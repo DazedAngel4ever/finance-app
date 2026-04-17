@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Finance Command Center V3</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+
+body { margin:0; font-family:system-ui; background:#0b0f14; color:#e6edf3; }
+
+header { padding:15px; font-size:20px; font-weight:bold; }
+
+.container { padding:10px; }
+
+.card {
+
+    background:#161b22;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+
+}
+
+input, button, select {
+
+    width:100%;
+
+    padding:10px;
+
+    margin-top:5px;
+
+    border-radius:8px;
+
+    border:none;
+
+}
+
+button { background:#238636; color:white; }
+
+.warn { color:#ff6b6b; font-size:12px; }
+
+.ok { color:#2ea043; font-size:12px; }
+
+canvas {
+
+    width:100%;
+
+    height:150px;
+
+}
+
+/* LOCK SCREEN */
+
+#lockScreen {
+
+    position:fixed;
+
+    inset:0;
+
+    background:#0b0f14;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999999;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="lockScreen">
+
+    <h2>🔐 Enter PIN</h2>
+
+    <input id="pinInput" type="password" placeholder="PIN">
+
+    <button onclick="unlock()">Unlock</button>
+
+</div>
+
+<header>💳 Finance Command Center V3</header>
+
+<div class="container">
+
+<select id="monthFilter"></select>
+
+<div id="summary"></div>
+
+<canvas id="chart"></canvas>
+
+<div id="calendar"></div>
+
+<div id="list"></div>
+
+<div class="card">
+
+<input id="name" placeholder="Bill name">
+
+<input id="amount" type="number" placeholder="Amount">
+
+<input id="date" type="date">
+
+<input id="category" placeholder="Category">
+
+<label><input type="checkbox" id="recurring"> Recurring</label>
+
+<button onclick="addBill()">Add</button>
+
+</div>
+
+<div class="card">
+
+<button onclick="exportData()">Export</button>
+
+<input type="file" onchange="importData(event)">
+
+<button onclick="enableNotifications()">Enable Alerts</button>
+
+</div>
+
+</div>
+
+<script>
+
+const KEY = "FIN_V3";
+
+const PIN_KEY = "FIN_PIN";
+
+let bills = JSON.parse(localStorage.getItem(KEY)) || [];
+
+function save(){ localStorage.setItem(KEY, JSON.stringify(bills)); }
+
+function daysLeft(date){
+
+    return Math.ceil((new Date(date) - new Date())/(1000*60*60*24));
+
+}
+
+function monthKey(date){
+
+    const d = new Date(date);
+
+    return d.getFullYear()+"-"+(d.getMonth()+1);
+
+}
+
+/* LOCK */
+
+function unlock(){
+
+    const pin = document.getElementById("pinInput").value;
+
+    const saved = localStorage.getItem(PIN_KEY);
+
+    if(!saved){
+
+        localStorage.setItem(PIN_KEY,pin);
+
+        document.getElementById("lockScreen").style.display="none";
+
+    } else if(pin===saved){
+
+        document.getElementById("lockScreen").style.display="none";
+
+    }
+
+}
+
+/* RECURRING ENGINE */
+
+function generateRecurring(){
+
+    const now = new Date();
+
+    bills.forEach(b=>{
+
+        if(!b.recurring) return;
+
+        const next = new Date(b.date);
+
+        next.setMonth(now.getMonth());
+
+        next.setFullYear(now.getFullYear());
+
+        const exists = bills.some(x =>
+
+            x.name===b.name &&
+
+            monthKey(x.date)===monthKey(next)
+
+        );
+
+        if(!exists){
+
+            bills.push({
+
+                ...b,
+
+                date: next.toISOString().split("T")[0],
+
+                paid:false
+
+            });
+
+        }
+
+    });
+
+    save();
+
+}
+
+/* MONTH FILTER */
+
+function populateMonths(){
+
+    const select = document.getElementById("monthFilter");
+
+    const months = [...new Set(bills.map(b=>monthKey(b.date)))];
+
+    select.innerHTML = months.map(m=>`<option>${m}</option>`).join("");
+
+    select.onchange = render;
+
+}
+
+/* ADD */
+
+function addBill(){
+
+    const name = nameInput.value;
+
+    const amount = parseFloat(amountInput.value);
+
+    const date = dateInput.value;
+
+    const category = categoryInput.value || "Other";
+
+    const recurring = recurringInput.checked;
+
+    if(!name||!amount||!date) return;
+
+    bills.push({name,amount,date,category,paid:false,recurring});
+
+    save();
+
+    populateMonths();
+
+    render();
+
+}
+
+/* TOGGLE */
+
+function toggle(i){
+
+    bills[i].paid=!bills[i].paid;
+
+    save();
+
+    render();
+
+}
+
+function removeBill(i){
+
+    bills.splice(i,1);
+
+    save();
+
+    render();
+
+}
+
+/* CHART */
+
+function drawChart(total, unpaid){
+
+    const canvas = document.getElementById("chart");
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const paid = total - unpaid;
+
+    const max = total || 1;
+
+    const paidWidth = (paid/max)*canvas.width;
+
+    const unpaidWidth = (unpaid/max)*canvas.width;
+
+    ctx.fillRect(0,0,paidWidth,40);
+
+    ctx.fillRect(paidWidth,0,unpaidWidth,40);
+
+    ctx.fillText("Paid",10,60);
+
+    ctx.fillText("Remaining",canvas.width/2,60);
+
+}
+
+/* CALENDAR */
+
+function renderCalendar(filtered){
+
+    const cal = document.getElementById("calendar");
+
+    cal.innerHTML = `<div class="card">📅 Calendar View</div>`;
+
+    filtered.forEach(b=>{
+
+        const d = document.createElement("div");
+
+        d.className="card";
+
+        d.innerText = `${b.date} - ${b.name}`;
+
+        cal.appendChild(d);
+
+    });
+
+}
+
+/* NOTIFICATIONS */
+
+function enableNotifications(){
+
+    if(Notification.permission !== "granted"){
+
+        Notification.requestPermission();
+
+    }
+
+}
+
+function checkNotifications(){
+
+    bills.forEach(b=>{
+
+        const days = daysLeft(b.date);
+
+        if(days===1 && !b.paid){
+
+            new Notification(`Bill Due Tomorrow: ${b.name}`);
+
+        }
+
+    });
+
+}
+
+/* RENDER */
+
+function render(){
+
+    generateRecurring();
+
+    const filter = document.getElementById("monthFilter").value;
+
+    const list = document.getElementById("list");
+
+    const summary = document.getElementById("summary");
+
+    list.innerHTML="";
+
+    let total=0, unpaid=0;
+
+    const filtered = bills.filter(b=>!filter || monthKey(b.date)===filter);
+
+    filtered.forEach((b,i)=>{
+
+        total+=b.amount;
+
+        if(!b.paid) unpaid+=b.amount;
+
+        const days = daysLeft(b.date);
+
+        const div=document.createElement("div");
+
+        div.className="card";
+
+        div.innerHTML=`
+
+            <strong>${b.name}</strong><br>
+
+            $${b.amount} | ${b.date}<br>
+
+            ${days<=3 && !b.paid ? `<div class="warn">Due ${days}d</div>`:""}
+
+            ${b.paid ? `<div class="ok">Paid</div>`:""}
+
+            <button onclick="toggle(${i})">${b.paid?"Unpay":"Pay"}</button>
+
+            <button onclick="removeBill(${i})">Delete</button>
+
+        `;
+
+        list.appendChild(div);
+
+    });
+
+    summary.innerHTML=`
+
+        <div class="card">
+
+        Total: $${total.toFixed(2)}<br>
+
+        Remaining: $${unpaid.toFixed(2)}
+
+        </div>
+
+    `;
+
+    drawChart(total,unpaid);
+
+    renderCalendar(filtered);
+
+    checkNotifications();
+
+}
+
+/* EXPORT / IMPORT */
+
+function exportData(){
+
+    const blob=new Blob([JSON.stringify(bills)],{type:"application/json"});
+
+    const a=document.createElement("a");
+
+    a.href=URL.createObjectURL(blob);
+
+    a.download="finance.json";
+
+    a.click();
+
+}
+
+function importData(e){
+
+    const file=e.target.files[0];
+
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+
+        bills=JSON.parse(reader.result);
+
+        save();
+
+        populateMonths();
+
+        render();
+
+    };
+
+    reader.readAsText(file);
+
+}
+
+/* INIT */
+
+const nameInput=document.getElementById("name");
+
+const amountInput=document.getElementById("amount");
+
+const dateInput=document.getElementById("date");
+
+const categoryInput=document.getElementById("category");
+
+const recurringInput=document.getElementById("recurring");
+
+populateMonths();
+
+render();
+
+setInterval(checkNotifications, 3600000);
+
+</script>
+
+</body>
+
+</html>
