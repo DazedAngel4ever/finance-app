@@ -1,242 +1,895 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finance Command Center V4.4</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Command Center Executive</title>
+  <meta name="theme-color" content="#0b0f14" />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#161b22;
+      --panel-2:#111821;
+      --line:#27313d;
+      --text:#e6edf3;
+      --muted:#9da7b3;
+      --green:#2ea043;
+      --red:#ff6b6b;
+      --yellow:#f2cc60;
+      --blue:#58a6ff;
+      --purple:#8b5cf6;
+      --radius:16px;
+      --shadow:0 12px 30px rgba(0,0,0,.22);
+    }
 
-<style>
-body {margin:0;background:#0b0f14;color:#e6edf3;font-family:system-ui;}
-.wrap {padding:15px;max-width:700px;margin:auto;}
-.title {font-size:26px;font-weight:800;margin-bottom:10px;}
+    * { box-sizing:border-box; }
 
-.card {background:#161b22;padding:12px;border-radius:12px;margin-top:10px;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    }
 
-input, select, button {
-width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;
-background:#0f141b;color:white;
-}
-button {background:#238636;font-weight:700;}
+    .wrap{
+      max-width:760px;
+      margin:0 auto;
+      padding:18px 14px 30px;
+    }
 
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.stat {background:#111821;padding:10px;border-radius:10px;}
-.stat-value {font-size:18px;font-weight:800;}
+    .header{
+      margin-bottom:14px;
+    }
 
-.progress {height:10px;background:#222;border-radius:10px;margin-top:10px;}
-.progress-bar {height:100%;background:#2ea043;width:0%;}
+    .title{
+      font-size:28px;
+      font-weight:800;
+      line-height:1.1;
+      margin:0 0 4px;
+    }
 
-.bill {background:#111821;padding:10px;border-radius:10px;margin-top:8px;}
-.bill-top {display:flex;justify-content:space-between;}
+    .subtitle{
+      color:var(--muted);
+      font-size:13px;
+      margin:0;
+    }
 
-.overdue {color:#ff6b6b;font-weight:700;}
-.due {color:#f2cc60;}
-.paid {color:#2ea043;}
+    .section{
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px;
+      margin-top:12px;
+      box-shadow:var(--shadow);
+    }
 
-canvas {width:100%;height:200px;margin-top:10px;}
-</style>
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .section-title{
+      font-size:16px;
+      font-weight:800;
+      margin:0;
+    }
+
+    .section-note{
+      color:var(--muted);
+      font-size:12px;
+      margin:0;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .kpi{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .kpi-label{
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+
+    .kpi-value{
+      font-size:22px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .progress{
+      height:12px;
+      background:#0c1016;
+      border:1px solid var(--line);
+      border-radius:999px;
+      overflow:hidden;
+      margin-top:12px;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--green),#44c767);
+      transition:width .25s ease;
+    }
+
+    .chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .chip{
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      border:1px solid var(--line);
+      background:#1b2430;
+      color:var(--muted);
+    }
+
+    .chip.red{ color:#ffd0d0; border-color:#5a2c34; background:#351920; }
+    .chip.yellow{ color:#ffe6a0; border-color:#6d5a21; background:#342a10; }
+    .chip.green{ color:#c8ffd8; border-color:#2f6c3d; background:#13261a; }
+    .chip.blue{ color:#d6e8ff; border-color:#2d557d; background:#122031; }
+
+    input, select, button, textarea{
+      width:100%;
+      border:none;
+      border-radius:12px;
+      padding:12px;
+      margin-top:8px;
+      background:#0f141b;
+      color:var(--text);
+      font:inherit;
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:84px;
+    }
+
+    button{
+      background:#238636;
+      font-weight:700;
+    }
+
+    button.secondary{
+      background:#1a2230;
+      border:1px solid var(--line);
+    }
+
+    button.danger{
+      background:#4b1f24;
+      color:#ffd0d0;
+    }
+
+    .toolbar-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .toolbar-3{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .urgency-list, .bill-list, .cat-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .bill{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .bill.urgent-high{
+      border-left:5px solid var(--red);
+    }
+
+    .bill.urgent-mid{
+      border-left:5px solid var(--yellow);
+    }
+
+    .bill.urgent-low{
+      border-left:5px solid var(--green);
+    }
+
+    .bill-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .bill-name{
+      font-size:16px;
+      font-weight:800;
+      margin:0 0 4px;
+    }
+
+    .bill-meta{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.4;
+      margin:0;
+    }
+
+    .bill-amount{
+      font-size:20px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .bill-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .cat-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:13px;
+      padding:6px 0;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media (min-width: 700px){
+      .grid-4{
+        grid-template-columns:1fr 1fr 1fr 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
+    <div class="header">
+      <h1 class="title">💳 Finance Command Center</h1>
+      <p class="subtitle">Executive dashboard layout · action first · offline and saved on your device</p>
+    </div>
 
-<div class="title">💳 Finance Command Center</div>
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Monthly overview</h2>
+          <p class="section-note">Immediate visibility into your current position</p>
+        </div>
+      </div>
 
-<div class="card">
-<input id="income" placeholder="Monthly Income" type="number" oninput="render()">
-</div>
+      <input id="incomeInput" type="number" step="0.01" placeholder="Monthly income" />
 
-<div class="card grid">
-<div class="stat"><div>Total</div><div id="total" class="stat-value">$0</div></div>
-<div class="stat"><div>Unpaid</div><div id="unpaid" class="stat-value">$0</div></div>
-<div class="stat"><div>Overdue</div><div id="overdue" class="stat-value">0</div></div>
-<div class="stat"><div>Leftover</div><div id="leftover" class="stat-value">$0</div></div>
-</div>
+      <div class="grid-4">
+        <div class="kpi">
+          <div class="kpi-label">Total bills</div>
+          <div class="kpi-value" id="totalStat">$0.00</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Unpaid</div>
+          <div class="kpi-value" id="unpaidStat">$0.00</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Overdue</div>
+          <div class="kpi-value" id="overdueStat">0</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Left over</div>
+          <div class="kpi-value" id="leftoverStat">$0.00</div>
+        </div>
+      </div>
 
-<div class="card">
-<div>Progress</div>
-<div class="progress"><div id="bar" class="progress-bar"></div></div>
-</div>
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
 
-<div class="card">
-<div>Spending Breakdown</div>
-<canvas id="chart"></canvas>
-</div>
+      <div class="chip-row" id="summaryChips"></div>
+    </div>
 
-<div class="card">
-<div>Add Bill</div>
-<input id="name" placeholder="Bill Name">
-<input id="amount" type="number" placeholder="Amount">
-<input id="date" type="date">
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Priority queue</h2>
+          <p class="section-note">The bills that need attention first</p>
+        </div>
+      </div>
+      <div id="urgentList" class="urgency-list"></div>
+    </div>
 
-<select id="category">
-<option>Rent</option>
-<option>Utilities</option>
-<option>Subscriptions</option>
-<option>Debt</option>
-<option>Other</option>
-</select>
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="formTitle">Add bill</h2>
+          <p class="section-note">Create or update a bill entry</p>
+        </div>
+      </div>
 
-<label>
-<input type="checkbox" id="recurring"> Recurring Monthly
-</label>
+      <input id="nameInput" placeholder="Bill name" />
+      <div class="grid-2">
+        <input id="amountInput" type="number" step="0.01" placeholder="Amount" />
+        <input id="dateInput" type="date" />
+      </div>
 
-<button onclick="addBill()">Add Bill</button>
-</div>
+      <div class="grid-2">
+        <select id="categoryInput">
+          <option value="Rent">Rent</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Subscriptions">Subscriptions</option>
+          <option value="Debt">Debt</option>
+          <option value="Other">Other</option>
+        </select>
+        <select id="recurringInput">
+          <option value="false">One-time bill</option>
+          <option value="true">Recurring monthly</option>
+        </select>
+      </div>
 
-<div class="card">
-<div id="list"></div>
-</div>
+      <textarea id="notesInput" placeholder="Notes (optional)"></textarea>
 
-</div>
+      <div class="toolbar-2">
+        <button id="saveBtn" onclick="saveBill()">Save bill</button>
+        <button class="secondary" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
 
-<script>
-let bills = JSON.parse(localStorage.getItem("bills_v44")) || [];
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Category totals</h2>
+          <p class="section-note">Where your money is going</p>
+        </div>
+      </div>
+      <div id="categoryList" class="cat-list"></div>
+    </div>
 
-function save(){localStorage.setItem("bills_v44",JSON.stringify(bills));}
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Backups</h2>
+          <p class="section-note">Export before major changes</p>
+        </div>
+      </div>
+      <div class="toolbar-3">
+        <button class="secondary" onclick="exportData()">Export</button>
+        <button class="secondary" onclick="document.getElementById('importFile').click()">Import</button>
+        <button class="secondary" onclick="resetAll()">Reset All</button>
+      </div>
+      <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)" />
+    </div>
 
-function daysUntil(date){
-return Math.ceil((new Date(date)-new Date())/(1000*60*60*24));
-}
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">All bills</h2>
+          <p class="section-note" id="billCountText">0 items</p>
+        </div>
+      </div>
+      <div id="billList" class="bill-list"></div>
+    </div>
+  </div>
 
-/* SMART RECURRING */
-function generateRecurring(){
-let now=new Date();
-let month=now.getMonth();
-let year=now.getFullYear();
+  <script>
+    const STORAGE_KEY = "finance_exec_v1";
+    const LEGACY_KEYS = [
+      "finance_exec_v1",
+      "bills_v44",
+      "finance_v4_lite_data",
+      "bills_v43",
+      "bills_v42",
+      "bills_v41"
+    ];
+    const INCOME_KEY = "finance_exec_income";
+    const LEGACY_INCOME_KEYS = ["finance_exec_income", "income_v44"];
+    let bills = [];
+    let editingId = null;
 
-bills.forEach(b=>{
-if(b.recurring && !b.generated){
-let d=new Date(b.date);
-let newDate=new Date(year,month,d.getDate());
+    function uid() {
+      return "bill_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
 
-let exists=bills.some(x=>x.name===b.name && x.date===newDate.toISOString().split("T")[0]);
+    function money(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(Number(value || 0));
+    }
 
-if(!exists){
-bills.push({...b,date:newDate.toISOString().split("T")[0],paid:false,recurring:false,generated:true});
-}
-}
-});
-}
+    function todayString() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
 
-/* ADD */
-function addBill(){
-let name=nameInput.value;
-let amount=parseFloat(amountInput.value);
-let date=dateInput.value;
-let category=categoryInput.value;
-let recurring=document.getElementById("recurring").checked;
+    function toLocalDate(dateStr) {
+      const parts = String(dateStr || "").split("-");
+      if (parts.length !== 3) return null;
+      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]), 12, 0, 0);
+    }
 
-if(!name||!amount||!date)return;
+    function daysUntil(dateStr) {
+      const due = toLocalDate(dateStr);
+      const now = toLocalDate(todayString());
+      if (!due || !now) return 9999;
+      return Math.round((due - now) / 86400000);
+    }
 
-bills.push({name,amount,date,category,paid:false,recurring});
-save();
-render();
-}
+    function billStatus(bill) {
+      const days = daysUntil(bill.date);
+      if (bill.paid) return "paid";
+      if (days < 0) return "overdue";
+      if (days === 0) return "today";
+      if (days <= 3) return "soon";
+      return "upcoming";
+    }
 
-/* TOGGLE */
-function toggle(i){bills[i].paid=!bills[i].paid;save();render();}
+    function priorityValue(bill) {
+      const status = billStatus(bill);
+      if (status === "overdue") return 1;
+      if (status === "today") return 2;
+      if (status === "soon") return 3;
+      if (status === "upcoming") return 4;
+      return 5;
+    }
 
-/* DELETE */
-function removeBill(i){bills.splice(i,1);save();render();}
+    function loadBills() {
+      let found = [];
+      for (const key of LEGACY_KEYS) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length >= 0) {
+              found = parsed;
+              break;
+            }
+          }
+        } catch {}
+      }
 
-/* PRIORITY SORT */
-function sortBills(a,b){
-let aDays=daysUntil(a.date);
-let bDays=daysUntil(b.date);
+      bills = found.map(item => ({
+        id: item.id || uid(),
+        name: item.name || "",
+        amount: Number(item.amount || 0),
+        date: item.date || "",
+        category: item.category || "Other",
+        notes: item.notes || "",
+        paid: !!item.paid,
+        recurring: !!item.recurring,
+        generatedFrom: item.generatedFrom || null
+      }));
 
-if(!a.paid && aDays<0) return -1;
-if(!b.paid && bDays<0) return 1;
+      saveBills();
+    }
 
-if(!a.paid && aDays<=3) return -1;
-if(!b.paid && bDays<=3) return 1;
+    function saveBills() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bills));
+    }
 
-return aDays - bDays;
-}
+    function loadIncome() {
+      for (const key of LEGACY_INCOME_KEYS) {
+        const val = localStorage.getItem(key);
+        if (val !== null && val !== "") {
+          document.getElementById("incomeInput").value = val;
+          localStorage.setItem(INCOME_KEY, val);
+          break;
+        }
+      }
+    }
 
-/* CHART */
-function drawChart(catTotals){
-let c=document.getElementById("chart");
-let ctx=c.getContext("2d");
-ctx.clearRect(0,0,c.width,c.height);
+    function saveIncome() {
+      localStorage.setItem(INCOME_KEY, document.getElementById("incomeInput").value || "");
+    }
 
-let colors=["#2ea043","#58a6ff","#f2cc60","#ff6b6b","#8b5cf6"];
-let i=0;
-let x=20;
+    function generateRecurringBills() {
+      const today = new Date();
+      const month = today.getMonth();
+      const year = today.getFullYear();
 
-for(let cat in catTotals){
-ctx.fillStyle=colors[i%colors.length];
-ctx.fillRect(x,100,40,catTotals[cat]/5);
-ctx.fillText(cat,x,90);
-x+=60;
-i++;
-}
-}
+      const sourceBills = [...bills];
+      let changed = false;
 
-/* RENDER */
-function render(){
+      sourceBills.forEach(bill => {
+        if (!bill.recurring) return;
 
-generateRecurring();
+        const originalDate = toLocalDate(bill.date);
+        if (!originalDate) return;
 
-let list=document.getElementById("list");
-let income=parseFloat(income.value)||0;
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        const targetDay = Math.min(originalDate.getDate(), lastDay);
+        const targetDate = new Date(year, month, targetDay, 12, 0, 0);
+        const targetStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
 
-let total=0,unpaid=0,overdue=0;
-let catTotals={};
+        const exists = bills.some(x =>
+          x.name === bill.name &&
+          x.amount === bill.amount &&
+          x.category === bill.category &&
+          x.date === targetStr
+        );
 
-list.innerHTML="";
+        if (!exists) {
+          const billMonth = originalDate.getMonth();
+          const billYear = originalDate.getFullYear();
+          if (billMonth !== month || billYear !== year) {
+            bills.push({
+              id: uid(),
+              name: bill.name,
+              amount: bill.amount,
+              date: targetStr,
+              category: bill.category,
+              notes: bill.notes || "",
+              paid: false,
+              recurring: false,
+              generatedFrom: bill.id || null
+            });
+            changed = true;
+          }
+        }
+      });
 
-/* SORT */
-bills.sort(sortBills);
+      if (changed) saveBills();
+    }
 
-bills.forEach((b,i)=>{
-total+=b.amount;
-if(!b.paid)unpaid+=b.amount;
+    function sortBills(list) {
+      return [...list].sort((a, b) => {
+        const p = priorityValue(a) - priorityValue(b);
+        if (p !== 0) return p;
+        return daysUntil(a.date) - daysUntil(b.date);
+      });
+    }
 
-let days=daysUntil(b.date);
-if(!b.paid && days<0)overdue++;
+    function clearForm() {
+      editingId = null;
+      document.getElementById("formTitle").textContent = "Add bill";
+      document.getElementById("nameInput").value = "";
+      document.getElementById("amountInput").value = "";
+      document.getElementById("dateInput").value = "";
+      document.getElementById("categoryInput").value = "Rent";
+      document.getElementById("recurringInput").value = "false";
+      document.getElementById("notesInput").value = "";
+      document.getElementById("saveBtn").textContent = "Save bill";
+    }
 
-catTotals[b.category]=(catTotals[b.category]||0)+b.amount;
+    function saveBill() {
+      const name = document.getElementById("nameInput").value.trim();
+      const amount = Number(document.getElementById("amountInput").value);
+      const date = document.getElementById("dateInput").value;
+      const category = document.getElementById("categoryInput").value;
+      const recurring = document.getElementById("recurringInput").value === "true";
+      const notes = document.getElementById("notesInput").value.trim();
 
-let statusClass="";
-let statusText="";
+      if (!name || !amount || amount <= 0 || !date) {
+        alert("Please enter a bill name, amount, and due date.");
+        return;
+      }
 
-if(b.paid){statusClass="paid";statusText="Paid";}
-else if(days<0){statusClass="overdue";statusText="OVERDUE";}
-else if(days<=3){statusClass="due";statusText="Due Soon";}
+      if (editingId) {
+        const idx = bills.findIndex(b => b.id === editingId);
+        if (idx >= 0) {
+          bills[idx] = {
+            ...bills[idx],
+            name,
+            amount,
+            date,
+            category,
+            notes,
+            recurring
+          };
+        }
+      } else {
+        bills.push({
+          id: uid(),
+          name,
+          amount,
+          date,
+          category,
+          notes,
+          paid: false,
+          recurring,
+          generatedFrom: null
+        });
+      }
 
-let div=document.createElement("div");
-div.className="bill";
+      saveBills();
+      clearForm();
+      render();
+    }
 
-div.innerHTML=`
-<div class="bill-top">
-<div>${b.name}</div>
-<div>$${b.amount}</div>
-</div>
-<div>${b.category} | ${b.date}</div>
-<div class="${statusClass}">${statusText}</div>
-<button onclick="toggle(${i})">${b.paid?'Undo':'Pay'}</button>
-<button onclick="removeBill(${i})">Delete</button>
-`;
+    function editBill(id) {
+      const bill = bills.find(b => b.id === id);
+      if (!bill) return;
 
-list.appendChild(div);
-});
+      editingId = id;
+      document.getElementById("formTitle").textContent = "Edit bill";
+      document.getElementById("nameInput").value = bill.name;
+      document.getElementById("amountInput").value = bill.amount;
+      document.getElementById("dateInput").value = bill.date;
+      document.getElementById("categoryInput").value = bill.category || "Other";
+      document.getElementById("recurringInput").value = bill.recurring ? "true" : "false";
+      document.getElementById("notesInput").value = bill.notes || "";
+      document.getElementById("saveBtn").textContent = "Update bill";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-/* STATS */
-document.getElementById("total").innerText="$"+total.toFixed(2);
-document.getElementById("unpaid").innerText="$"+unpaid.toFixed(2);
-document.getElementById("overdue").innerText=overdue;
-document.getElementById("leftover").innerText="$"+(income-unpaid).toFixed(2);
+    function togglePaid(id) {
+      const bill = bills.find(b => b.id === id);
+      if (!bill) return;
+      bill.paid = !bill.paid;
+      saveBills();
+      render();
+    }
 
-/* PROGRESS */
-let paid=total-unpaid;
-let percent=total?(paid/total)*100:0;
-document.getElementById("bar").style.width=percent+"%";
+    function deleteBill(id) {
+      if (!confirm("Delete this bill?")) return;
+      bills = bills.filter(b => b.id !== id);
+      saveBills();
+      if (editingId === id) clearForm();
+      render();
+    }
 
-/* CHART */
-drawChart(catTotals);
-}
+    function exportData() {
+      const blob = new Blob([JSON.stringify(bills, null, 2)], { type:"application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "finance-backup.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
 
-render();
-</script>
+    function importData(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
 
+      const reader = new FileReader();
+      reader.onload = function() {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if (!Array.isArray(parsed)) throw new Error();
+          bills = parsed.map(item => ({
+            id: item.id || uid(),
+            name: item.name || "",
+            amount: Number(item.amount || 0),
+            date: item.date || "",
+            category: item.category || "Other",
+            notes: item.notes || "",
+            paid: !!item.paid,
+            recurring: !!item.recurring,
+            generatedFrom: item.generatedFrom || null
+          }));
+          saveBills();
+          render();
+          alert("Import complete.");
+        } catch {
+          alert("Import failed.");
+        }
+        event.target.value = "";
+      };
+      reader.readAsText(file);
+    }
+
+    function resetAll() {
+      if (!confirm("This will erase all bills in the app. Continue?")) return;
+      bills = [];
+      saveBills();
+      render();
+    }
+
+    function statusChipText(bill) {
+      const status = billStatus(bill);
+      const days = daysUntil(bill.date);
+
+      if (status === "paid") return `<span class="chip green">Paid</span>`;
+      if (status === "overdue") return `<span class="chip red">${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"} overdue</span>`;
+      if (status === "today") return `<span class="chip red">Due today</span>`;
+      if (status === "soon") return `<span class="chip yellow">Due in ${days} day${days === 1 ? "" : "s"}</span>`;
+      return `<span class="chip blue">Upcoming</span>`;
+    }
+
+    function recurringChipText(bill) {
+      if (bill.recurring) return `<span class="chip blue">Recurring</span>`;
+      return "";
+    }
+
+    function renderSummary(sortedBills) {
+      const income = Number(document.getElementById("incomeInput").value || 0);
+      const total = sortedBills.reduce((sum, b) => sum + b.amount, 0);
+      const unpaid = sortedBills.filter(b => !b.paid).reduce((sum, b) => sum + b.amount, 0);
+      const overdue = sortedBills.filter(b => billStatus(b) === "overdue").length;
+      const dueToday = sortedBills.filter(b => billStatus(b) === "today").length;
+      const dueSoon = sortedBills.filter(b => billStatus(b) === "soon").length;
+      const paid = total - unpaid;
+      const progress = total > 0 ? (paid / total) * 100 : 0;
+      const leftover = income - unpaid;
+
+      document.getElementById("totalStat").textContent = money(total);
+      document.getElementById("unpaidStat").textContent = money(unpaid);
+      document.getElementById("overdueStat").textContent = overdue;
+      document.getElementById("leftoverStat").textContent = money(leftover);
+      document.getElementById("progressBar").style.width = progress + "%";
+
+      const chips = [];
+      chips.push(`<span class="chip blue">Paid ${money(paid)}</span>`);
+      if (dueToday > 0) chips.push(`<span class="chip red">${dueToday} due today</span>`);
+      if (dueSoon > 0) chips.push(`<span class="chip yellow">${dueSoon} due soon</span>`);
+      if (overdue > 0) chips.push(`<span class="chip red">${overdue} overdue</span>`);
+      if (overdue === 0 && dueToday === 0 && dueSoon === 0) {
+        chips.push(`<span class="chip green">No urgent bills</span>`);
+      }
+
+      document.getElementById("summaryChips").innerHTML = chips.join("");
+    }
+
+    function renderUrgent(sortedBills) {
+      const urgent = sortedBills.filter(b => {
+        const s = billStatus(b);
+        return !b.paid && (s === "overdue" || s === "today" || s === "soon");
+      });
+
+      const box = document.getElementById("urgentList");
+      if (!urgent.length) {
+        box.innerHTML = `<div class="empty">Nothing urgent right now.</div>`;
+        return;
+      }
+
+      box.innerHTML = urgent.map(b => {
+        let cls = "urgent-low";
+        const s = billStatus(b);
+        if (s === "overdue" || s === "today") cls = "urgent-high";
+        else if (s === "soon") cls = "urgent-mid";
+
+        return `
+          <div class="bill ${cls}">
+            <div class="bill-top">
+              <div>
+                <div class="bill-name">${escapeHtml(b.name)}</div>
+                <p class="bill-meta">${escapeHtml(b.category)} · Due ${escapeHtml(b.date)}</p>
+              </div>
+              <div class="bill-amount">${money(b.amount)}</div>
+            </div>
+            <div class="chip-row">
+              ${statusChipText(b)}
+              ${recurringChipText(b)}
+            </div>
+            <div class="bill-actions">
+              <button onclick="togglePaid('${b.id}')">Mark paid</button>
+              <button class="secondary" onclick="editBill('${b.id}')">Edit</button>
+              <button class="danger" onclick="deleteBill('${b.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCategoryTotals(sortedBills) {
+      const totals = {};
+      sortedBills.forEach(b => {
+        totals[b.category] = (totals[b.category] || 0) + b.amount;
+      });
+
+      const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+      const box = document.getElementById("categoryList");
+
+      if (!entries.length) {
+        box.innerHTML = `<div class="empty">No category totals yet.</div>`;
+        return;
+      }
+
+      box.innerHTML = entries.map(([name, amount]) => `
+        <div class="cat-row">
+          <span>${escapeHtml(name)}</span>
+          <strong>${money(amount)}</strong>
+        </div>
+      `).join("");
+    }
+
+    function renderBills(sortedBills) {
+      const box = document.getElementById("billList");
+      document.getElementById("billCountText").textContent = `${sortedBills.length} item${sortedBills.length === 1 ? "" : "s"}`;
+
+      if (!sortedBills.length) {
+        box.innerHTML = `<div class="empty">No bills added yet.</div>`;
+        return;
+      }
+
+      box.innerHTML = sortedBills.map(b => {
+        let cls = "urgent-low";
+        const s = billStatus(b);
+        if (s === "overdue" || s === "today") cls = "urgent-high";
+        else if (s === "soon") cls = "urgent-mid";
+
+        return `
+          <div class="bill ${cls}">
+            <div class="bill-top">
+              <div>
+                <div class="bill-name">${escapeHtml(b.name)}</div>
+                <p class="bill-meta">
+                  ${escapeHtml(b.category)} · Due ${escapeHtml(b.date)}
+                  ${b.notes ? `<br>${escapeHtml(b.notes)}` : ""}
+                </p>
+              </div>
+              <div class="bill-amount">${money(b.amount)}</div>
+            </div>
+            <div class="chip-row">
+              ${statusChipText(b)}
+              ${recurringChipText(b)}
+            </div>
+            <div class="bill-actions">
+              <button onclick="togglePaid('${b.id}')">${b.paid ? "Undo" : "Pay"}</button>
+              <button class="secondary" onclick="editBill('${b.id}')">Edit</button>
+              <button class="danger" onclick="deleteBill('${b.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function render() {
+      saveIncome();
+      generateRecurringBills();
+      const sortedBills = sortBills(bills);
+      renderSummary(sortedBills);
+      renderUrgent(sortedBills);
+      renderCategoryTotals(sortedBills);
+      renderBills(sortedBills);
+    }
+
+    document.getElementById("incomeInput").addEventListener("input", render);
+
+    loadBills();
+    loadIncome();
+    clearForm();
+    render();
+  </script>
 </body>
 </html>
