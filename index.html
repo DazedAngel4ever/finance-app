@@ -1,240 +1,670 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finance Command Center V4.5</title>
-
-<style>
-body{margin:0;background:#0b0f14;color:#e6edf3;font-family:system-ui;}
-.wrap{padding:15px;max-width:760px;margin:auto;}
-.title{font-size:26px;font-weight:800;margin-bottom:10px;}
-.card{background:#161b22;padding:12px;border-radius:12px;margin-top:10px;}
-
-input,select,button{
-width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;
-background:#0f141b;color:white;
-}
-button{background:#238636;font-weight:700;}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.stat{background:#111821;padding:10px;border-radius:10px;}
-.stat-value{font-size:18px;font-weight:800;}
-
-canvas{width:100%;height:200px;margin-top:10px;}
-
-.bill{background:#111821;padding:10px;border-radius:10px;margin-top:8px;}
-.bill-top{display:flex;justify-content:space-between;}
-.small{font-size:12px;color:#9da7b3;}
-
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Command Center V4.5</title>
+  <meta name="theme-color" content="#0b0f14" />
+  <style>
+    body{
+      margin:0;
+      background:#0b0f14;
+      color:#e6edf3;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
+    }
+    .wrap{
+      padding:15px;
+      max-width:760px;
+      margin:auto;
+    }
+    .title{
+      font-size:26px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+    .card{
+      background:#161b22;
+      padding:12px;
+      border-radius:12px;
+      margin-top:10px;
+      border:1px solid #27313d;
+    }
+    .section-title{
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    input,select,button{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:10px;
+      border:none;
+      background:#0f141b;
+      color:white;
+      box-sizing:border-box;
+      font:inherit;
+    }
+    button{
+      background:#238636;
+      font-weight:700;
+    }
+    button.secondary{
+      background:#1a2230;
+      border:1px solid #27313d;
+    }
+    button.danger{
+      background:#4b1f24;
+      color:#ffd0d0;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      background:#111821;
+      padding:10px;
+      border-radius:10px;
+    }
+    .stat-label{
+      font-size:12px;
+      color:#9da7b3;
+      margin-bottom:4px;
+    }
+    .stat-value{
+      font-size:18px;
+      font-weight:800;
+    }
+    .bill{
+      background:#111821;
+      padding:10px;
+      border-radius:10px;
+      margin-top:8px;
+      border-left:4px solid #2ea043;
+    }
+    .bill.overdue{ border-left-color:#ff6b6b; }
+    .bill.soon{ border-left-color:#f2cc60; }
+    .bill-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .small{
+      font-size:12px;
+      color:#9da7b3;
+      margin-top:4px;
+    }
+    .chip-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .chip{
+      font-size:12px;
+      padding:5px 8px;
+      border-radius:999px;
+      background:#1b2430;
+      border:1px solid #27313d;
+      color:#cdd6df;
+    }
+    .chip.red{ color:#ffd0d0; background:#351920; border-color:#5a2c34; }
+    .chip.yellow{ color:#ffe6a0; background:#342a10; border-color:#6d5a21; }
+    .chip.green{ color:#c8ffd8; background:#13261a; border-color:#2f6c3d; }
+    .bill-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+    .canvas-wrap{
+      width:100%;
+      overflow:hidden;
+    }
+    canvas{
+      width:100%;
+      height:220px;
+      display:block;
+      background:#0f141b;
+      border-radius:10px;
+      margin-top:8px;
+    }
+    .empty{
+      color:#9da7b3;
+      font-size:13px;
+      padding:8px 0;
+    }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
+    <div class="title">💳 Finance Command Center</div>
 
-<div class="title">💳 Finance Command Center</div>
+    <div class="card">
+      <div class="section-title">Monthly Income</div>
+      <input id="income" placeholder="Monthly Income" type="number" step="0.01">
+    </div>
 
-<div class="card">
-<input id="income" placeholder="Monthly Income" type="number" oninput="saveIncome();render()">
-</div>
+    <div class="card grid">
+      <div class="stat">
+        <div class="stat-label">Total</div>
+        <div id="total" class="stat-value">$0.00</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Unpaid</div>
+        <div id="unpaid" class="stat-value">$0.00</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Overdue</div>
+        <div id="overdue" class="stat-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Leftover</div>
+        <div id="leftover" class="stat-value">$0.00</div>
+      </div>
+    </div>
 
-<div class="card grid">
-<div class="stat"><div>Total</div><div id="total" class="stat-value">$0</div></div>
-<div class="stat"><div>Unpaid</div><div id="unpaid" class="stat-value">$0</div></div>
-<div class="stat"><div>Overdue</div><div id="overdue" class="stat-value">0</div></div>
-<div class="stat"><div>Leftover</div><div id="leftover" class="stat-value">$0</div></div>
-</div>
+    <div class="card">
+      <div class="section-title">📊 Category Bar Chart</div>
+      <div class="canvas-wrap"><canvas id="barChart"></canvas></div>
+    </div>
 
-<div class="card">
-<div>📊 Category Bar Chart</div>
-<canvas id="barChart"></canvas>
-</div>
+    <div class="card">
+      <div class="section-title">🥧 Spending Distribution</div>
+      <div class="canvas-wrap"><canvas id="pieChart"></canvas></div>
+    </div>
 
-<div class="card">
-<div>🥧 Spending Distribution</div>
-<canvas id="pieChart"></canvas>
-</div>
+    <div class="card">
+      <div class="section-title">📈 Spending Trend</div>
+      <div class="canvas-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
 
-<div class="card">
-<div>📈 Spending Trend</div>
-<canvas id="trendChart"></canvas>
-</div>
+    <div class="card">
+      <div class="section-title">Add Bill</div>
+      <input id="name" placeholder="Bill Name">
+      <input id="amount" type="number" step="0.01" placeholder="Amount">
+      <input id="date" type="date">
 
-<div class="card">
-<div>Add Bill</div>
-<input id="name">
-<input id="amount" type="number">
-<input id="date" type="date">
+      <select id="category">
+        <option>Rent</option>
+        <option>Utilities</option>
+        <option>Subscriptions</option>
+        <option>Debt</option>
+        <option>Other</option>
+      </select>
 
-<select id="category">
-<option>Rent</option>
-<option>Utilities</option>
-<option>Subscriptions</option>
-<option>Debt</option>
-<option>Other</option>
-</select>
+      <label class="small">
+        <input type="checkbox" id="recurring" style="width:auto;margin-right:8px;"> Recurring
+      </label>
 
-<label class="small">
-<input type="checkbox" id="recurring"> Recurring
-</label>
+      <button id="addBtn">Add</button>
+    </div>
 
-<button onclick="addBill()">Add</button>
-</div>
+    <div class="card">
+      <div class="section-title">Bills</div>
+      <div id="list"></div>
+    </div>
+  </div>
 
-<div class="card">
-<div id="list"></div>
-</div>
+  <script>
+    const STORAGE_KEY = "bills_v45_fixed";
+    const LEGACY_KEYS = ["bills_v45", "finance_exec_v1", "bills_v44", "finance_v4_lite_data", "bills_v43", "bills_v42", "bills_v41"];
+    const INCOME_KEY = "income_v45_fixed";
+    const LEGACY_INCOME_KEYS = ["income_v45", "finance_exec_income", "income_v44"];
 
-</div>
+    let bills = [];
 
-<script>
+    const incomeEl = document.getElementById("income");
+    const totalEl = document.getElementById("total");
+    const unpaidEl = document.getElementById("unpaid");
+    const overdueEl = document.getElementById("overdue");
+    const leftoverEl = document.getElementById("leftover");
+    const listEl = document.getElementById("list");
+    const addBtn = document.getElementById("addBtn");
 
-let bills=JSON.parse(localStorage.getItem("bills_v45"))||[];
+    const nameEl = document.getElementById("name");
+    const amountEl = document.getElementById("amount");
+    const dateEl = document.getElementById("date");
+    const categoryEl = document.getElementById("category");
+    const recurringEl = document.getElementById("recurring");
 
-function save(){localStorage.setItem("bills_v45",JSON.stringify(bills));}
+    function money(v){
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(Number(v || 0));
+    }
 
-function saveIncome(){
-localStorage.setItem("income_v45",income.value);
-}
+    function uid(){
+      return "bill_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
 
-function loadIncome(){
-income.value=localStorage.getItem("income_v45")||"";
-}
+    function todayString(){
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
 
-function daysUntil(date){
-return Math.ceil((new Date(date)-new Date())/(1000*60*60*24));
-}
+    function toLocalDate(dateStr){
+      const parts = String(dateStr || "").split("-");
+      if (parts.length !== 3) return null;
+      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]), 12, 0, 0);
+    }
 
-/* ADD */
-function addBill(){
-let name=nameInput.value;
-let amount=parseFloat(amountInput.value);
-let date=dateInput.value;
-let category=category.value;
-let recurring=document.getElementById("recurring").checked;
+    function daysUntil(dateStr){
+      const due = toLocalDate(dateStr);
+      const now = toLocalDate(todayString());
+      if (!due || !now) return 9999;
+      return Math.round((due - now) / 86400000);
+    }
 
-if(!name||!amount||!date)return;
+    function saveBills(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bills));
+    }
 
-bills.push({name,amount,date,category,paid:false,recurring});
-save();
-render();
-}
+    function loadBills(){
+      let loaded = [];
+      for (const key of LEGACY_KEYS){
+        try{
+          const raw = localStorage.getItem(key);
+          if (raw){
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)){
+              loaded = parsed;
+              break;
+            }
+          }
+        } catch(e){}
+      }
 
-/* TOGGLE */
-function toggle(i){bills[i].paid=!bills[i].paid;save();render();}
+      bills = loaded.map(b => ({
+        id: b.id || uid(),
+        name: b.name || "",
+        amount: Number(b.amount || 0),
+        date: b.date || "",
+        category: b.category || "Other",
+        paid: !!b.paid,
+        recurring: !!b.recurring
+      }));
 
-/* DELETE */
-function removeBill(i){bills.splice(i,1);save();render();}
+      saveBills();
+    }
 
-/* BAR CHART */
-function drawBar(catTotals){
-let c=barChart;
-let ctx=c.getContext("2d");
-ctx.clearRect(0,0,c.width,c.height);
+    function saveIncome(){
+      localStorage.setItem(INCOME_KEY, incomeEl.value || "");
+    }
 
-let max=Math.max(...Object.values(catTotals),1);
-let i=0,x=20;
+    function loadIncome(){
+      for (const key of LEGACY_INCOME_KEYS){
+        const val = localStorage.getItem(key);
+        if (val !== null && val !== ""){
+          incomeEl.value = val;
+          localStorage.setItem(INCOME_KEY, val);
+          return;
+        }
+      }
+      incomeEl.value = localStorage.getItem(INCOME_KEY) || "";
+    }
 
-for(let cat in catTotals){
-let h=(catTotals[cat]/max)*150;
-ctx.fillStyle="#58a6ff";
-ctx.fillRect(x,180-h,40,h);
-ctx.fillText(cat,x,195);
-x+=60;i++;
-}
-}
+    function generateRecurring(){
+      const now = new Date();
+      const month = now.getMonth();
+      const year = now.getFullYear();
+      let changed = false;
 
-/* PIE CHART */
-function drawPie(catTotals){
-let c=pieChart;
-let ctx=c.getContext("2d");
-ctx.clearRect(0,0,c.width,c.height);
+      const snapshot = [...bills];
+      snapshot.forEach(b => {
+        if (!b.recurring) return;
 
-let total=Object.values(catTotals).reduce((a,b)=>a+b,0);
-let start=0;
+        const original = toLocalDate(b.date);
+        if (!original) return;
 
-let colors=["#2ea043","#58a6ff","#f2cc60","#ff6b6b","#8b5cf6"];
-let i=0;
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        const targetDay = Math.min(original.getDate(), lastDay);
+        const target = new Date(year, month, targetDay, 12, 0, 0);
+        const targetStr = `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, "0")}-${String(target.getDate()).padStart(2, "0")}`;
 
-for(let cat in catTotals){
-let slice=(catTotals[cat]/total)*Math.PI*2;
-ctx.beginPath();
-ctx.moveTo(100,100);
-ctx.arc(100,100,80,start,start+slice);
-ctx.fillStyle=colors[i%colors.length];
-ctx.fill();
-start+=slice;
-i++;
-}
-}
+        const exists = bills.some(x =>
+          x.name === b.name &&
+          x.amount === b.amount &&
+          x.category === b.category &&
+          x.date === targetStr
+        );
 
-/* TREND */
-function drawTrend(){
-let c=trendChart;
-let ctx=c.getContext("2d");
-ctx.clearRect(0,0,c.width,c.height);
+        if (!exists && (original.getMonth() !== month || original.getFullYear() !== year)){
+          bills.push({
+            id: uid(),
+            name: b.name,
+            amount: b.amount,
+            date: targetStr,
+            category: b.category,
+            paid: false,
+            recurring: false
+          });
+          changed = true;
+        }
+      });
 
-let sorted=[...bills].sort((a,b)=>new Date(a.date)-new Date(b.date));
+      if (changed) saveBills();
+    }
 
-let x=20;
-sorted.forEach(b=>{
-let y=200-(b.amount/10);
-ctx.fillRect(x,y,4,4);
-x+=20;
-});
-}
+    function addBill(){
+      const name = nameEl.value.trim();
+      const amount = Number(amountEl.value);
+      const date = dateEl.value;
+      const category = categoryEl.value;
+      const recurring = recurringEl.checked;
 
-/* RENDER */
-function render(){
+      if (!name || !amount || amount <= 0 || !date){
+        alert("Enter a bill name, amount, and due date.");
+        return;
+      }
 
-let list=document.getElementById("list");
-let incomeVal=parseFloat(income.value)||0;
+      bills.push({
+        id: uid(),
+        name,
+        amount,
+        date,
+        category,
+        paid: false,
+        recurring
+      });
 
-let total=0,unpaid=0,overdue=0;
-let catTotals={};
+      saveBills();
 
-list.innerHTML="";
+      nameEl.value = "";
+      amountEl.value = "";
+      dateEl.value = "";
+      categoryEl.value = "Rent";
+      recurringEl.checked = false;
 
-bills.forEach((b,i)=>{
-total+=b.amount;
-if(!b.paid)unpaid+=b.amount;
+      render();
+    }
 
-let days=daysUntil(b.date);
-if(!b.paid && days<0)overdue++;
+    function togglePaid(id){
+      const bill = bills.find(b => b.id === id);
+      if (!bill) return;
+      bill.paid = !bill.paid;
+      saveBills();
+      render();
+    }
 
-catTotals[b.category]=(catTotals[b.category]||0)+b.amount;
+    function removeBill(id){
+      bills = bills.filter(b => b.id !== id);
+      saveBills();
+      render();
+    }
 
-let div=document.createElement("div");
-div.className="bill";
+    function billStatus(b){
+      if (b.paid) return "paid";
+      const days = daysUntil(b.date);
+      if (days < 0) return "overdue";
+      if (days <= 3) return "soon";
+      return "normal";
+    }
 
-div.innerHTML=`
-<div class="bill-top">
-<div>${b.name}</div>
-<div>$${b.amount}</div>
-</div>
-<div class="small">${b.category} | ${b.date}</div>
-<button onclick="toggle(${i})">${b.paid?'Undo':'Pay'}</button>
-<button onclick="removeBill(${i})">Delete</button>
-`;
+    function sortBills(){
+      bills.sort((a, b) => {
+        const pa = billStatus(a) === "overdue" ? 1 : billStatus(a) === "soon" ? 2 : billStatus(a) === "normal" ? 3 : 4;
+        const pb = billStatus(b) === "overdue" ? 1 : billStatus(b) === "soon" ? 2 : billStatus(b) === "normal" ? 3 : 4;
+        if (pa !== pb) return pa - pb;
+        return daysUntil(a.date) - daysUntil(b.date);
+      });
+    }
 
-list.appendChild(div);
-});
+    function setupCanvas(canvas){
+      const rect = canvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.max(300, Math.floor(rect.width * ratio));
+      canvas.height = Math.floor(220 * ratio);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      return ctx;
+    }
 
-/* STATS */
-totalEl.innerText="$"+total.toFixed(2);
-unpaidEl.innerText="$"+unpaid.toFixed(2);
-overdueEl.innerText=overdue;
-leftoverEl.innerText="$"+(incomeVal-unpaid).toFixed(2);
+    function drawBar(catTotals){
+      const canvas = document.getElementById("barChart");
+      const ctx = setupCanvas(canvas);
+      const width = canvas.width / (window.devicePixelRatio || 1);
+      const height = 220;
 
-/* DRAW */
-drawBar(catTotals);
-drawPie(catTotals);
-drawTrend();
-}
+      ctx.clearRect(0, 0, width, height);
 
-loadIncome();
-render();
+      const entries = Object.entries(catTotals);
+      if (!entries.length){
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "14px system-ui";
+        ctx.fillText("No category data yet", 16, 30);
+        return;
+      }
 
-</script>
+      const max = Math.max(...entries.map(([,v]) => v), 1);
+      const chartTop = 20;
+      const chartBottom = 180;
+      const chartHeight = chartBottom - chartTop;
+      const barWidth = Math.min(44, (width - 30) / entries.length - 16);
+      const gap = 16;
+      const colors = ["#58a6ff", "#2ea043", "#f2cc60", "#ff6b6b", "#8b5cf6"];
+
+      entries.forEach(([cat, val], i) => {
+        const x = 20 + i * (barWidth + gap);
+        const h = (val / max) * chartHeight;
+        const y = chartBottom - h;
+
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillRect(x, y, barWidth, h);
+
+        ctx.fillStyle = "#e6edf3";
+        ctx.font = "11px system-ui";
+        ctx.fillText(cat.slice(0, 10), x, 198);
+        ctx.fillStyle = "#9da7b3";
+        ctx.fillText("$" + Math.round(val), x, y - 6);
+      });
+    }
+
+    function drawPie(catTotals){
+      const canvas = document.getElementById("pieChart");
+      const ctx = setupCanvas(canvas);
+      const width = canvas.width / (window.devicePixelRatio || 1);
+      const height = 220;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const entries = Object.entries(catTotals);
+      if (!entries.length){
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "14px system-ui";
+        ctx.fillText("No category data yet", 16, 30);
+        return;
+      }
+
+      const total = entries.reduce((sum, [,v]) => sum + v, 0);
+      const cx = 110;
+      const cy = 110;
+      const r = 72;
+      const colors = ["#2ea043", "#58a6ff", "#f2cc60", "#ff6b6b", "#8b5cf6", "#14b8a6"];
+      let start = -Math.PI / 2;
+
+      entries.forEach(([cat, val], i) => {
+        const slice = (val / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, start + slice);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        start += slice;
+      });
+
+      ctx.beginPath();
+      ctx.fillStyle = "#0f141b";
+      ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#e6edf3";
+      ctx.font = "bold 13px system-ui";
+      ctx.fillText("Total", 95, 106);
+      ctx.font = "12px system-ui";
+      ctx.fillText("$" + Math.round(total), 88, 124);
+
+      entries.slice(0, 4).forEach(([cat, val], i) => {
+        const lx = 220;
+        const ly = 38 + i * 32;
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillRect(lx, ly, 12, 12);
+        ctx.fillStyle = "#e6edf3";
+        ctx.font = "12px system-ui";
+        ctx.fillText(cat, lx + 18, ly + 10);
+        ctx.fillStyle = "#9da7b3";
+        ctx.fillText(Math.round((val / total) * 100) + "%", lx + 90, ly + 10);
+      });
+    }
+
+    function drawTrend(){
+      const canvas = document.getElementById("trendChart");
+      const ctx = setupCanvas(canvas);
+      const width = canvas.width / (window.devicePixelRatio || 1);
+      const height = 220;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const sorted = [...bills].sort((a,b) => new Date(a.date) - new Date(b.date));
+      if (!sorted.length){
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "14px system-ui";
+        ctx.fillText("No trend data yet", 16, 30);
+        return;
+      }
+
+      const amounts = sorted.map(b => Number(b.amount || 0));
+      const max = Math.max(...amounts, 1);
+      const left = 20;
+      const right = width - 20;
+      const top = 20;
+      const bottom = 180;
+      const spanX = Math.max(1, right - left);
+      const spanY = bottom - top;
+
+      ctx.strokeStyle = "#27313d";
+      ctx.beginPath();
+      ctx.moveTo(left, bottom);
+      ctx.lineTo(right, bottom);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#58a6ff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+
+      sorted.forEach((b, i) => {
+        const x = sorted.length === 1 ? left : left + (i / (sorted.length - 1)) * spanX;
+        const y = bottom - (b.amount / max) * spanY;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+
+      ctx.stroke();
+
+      sorted.forEach((b, i) => {
+        const x = sorted.length === 1 ? left : left + (i / (sorted.length - 1)) * spanX;
+        const y = bottom - (b.amount / max) * spanY;
+        ctx.fillStyle = "#2ea043";
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.fillStyle = "#9da7b3";
+      ctx.font = "11px system-ui";
+      ctx.fillText("By due date", 16, 16);
+    }
+
+    function renderList(){
+      if (!bills.length){
+        listEl.innerHTML = '<div class="empty">No bills added yet.</div>';
+        return;
+      }
+
+      listEl.innerHTML = bills.map(b => {
+        const status = billStatus(b);
+        const days = daysUntil(b.date);
+        const cls = status === "overdue" ? "overdue" : status === "soon" ? "soon" : "";
+
+        let chip = '<span class="chip green">Paid</span>';
+        if (!b.paid && status === "overdue") chip = `<span class="chip red">${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"} overdue</span>`;
+        else if (!b.paid && status === "soon") chip = days === 0
+          ? '<span class="chip red">Due today</span>'
+          : `<span class="chip yellow">Due in ${days} day${days === 1 ? "" : "s"}</span>`;
+        else if (!b.paid) chip = '<span class="chip green">Upcoming</span>';
+
+        return `
+          <div class="bill ${cls}">
+            <div class="bill-top">
+              <div>
+                <div><strong>${escapeHtml(b.name)}</strong></div>
+                <div class="small">${escapeHtml(b.category)} | ${escapeHtml(b.date)}</div>
+              </div>
+              <div><strong>${money(b.amount)}</strong></div>
+            </div>
+            <div class="chip-row">
+              ${chip}
+              ${b.recurring ? '<span class="chip">Recurring</span>' : ''}
+            </div>
+            <div class="bill-actions">
+              <button onclick="togglePaid('${b.id}')">${b.paid ? 'Undo' : 'Pay'}</button>
+              <button class="danger" onclick="removeBill('${b.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str){
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function render(){
+      saveIncome();
+      generateRecurring();
+      sortBills();
+
+      const incomeVal = Number(incomeEl.value || 0);
+      const total = bills.reduce((sum, b) => sum + Number(b.amount || 0), 0);
+      const unpaid = bills.filter(b => !b.paid).reduce((sum, b) => sum + Number(b.amount || 0), 0);
+      const overdue = bills.filter(b => !b.paid && daysUntil(b.date) < 0).length;
+      const leftover = incomeVal - unpaid;
+
+      totalEl.textContent = money(total);
+      unpaidEl.textContent = money(unpaid);
+      overdueEl.textContent = String(overdue);
+      leftoverEl.textContent = money(leftover);
+
+      const catTotals = {};
+      bills.forEach(b => {
+        catTotals[b.category] = (catTotals[b.category] || 0) + Number(b.amount || 0);
+      });
+
+      drawBar(catTotals);
+      drawPie(catTotals);
+      drawTrend();
+      renderList();
+    }
+
+    addBtn.addEventListener("click", addBill);
+    incomeEl.addEventListener("input", render);
+    window.addEventListener("resize", render);
+
+    loadBills();
+    loadIncome();
+    render();
+  </script>
 </body>
 </html>
