@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finance Command Center V4.5</title>
+  <title>Finance Command Center V4.6</title>
   <meta name="theme-color" content="#0b0f14" />
   <style>
     body{
@@ -76,6 +76,30 @@
       font-size:18px;
       font-weight:800;
     }
+    .alert-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .alert-box{
+      background:#111821;
+      padding:10px;
+      border-radius:10px;
+      border-left:4px solid #58a6ff;
+    }
+    .alert-box.red{ border-left-color:#ff6b6b; }
+    .alert-box.yellow{ border-left-color:#f2cc60; }
+    .alert-box.green{ border-left-color:#2ea043; }
+    .alert-box.blue{ border-left-color:#58a6ff; }
+    .alert-label{
+      font-size:12px;
+      color:#9da7b3;
+      margin-bottom:4px;
+    }
+    .alert-value{
+      font-size:17px;
+      font-weight:800;
+    }
     .bill{
       background:#111821;
       padding:10px;
@@ -113,6 +137,7 @@
     .chip.red{ color:#ffd0d0; background:#351920; border-color:#5a2c34; }
     .chip.yellow{ color:#ffe6a0; background:#342a10; border-color:#6d5a21; }
     .chip.green{ color:#c8ffd8; background:#13261a; border-color:#2f6c3d; }
+    .chip.blue{ color:#d6e8ff; background:#122031; border-color:#2d557d; }
     .bill-actions{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -136,6 +161,48 @@
       font-size:13px;
       padding:8px 0;
     }
+    .budget-row{
+      display:grid;
+      grid-template-columns:1.2fr .8fr auto;
+      gap:8px;
+      align-items:end;
+      margin-top:8px;
+    }
+    .budget-list{
+      display:grid;
+      gap:8px;
+      margin-top:10px;
+    }
+    .budget-item{
+      background:#111821;
+      border:1px solid #27313d;
+      border-radius:10px;
+      padding:10px;
+    }
+    .budget-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:8px;
+    }
+    .budget-name{
+      font-weight:700;
+    }
+    .budget-status{
+      font-size:12px;
+      font-weight:700;
+    }
+    .budget-status.good{ color:#2ea043; }
+    .budget-status.warn{ color:#f2cc60; }
+    .budget-status.bad{ color:#ff6b6b; }
+    .budget-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      font-size:12px;
+      color:#9da7b3;
+    }
   </style>
 </head>
 <body>
@@ -145,6 +212,28 @@
     <div class="card">
       <div class="section-title">Monthly Income</div>
       <input id="income" placeholder="Monthly Income" type="number" step="0.01">
+    </div>
+
+    <div class="card">
+      <div class="section-title">Alerts Panel</div>
+      <div class="alert-grid">
+        <div class="alert-box red">
+          <div class="alert-label">Overdue Bills</div>
+          <div id="alertOverdue" class="alert-value">0</div>
+        </div>
+        <div class="alert-box red">
+          <div class="alert-label">Due Today</div>
+          <div id="alertToday" class="alert-value">0</div>
+        </div>
+        <div class="alert-box yellow">
+          <div class="alert-label">Due Soon (3 days)</div>
+          <div id="alertSoon" class="alert-value">0</div>
+        </div>
+        <div class="alert-box blue">
+          <div class="alert-label">Highest Unpaid</div>
+          <div id="alertHighest" class="alert-value">$0.00</div>
+        </div>
+      </div>
     </div>
 
     <div class="card grid">
@@ -164,6 +253,22 @@
         <div class="stat-label">Leftover</div>
         <div id="leftover" class="stat-value">$0.00</div>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Budget Tracking</div>
+      <div class="budget-row">
+        <select id="budgetCategory">
+          <option>Rent</option>
+          <option>Utilities</option>
+          <option>Subscriptions</option>
+          <option>Debt</option>
+          <option>Other</option>
+        </select>
+        <input id="budgetAmount" type="number" step="0.01" placeholder="Planned Budget">
+        <button id="saveBudgetBtn">Save</button>
+      </div>
+      <div id="budgetList" class="budget-list"></div>
     </div>
 
     <div class="card">
@@ -209,12 +314,14 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "bills_v45_fixed";
-    const LEGACY_KEYS = ["bills_v45", "finance_exec_v1", "bills_v44", "finance_v4_lite_data", "bills_v43", "bills_v42", "bills_v41"];
-    const INCOME_KEY = "income_v45_fixed";
-    const LEGACY_INCOME_KEYS = ["income_v45", "finance_exec_income", "income_v44"];
+    const STORAGE_KEY = "bills_v46";
+    const BUDGET_KEY = "budgets_v46";
+    const LEGACY_KEYS = ["bills_v45_fixed", "bills_v45", "finance_exec_v1", "bills_v44", "finance_v4_lite_data", "bills_v43", "bills_v42", "bills_v41"];
+    const INCOME_KEY = "income_v46";
+    const LEGACY_INCOME_KEYS = ["income_v45_fixed", "income_v45", "finance_exec_income", "income_v44"];
 
     let bills = [];
+    let budgets = {};
 
     const incomeEl = document.getElementById("income");
     const totalEl = document.getElementById("total");
@@ -229,6 +336,11 @@
     const dateEl = document.getElementById("date");
     const categoryEl = document.getElementById("category");
     const recurringEl = document.getElementById("recurring");
+
+    const budgetCategoryEl = document.getElementById("budgetCategory");
+    const budgetAmountEl = document.getElementById("budgetAmount");
+    const saveBudgetBtn = document.getElementById("saveBudgetBtn");
+    const budgetListEl = document.getElementById("budgetList");
 
     function money(v){
       return new Intl.NumberFormat("en-US", {
@@ -292,6 +404,18 @@
       }));
 
       saveBills();
+    }
+
+    function saveBudgets(){
+      localStorage.setItem(BUDGET_KEY, JSON.stringify(budgets));
+    }
+
+    function loadBudgets(){
+      try{
+        budgets = JSON.parse(localStorage.getItem(BUDGET_KEY)) || {};
+      } catch(e){
+        budgets = {};
+      }
     }
 
     function saveIncome(){
@@ -382,6 +506,27 @@
       categoryEl.value = "Rent";
       recurringEl.checked = false;
 
+      render();
+    }
+
+    function saveBudget(){
+      const category = budgetCategoryEl.value;
+      const amount = Number(budgetAmountEl.value);
+
+      if (!category || !amount || amount <= 0){
+        alert("Enter a valid planned budget.");
+        return;
+      }
+
+      budgets[category] = amount;
+      saveBudgets();
+      budgetAmountEl.value = "";
+      render();
+    }
+
+    function deleteBudget(category){
+      delete budgets[category];
+      saveBudgets();
       render();
     }
 
@@ -582,6 +727,71 @@
       ctx.fillText("By due date", 16, 16);
     }
 
+    function renderAlerts(){
+      const unpaidBills = bills.filter(b => !b.paid);
+      const overdueBills = unpaidBills.filter(b => daysUntil(b.date) < 0);
+      const todayBills = unpaidBills.filter(b => daysUntil(b.date) === 0);
+      const soonBills = unpaidBills.filter(b => {
+        const d = daysUntil(b.date);
+        return d > 0 && d <= 3;
+      });
+      const highest = unpaidBills.reduce((max, b) => b.amount > max.amount ? b : max, { amount: 0 });
+
+      document.getElementById("alertOverdue").textContent = overdueBills.length;
+      document.getElementById("alertToday").textContent = todayBills.length;
+      document.getElementById("alertSoon").textContent = soonBills.length;
+      document.getElementById("alertHighest").textContent = money(highest.amount || 0);
+    }
+
+    function renderBudget(){
+      const categories = ["Rent", "Utilities", "Subscriptions", "Debt", "Other"];
+      const actuals = {};
+
+      bills.forEach(b => {
+        actuals[b.category] = (actuals[b.category] || 0) + Number(b.amount || 0);
+      });
+
+      const rows = categories
+        .filter(cat => budgets[cat] || actuals[cat])
+        .map(cat => {
+          const planned = Number(budgets[cat] || 0);
+          const actual = Number(actuals[cat] || 0);
+          const diff = planned - actual;
+
+          let statusText = "No budget";
+          let statusClass = "";
+          if (planned > 0) {
+            if (actual > planned) {
+              statusText = "Over budget";
+              statusClass = "bad";
+            } else if (actual >= planned * 0.85) {
+              statusText = "Close";
+              statusClass = "warn";
+            } else {
+              statusText = "Under budget";
+              statusClass = "good";
+            }
+          }
+
+          return `
+            <div class="budget-item">
+              <div class="budget-top">
+                <div class="budget-name">${escapeHtml(cat)}</div>
+                <div class="budget-status ${statusClass}">${statusText}</div>
+              </div>
+              <div class="budget-meta">
+                <div>Planned: ${money(planned)}</div>
+                <div>Actual: ${money(actual)}</div>
+                <div>${planned > 0 ? (diff >= 0 ? "Left: " + money(diff) : "Over: " + money(Math.abs(diff))) : "Set budget"}</div>
+              </div>
+              <button class="danger" style="margin-top:8px;" onclick="deleteBudget('${cat}')">Delete Budget</button>
+            </div>
+          `;
+        });
+
+      budgetListEl.innerHTML = rows.length ? rows.join("") : '<div class="empty">No budgets set yet.</div>';
+    }
+
     function renderList(){
       if (!bills.length){
         listEl.innerHTML = '<div class="empty">No bills added yet.</div>';
@@ -652,6 +862,8 @@
         catTotals[b.category] = (catTotals[b.category] || 0) + Number(b.amount || 0);
       });
 
+      renderAlerts();
+      renderBudget();
       drawBar(catTotals);
       drawPie(catTotals);
       drawTrend();
@@ -659,10 +871,12 @@
     }
 
     addBtn.addEventListener("click", addBill);
+    saveBudgetBtn.addEventListener("click", saveBudget);
     incomeEl.addEventListener("input", render);
     window.addEventListener("resize", render);
 
     loadBills();
+    loadBudgets();
     loadIncome();
     render();
   </script>
