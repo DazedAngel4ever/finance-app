@@ -2,12 +2,13 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finance Command Center V4.3</title>
+<title>Finance Command Center V4.4</title>
 
 <style>
 body {margin:0;background:#0b0f14;color:#e6edf3;font-family:system-ui;}
 .wrap {padding:15px;max-width:700px;margin:auto;}
 .title {font-size:26px;font-weight:800;margin-bottom:10px;}
+
 .card {background:#161b22;padding:12px;border-radius:12px;margin-top:10px;}
 
 input, select, button {
@@ -25,14 +26,12 @@ button {background:#238636;font-weight:700;}
 
 .bill {background:#111821;padding:10px;border-radius:10px;margin-top:8px;}
 .bill-top {display:flex;justify-content:space-between;}
-.small {font-size:12px;color:#9da7b3;}
 
-.overdue {color:#ff6b6b;}
+.overdue {color:#ff6b6b;font-weight:700;}
 .due {color:#f2cc60;}
 .paid {color:#2ea043;}
 
 canvas {width:100%;height:200px;margin-top:10px;}
-
 </style>
 </head>
 
@@ -76,7 +75,7 @@ canvas {width:100%;height:200px;margin-top:10px;}
 <option>Other</option>
 </select>
 
-<label class="small">
+<label>
 <input type="checkbox" id="recurring"> Recurring Monthly
 </label>
 
@@ -90,15 +89,15 @@ canvas {width:100%;height:200px;margin-top:10px;}
 </div>
 
 <script>
-let bills = JSON.parse(localStorage.getItem("bills_v43")) || [];
+let bills = JSON.parse(localStorage.getItem("bills_v44")) || [];
 
-function save(){localStorage.setItem("bills_v43",JSON.stringify(bills));}
+function save(){localStorage.setItem("bills_v44",JSON.stringify(bills));}
 
 function daysUntil(date){
 return Math.ceil((new Date(date)-new Date())/(1000*60*60*24));
 }
 
-/* FIXED RECURRING */
+/* SMART RECURRING */
 function generateRecurring(){
 let now=new Date();
 let month=now.getMonth();
@@ -107,7 +106,6 @@ let year=now.getFullYear();
 bills.forEach(b=>{
 if(b.recurring && !b.generated){
 let d=new Date(b.date);
-
 let newDate=new Date(year,month,d.getDate());
 
 let exists=bills.some(x=>x.name===b.name && x.date===newDate.toISOString().split("T")[0]);
@@ -140,6 +138,20 @@ function toggle(i){bills[i].paid=!bills[i].paid;save();render();}
 /* DELETE */
 function removeBill(i){bills.splice(i,1);save();render();}
 
+/* PRIORITY SORT */
+function sortBills(a,b){
+let aDays=daysUntil(a.date);
+let bDays=daysUntil(b.date);
+
+if(!a.paid && aDays<0) return -1;
+if(!b.paid && bDays<0) return 1;
+
+if(!a.paid && aDays<=3) return -1;
+if(!b.paid && bDays<=3) return 1;
+
+return aDays - bDays;
+}
+
 /* CHART */
 function drawChart(catTotals){
 let c=document.getElementById("chart");
@@ -148,12 +160,12 @@ ctx.clearRect(0,0,c.width,c.height);
 
 let colors=["#2ea043","#58a6ff","#f2cc60","#ff6b6b","#8b5cf6"];
 let i=0;
-let x=10;
+let x=20;
 
 for(let cat in catTotals){
 ctx.fillStyle=colors[i%colors.length];
-ctx.fillRect(x,50,40,catTotals[cat]/5);
-ctx.fillText(cat,x,40);
+ctx.fillRect(x,100,40,catTotals[cat]/5);
+ctx.fillText(cat,x,90);
 x+=60;
 i++;
 }
@@ -165,12 +177,15 @@ function render(){
 generateRecurring();
 
 let list=document.getElementById("list");
-let income=parseFloat(document.getElementById("income").value)||0;
+let income=parseFloat(income.value)||0;
 
 let total=0,unpaid=0,overdue=0;
 let catTotals={};
 
 list.innerHTML="";
+
+/* SORT */
+bills.sort(sortBills);
 
 bills.forEach((b,i)=>{
 total+=b.amount;
@@ -181,6 +196,13 @@ if(!b.paid && days<0)overdue++;
 
 catTotals[b.category]=(catTotals[b.category]||0)+b.amount;
 
+let statusClass="";
+let statusText="";
+
+if(b.paid){statusClass="paid";statusText="Paid";}
+else if(days<0){statusClass="overdue";statusText="OVERDUE";}
+else if(days<=3){statusClass="due";statusText="Due Soon";}
+
 let div=document.createElement("div");
 div.className="bill";
 
@@ -189,16 +211,8 @@ div.innerHTML=`
 <div>${b.name}</div>
 <div>$${b.amount}</div>
 </div>
-<div class="small">${b.category} | ${b.date}</div>
-<div class="small ${
-b.paid?'paid':
-days<0?'overdue':
-days<=3?'due':''
-}">
-${b.paid?'Paid':
-days<0?'Overdue':
-days<=3?'Due Soon':''}
-</div>
+<div>${b.category} | ${b.date}</div>
+<div class="${statusClass}">${statusText}</div>
 <button onclick="toggle(${i})">${b.paid?'Undo':'Pay'}</button>
 <button onclick="removeBill(${i})">Delete</button>
 `;
