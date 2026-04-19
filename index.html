@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finance Command Center V4.2</title>
+<title>Finance Command Center V4.3</title>
 
 <style>
 body {margin:0;background:#0b0f14;color:#e6edf3;font-family:system-ui;}
 .wrap {padding:15px;max-width:700px;margin:auto;}
-.title {font-size:26px;font-weight:800;}
+.title {font-size:26px;font-weight:800;margin-bottom:10px;}
 .card {background:#161b22;padding:12px;border-radius:12px;margin-top:10px;}
 
 input, select, button {
@@ -27,6 +27,12 @@ button {background:#238636;font-weight:700;}
 .bill-top {display:flex;justify-content:space-between;}
 .small {font-size:12px;color:#9da7b3;}
 
+.overdue {color:#ff6b6b;}
+.due {color:#f2cc60;}
+.paid {color:#2ea043;}
+
+canvas {width:100%;height:200px;margin-top:10px;}
+
 </style>
 </head>
 
@@ -42,13 +48,18 @@ button {background:#238636;font-weight:700;}
 <div class="card grid">
 <div class="stat"><div>Total</div><div id="total" class="stat-value">$0</div></div>
 <div class="stat"><div>Unpaid</div><div id="unpaid" class="stat-value">$0</div></div>
+<div class="stat"><div>Overdue</div><div id="overdue" class="stat-value">0</div></div>
 <div class="stat"><div>Leftover</div><div id="leftover" class="stat-value">$0</div></div>
-<div class="stat"><div>Due Soon</div><div id="dueSoon" class="stat-value">0</div></div>
 </div>
 
 <div class="card">
 <div>Progress</div>
 <div class="progress"><div id="bar" class="progress-bar"></div></div>
+</div>
+
+<div class="card">
+<div>Spending Breakdown</div>
+<canvas id="chart"></canvas>
 </div>
 
 <div class="card">
@@ -73,38 +84,36 @@ button {background:#238636;font-weight:700;}
 </div>
 
 <div class="card">
-<div>Category Totals</div>
-<div id="categories"></div>
-</div>
-
-<div class="card">
 <div id="list"></div>
 </div>
 
 </div>
 
 <script>
-let bills = JSON.parse(localStorage.getItem("bills_v42")) || [];
+let bills = JSON.parse(localStorage.getItem("bills_v43")) || [];
 
-function save(){
-localStorage.setItem("bills_v42", JSON.stringify(bills));
-}
+function save(){localStorage.setItem("bills_v43",JSON.stringify(bills));}
 
 function daysUntil(date){
 return Math.ceil((new Date(date)-new Date())/(1000*60*60*24));
 }
 
-/* RECURRING */
+/* FIXED RECURRING */
 function generateRecurring(){
-let now = new Date();
-let month = now.getMonth();
+let now=new Date();
+let month=now.getMonth();
+let year=now.getFullYear();
 
 bills.forEach(b=>{
-if(b.recurring){
-let d = new Date(b.date);
-if(d.getMonth() !== month){
-let newDate = new Date(now.getFullYear(), month, d.getDate());
-bills.push({...b,date:newDate.toISOString().split("T")[0],paid:false,recurring:false});
+if(b.recurring && !b.generated){
+let d=new Date(b.date);
+
+let newDate=new Date(year,month,d.getDate());
+
+let exists=bills.some(x=>x.name===b.name && x.date===newDate.toISOString().split("T")[0]);
+
+if(!exists){
+bills.push({...b,date:newDate.toISOString().split("T")[0],paid:false,recurring:false,generated:true});
 }
 }
 });
@@ -112,11 +121,11 @@ bills.push({...b,date:newDate.toISOString().split("T")[0],paid:false,recurring:f
 
 /* ADD */
 function addBill(){
-let name = name.value;
-let amount = parseFloat(amount.value);
-let date = date.value;
-let category = category.value;
-let recurring = document.getElementById("recurring").checked;
+let name=nameInput.value;
+let amount=parseFloat(amountInput.value);
+let date=dateInput.value;
+let category=categoryInput.value;
+let recurring=document.getElementById("recurring").checked;
 
 if(!name||!amount||!date)return;
 
@@ -126,17 +135,28 @@ render();
 }
 
 /* TOGGLE */
-function toggle(i){
-bills[i].paid=!bills[i].paid;
-save();
-render();
-}
+function toggle(i){bills[i].paid=!bills[i].paid;save();render();}
 
 /* DELETE */
-function removeBill(i){
-bills.splice(i,1);
-save();
-render();
+function removeBill(i){bills.splice(i,1);save();render();}
+
+/* CHART */
+function drawChart(catTotals){
+let c=document.getElementById("chart");
+let ctx=c.getContext("2d");
+ctx.clearRect(0,0,c.width,c.height);
+
+let colors=["#2ea043","#58a6ff","#f2cc60","#ff6b6b","#8b5cf6"];
+let i=0;
+let x=10;
+
+for(let cat in catTotals){
+ctx.fillStyle=colors[i%colors.length];
+ctx.fillRect(x,50,40,catTotals[cat]/5);
+ctx.fillText(cat,x,40);
+x+=60;
+i++;
+}
 }
 
 /* RENDER */
@@ -144,24 +164,20 @@ function render(){
 
 generateRecurring();
 
-let list = document.getElementById("list");
-let catBox = document.getElementById("categories");
+let list=document.getElementById("list");
+let income=parseFloat(document.getElementById("income").value)||0;
 
-let incomeVal = parseFloat(income.value)||0;
-
-let total=0,unpaid=0,dueSoon=0;
+let total=0,unpaid=0,overdue=0;
 let catTotals={};
 
 list.innerHTML="";
-catBox.innerHTML="";
 
 bills.forEach((b,i)=>{
 total+=b.amount;
-
-if(!b.paid) unpaid+=b.amount;
+if(!b.paid)unpaid+=b.amount;
 
 let days=daysUntil(b.date);
-if(!b.paid && days<=3) dueSoon++;
+if(!b.paid && days<0)overdue++;
 
 catTotals[b.category]=(catTotals[b.category]||0)+b.amount;
 
@@ -174,9 +190,14 @@ div.innerHTML=`
 <div>$${b.amount}</div>
 </div>
 <div class="small">${b.category} | ${b.date}</div>
-<div class="small">
-${b.paid?'Paid':''}
-${!b.paid && days<=3?'⚠ Due Soon':''}
+<div class="small ${
+b.paid?'paid':
+days<0?'overdue':
+days<=3?'due':''
+}">
+${b.paid?'Paid':
+days<0?'Overdue':
+days<=3?'Due Soon':''}
 </div>
 <button onclick="toggle(${i})">${b.paid?'Undo':'Pay'}</button>
 <button onclick="removeBill(${i})">Delete</button>
@@ -185,21 +206,19 @@ ${!b.paid && days<=3?'⚠ Due Soon':''}
 list.appendChild(div);
 });
 
-/* CATEGORY TOTALS */
-for(let c in catTotals){
-catBox.innerHTML+=`<div class="small">${c}: $${catTotals[c].toFixed(2)}</div>`;
-}
-
 /* STATS */
 document.getElementById("total").innerText="$"+total.toFixed(2);
 document.getElementById("unpaid").innerText="$"+unpaid.toFixed(2);
-document.getElementById("dueSoon").innerText=dueSoon;
-document.getElementById("leftover").innerText="$"+(incomeVal-unpaid).toFixed(2);
+document.getElementById("overdue").innerText=overdue;
+document.getElementById("leftover").innerText="$"+(income-unpaid).toFixed(2);
 
 /* PROGRESS */
 let paid=total-unpaid;
-let percent = total? (paid/total)*100:0;
+let percent=total?(paid/total)*100:0;
 document.getElementById("bar").style.width=percent+"%";
+
+/* CHART */
+drawChart(catTotals);
 }
 
 render();
