@@ -1,92 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Finance Command Center V4.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance Command Center V4.2</title>
 
 <style>
 body {margin:0;background:#0b0f14;color:#e6edf3;font-family:system-ui;}
-.wrap {max-width:700px;margin:auto;padding:15px;}
-.title {font-size:26px;font-weight:800;margin-bottom:5px;}
-.sub {color:#9da7b3;font-size:13px;margin-bottom:12px;}
+.wrap {padding:15px;max-width:700px;margin:auto;}
+.title {font-size:26px;font-weight:800;}
+.card {background:#161b22;padding:12px;border-radius:12px;margin-top:10px;}
 
-.card {
-  background:#161b22;
-  border-radius:14px;
-  padding:12px;
-  margin-bottom:10px;
+input, select, button {
+width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;
+background:#0f141b;color:white;
 }
-
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-
-.stat {background:#111821;padding:10px;border-radius:10px;}
-.stat-title {font-size:12px;color:#9da7b3;}
-.stat-value {font-size:20px;font-weight:800;}
-
-input,button {
-  width:100%;
-  padding:10px;
-  margin-top:6px;
-  border-radius:10px;
-  border:none;
-  background:#0f141b;
-  color:white;
-}
-
 button {background:#238636;font-weight:700;}
 
-.bill {
-  background:#111821;
-  padding:10px;
-  border-radius:12px;
-  margin-top:8px;
-}
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat {background:#111821;padding:10px;border-radius:10px;}
+.stat-value {font-size:18px;font-weight:800;}
 
+.progress {height:10px;background:#222;border-radius:10px;margin-top:10px;}
+.progress-bar {height:100%;background:#2ea043;width:0%;}
+
+.bill {background:#111821;padding:10px;border-radius:10px;margin-top:8px;}
 .bill-top {display:flex;justify-content:space-between;}
-.bill-name {font-weight:700;}
-.bill-amount {font-weight:900;}
+.small {font-size:12px;color:#9da7b3;}
 
-.actions {display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;}
-
-.chip {font-size:12px;margin-top:4px;}
-.green {color:#2ea043;}
-.red {color:#ff6b6b;}
-.yellow {color:#f2cc60;}
 </style>
 </head>
 
 <body>
-
 <div class="wrap">
 
 <div class="title">💳 Finance Command Center</div>
-<div class="sub">Your personal money control system</div>
 
 <div class="card">
-<input id="income" type="number" placeholder="Monthly Income" oninput="render()">
+<input id="income" placeholder="Monthly Income" type="number" oninput="render()">
 </div>
 
 <div class="card grid">
-<div class="stat">
-<div class="stat-title">Total Bills</div>
-<div id="total" class="stat-value">$0</div>
+<div class="stat"><div>Total</div><div id="total" class="stat-value">$0</div></div>
+<div class="stat"><div>Unpaid</div><div id="unpaid" class="stat-value">$0</div></div>
+<div class="stat"><div>Leftover</div><div id="leftover" class="stat-value">$0</div></div>
+<div class="stat"><div>Due Soon</div><div id="dueSoon" class="stat-value">0</div></div>
 </div>
 
-<div class="stat">
-<div class="stat-title">Unpaid</div>
-<div id="unpaid" class="stat-value">$0</div>
-</div>
-
-<div class="stat">
-<div class="stat-title">Left Over</div>
-<div id="leftover" class="stat-value">$0</div>
-</div>
-
-<div class="stat">
-<div class="stat-title">Due Soon</div>
-<div id="dueSoon" class="stat-value">0</div>
-</div>
+<div class="card">
+<div>Progress</div>
+<div class="progress"><div id="bar" class="progress-bar"></div></div>
 </div>
 
 <div class="card">
@@ -94,7 +56,25 @@ button {background:#238636;font-weight:700;}
 <input id="name" placeholder="Bill Name">
 <input id="amount" type="number" placeholder="Amount">
 <input id="date" type="date">
-<button onclick="addBill()">Add</button>
+
+<select id="category">
+<option>Rent</option>
+<option>Utilities</option>
+<option>Subscriptions</option>
+<option>Debt</option>
+<option>Other</option>
+</select>
+
+<label class="small">
+<input type="checkbox" id="recurring"> Recurring Monthly
+</label>
+
+<button onclick="addBill()">Add Bill</button>
+</div>
+
+<div class="card">
+<div>Category Totals</div>
+<div id="categories"></div>
 </div>
 
 <div class="card">
@@ -104,82 +84,122 @@ button {background:#238636;font-weight:700;}
 </div>
 
 <script>
-let bills = JSON.parse(localStorage.getItem("bills_v41")) || [];
+let bills = JSON.parse(localStorage.getItem("bills_v42")) || [];
 
 function save(){
-localStorage.setItem("bills_v41", JSON.stringify(bills));
+localStorage.setItem("bills_v42", JSON.stringify(bills));
 }
 
 function daysUntil(date){
 return Math.ceil((new Date(date)-new Date())/(1000*60*60*24));
 }
 
+/* RECURRING */
+function generateRecurring(){
+let now = new Date();
+let month = now.getMonth();
+
+bills.forEach(b=>{
+if(b.recurring){
+let d = new Date(b.date);
+if(d.getMonth() !== month){
+let newDate = new Date(now.getFullYear(), month, d.getDate());
+bills.push({...b,date:newDate.toISOString().split("T")[0],paid:false,recurring:false});
+}
+}
+});
+}
+
+/* ADD */
 function addBill(){
-let name = document.getElementById("name").value;
-let amount = parseFloat(document.getElementById("amount").value);
-let date = document.getElementById("date").value;
+let name = name.value;
+let amount = parseFloat(amount.value);
+let date = date.value;
+let category = category.value;
+let recurring = document.getElementById("recurring").checked;
 
-if(!name || !amount || !date) return;
+if(!name||!amount||!date)return;
 
-bills.push({name,amount,date,paid:false});
+bills.push({name,amount,date,category,paid:false,recurring});
 save();
 render();
 }
 
+/* TOGGLE */
 function toggle(i){
-bills[i].paid = !bills[i].paid;
+bills[i].paid=!bills[i].paid;
 save();
 render();
 }
 
+/* DELETE */
 function removeBill(i){
 bills.splice(i,1);
 save();
 render();
 }
 
+/* RENDER */
 function render(){
+
+generateRecurring();
+
 let list = document.getElementById("list");
+let catBox = document.getElementById("categories");
 
-let income = parseFloat(document.getElementById("income").value) || 0;
+let incomeVal = parseFloat(income.value)||0;
 
-let total=0, unpaid=0, dueSoon=0;
+let total=0,unpaid=0,dueSoon=0;
+let catTotals={};
 
 list.innerHTML="";
+catBox.innerHTML="";
 
 bills.forEach((b,i)=>{
 total+=b.amount;
+
 if(!b.paid) unpaid+=b.amount;
 
-let days = daysUntil(b.date);
+let days=daysUntil(b.date);
 if(!b.paid && days<=3) dueSoon++;
 
-let div = document.createElement("div");
+catTotals[b.category]=(catTotals[b.category]||0)+b.amount;
+
+let div=document.createElement("div");
 div.className="bill";
 
-div.innerHTML = `
+div.innerHTML=`
 <div class="bill-top">
-<div class="bill-name">${b.name}</div>
-<div class="bill-amount">$${b.amount}</div>
+<div>${b.name}</div>
+<div>$${b.amount}</div>
 </div>
-<div>${b.date}</div>
-<div class="chip ${b.paid?'green':''}">
+<div class="small">${b.category} | ${b.date}</div>
+<div class="small">
 ${b.paid?'Paid':''}
 ${!b.paid && days<=3?'⚠ Due Soon':''}
 </div>
-<div class="actions">
 <button onclick="toggle(${i})">${b.paid?'Undo':'Pay'}</button>
 <button onclick="removeBill(${i})">Delete</button>
-</div>
 `;
 
 list.appendChild(div);
 });
 
+/* CATEGORY TOTALS */
+for(let c in catTotals){
+catBox.innerHTML+=`<div class="small">${c}: $${catTotals[c].toFixed(2)}</div>`;
+}
+
+/* STATS */
 document.getElementById("total").innerText="$"+total.toFixed(2);
 document.getElementById("unpaid").innerText="$"+unpaid.toFixed(2);
 document.getElementById("dueSoon").innerText=dueSoon;
-document.getElementById("leftover").innerText="$"+(income-unpaid).toFixed(2);
+document.getElementById("leftover").innerText="$"+(incomeVal-unpaid).toFixed(2);
+
+/* PROGRESS */
+let paid=total-unpaid;
+let percent = total? (paid/total)*100:0;
+document.getElementById("bar").style.width=percent+"%";
 }
 
 render();
