@@ -18,9 +18,11 @@
       --yellow:#f2cc60;
       --blue:#58a6ff;
       --purple:#8b5cf6;
+      --teal:#14b8a6;
     }
 
     *{box-sizing:border-box}
+
     body{
       margin:0;
       background:linear-gradient(180deg,#0b0f14 0%, #0f141b 100%);
@@ -57,8 +59,9 @@
       position:sticky;
       top:0;
       background:linear-gradient(180deg,#0b0f14 0%, #0f141b 100%);
-      z-index:10;
+      z-index:20;
     }
+
     .tabs::-webkit-scrollbar{display:none}
 
     .tab-btn{
@@ -161,6 +164,7 @@
     .action-box{
       border-left:5px solid var(--blue);
     }
+
     .action-box.red{border-left-color:var(--red)}
     .action-box.yellow{border-left-color:var(--yellow)}
     .action-box.purple{border-left-color:var(--purple)}
@@ -341,7 +345,7 @@
 <body>
   <div class="wrap">
     <h1 class="hero-title">💳 Finance Command Center</h1>
-    <p class="hero-sub">Stable fixed version with tabs, bills, budget, goals, cash flow, report, and settings</p>
+    <p class="hero-sub">Full completed version with tabs, charts, bills, budget, goals, cash flow, report, and settings</p>
 
     <div class="tabs">
       <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
@@ -667,6 +671,47 @@
       $("toggleShowCharts").checked = !!prefs.showCharts;
     }
 
+    function generateRecurring(){
+      const now = new Date();
+      const month = now.getMonth();
+      const year = now.getFullYear();
+      const snapshot = [...bills];
+      let changed = false;
+
+      snapshot.forEach(b => {
+        if (!b.recurring) return;
+        const original = toLocalDate(b.date);
+        if (!original) return;
+
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        const targetDay = Math.min(original.getDate(), lastDay);
+        const targetDate = new Date(year, month, targetDay, 12, 0, 0);
+        const targetStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
+
+        const exists = bills.some(x =>
+          x.name === b.name &&
+          x.amount === b.amount &&
+          x.category === b.category &&
+          x.date === targetStr
+        );
+
+        if (!exists && (original.getMonth() !== month || original.getFullYear() !== year)){
+          bills.push({
+            id: uid("bill"),
+            name: b.name,
+            amount: b.amount,
+            date: targetStr,
+            category: b.category,
+            paid: false,
+            recurring: false
+          });
+          changed = true;
+        }
+      });
+
+      if (changed) saveAll();
+    }
+
     function populateMonthControl(){
       const months = [...new Set(bills.map(b => monthKeyFromDate(b.date)).filter(Boolean))];
       const current = currentMonthKey();
@@ -755,7 +800,11 @@
       if (editingBillId){
         const bill = bills.find(b => b.id === editingBillId);
         if (!bill) return;
-        bill.name = name; bill.amount = amount; bill.date = date; bill.category = category; bill.recurring = recurring;
+        bill.name = name;
+        bill.amount = amount;
+        bill.date = date;
+        bill.category = category;
+        bill.recurring = recurring;
       } else {
         bills.push({ id: uid("bill"), name, amount, date, category, paid:false, recurring });
       }
@@ -838,7 +887,9 @@
       if (editingGoalId){
         const g = goals.find(x => x.id === editingGoalId);
         if (!g) return;
-        g.name = name; g.saved = saved; g.target = target;
+        g.name = name;
+        g.saved = saved;
+        g.target = target;
       } else {
         goals.push({ id: uid("goal"), name, saved, target });
       }
@@ -903,6 +954,11 @@
       $("healthStatus").textContent = label;
       $("healthNote").textContent = note;
       $("healthFill").style.width = score + "%";
+      $("healthFill").style.background = cls === "green"
+        ? "linear-gradient(90deg,#2ea043,#53d07a)"
+        : cls === "yellow"
+          ? "linear-gradient(90deg,#f2cc60,#ffd97a)"
+          : "linear-gradient(90deg,#ff6b6b,#ff8a8a)";
     }
 
     function renderActionCenter(list){
@@ -1002,19 +1058,188 @@
       $("budgetList").innerHTML = rows.length ? rows.join("") : `<div class="empty">No budgets set.</div>`;
     }
 
-    function drawPlaceholder(canvasId, label){
+    function setupCanvas(canvasId){
       const canvas = $(canvasId);
-      if (!canvas) return;
+      if (!canvas) return null;
       const rect = canvas.getBoundingClientRect();
       const ratio = window.devicePixelRatio || 1;
-      canvas.width = Math.max(300, Math.floor(rect.width * ratio));
-      canvas.height = Math.floor(220 * ratio);
+      const width = Math.max(300, Math.floor(rect.width));
+      const height = 220;
+      canvas.width = Math.floor(width * ratio);
+      canvas.height = Math.floor(height * ratio);
       const ctx = canvas.getContext("2d");
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.clearRect(0, 0, width, height);
+      return { canvas, ctx, width, height };
+    }
+
+    function getCategoryTotals(list){
+      const totals = {};
+      list.forEach(b => {
+        const cat = b.category || "Other";
+        totals[cat] = (totals[cat] || 0) + Number(b.amount || 0);
+      });
+      return totals;
+    }
+
+    function drawBarChart(list){
+      const setup = setupCanvas("barChart");
+      if (!setup) return;
+      const { ctx, width, height } = setup;
+      const totals = getCategoryTotals(list);
+      const entries = Object.entries(totals);
+
+      if (!entries.length){
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "14px system-ui";
+        ctx.fillText("No category data for this month", 16, 30);
+        return;
+      }
+
+      const maxVal = Math.max(...entries.map(([,v]) => v), 1);
+      const left = 16;
+      const right = width - 16;
+      const top = 20;
+      const bottom = height - 36;
+      const chartHeight = bottom - top;
+      const gap = 12;
+      const barWidth = Math.max(18, Math.min(44, ((right - left) - gap * (entries.length - 1)) / entries.length));
+      const colors = ["#58a6ff","#2ea043","#f2cc60","#ff6b6b","#8b5cf6","#14b8a6"];
+
+      entries.forEach(([cat, val], i) => {
+        const x = left + i * (barWidth + gap);
+        const h = (val / maxVal) * chartHeight;
+        const y = bottom - h;
+
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillRect(x, y, barWidth, h);
+
+        ctx.fillStyle = "#e6edf3";
+        ctx.font = "11px system-ui";
+        ctx.fillText(cat.slice(0, 10), x, height - 16);
+
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "10px system-ui";
+        ctx.fillText("$" + Math.round(val), x, Math.max(12, y - 6));
+      });
+    }
+
+    function drawPieChart(list){
+      const setup = setupCanvas("pieChart");
+      if (!setup) return;
+      const { ctx } = setup;
+      const totals = getCategoryTotals(list);
+      const entries = Object.entries(totals);
+
+      if (!entries.length){
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "14px system-ui";
+        ctx.fillText("No category data for this month", 16, 30);
+        return;
+      }
+
+      const total = entries.reduce((s, [,v]) => s + v, 0);
+      const cx = 95;
+      const cy = 105;
+      const r = 62;
+      const innerR = 34;
+      const colors = ["#2ea043","#58a6ff","#f2cc60","#ff6b6b","#8b5cf6","#14b8a6"];
+      let start = -Math.PI / 2;
+
+      entries.forEach(([cat, val], i) => {
+        const slice = (val / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, start + slice);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        start += slice;
+      });
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+      ctx.fillStyle = "#0f141b";
+      ctx.fill();
+
+      ctx.fillStyle = "#e6edf3";
+      ctx.font = "bold 12px system-ui";
+      ctx.fillText("Total", cx - 14, cy - 4);
+      ctx.font = "11px system-ui";
+      ctx.fillText("$" + Math.round(total), cx - 18, cy + 14);
+
+      entries.slice(0, 4).forEach(([cat, val], i) => {
+        const lx = 185;
+        const ly = 32 + i * 34;
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillRect(lx, ly, 12, 12);
+
+        ctx.fillStyle = "#e6edf3";
+        ctx.font = "11px system-ui";
+        ctx.fillText(cat, lx + 18, ly + 10);
+
+        ctx.fillStyle = "#9da7b3";
+        ctx.fillText(Math.round((val / total) * 100) + "%", lx + 18, ly + 24);
+      });
+    }
+
+    function drawTrendChart(list){
+      const setup = setupCanvas("trendChart");
+      if (!setup) return;
+      const { ctx, width, height } = setup;
+
+      const sorted = [...list].sort((a,b) => new Date(a.date) - new Date(b.date));
+
+      if (!sorted.length){
+        ctx.fillStyle = "#9da7b3";
+        ctx.font = "14px system-ui";
+        ctx.fillText("No trend data for this month", 16, 30);
+        return;
+      }
+
+      const values = sorted.map(b => Number(b.amount || 0));
+      const maxVal = Math.max(...values, 1);
+
+      const left = 20;
+      const right = width - 20;
+      const top = 20;
+      const bottom = height - 28;
+      const spanX = Math.max(1, right - left);
+      const spanY = Math.max(1, bottom - top);
+
+      ctx.strokeStyle = "#27313d";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(left, bottom);
+      ctx.lineTo(right, bottom);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#58a6ff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+
+      sorted.forEach((b, i) => {
+        const x = sorted.length === 1 ? left : left + (i / (sorted.length - 1)) * spanX;
+        const y = bottom - (Number(b.amount || 0) / maxVal) * spanY;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+
+      ctx.stroke();
+
+      sorted.forEach((b, i) => {
+        const x = sorted.length === 1 ? left : left + (i / (sorted.length - 1)) * spanX;
+        const y = bottom - (Number(b.amount || 0) / maxVal) * spanY;
+
+        ctx.fillStyle = "#2ea043";
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
       ctx.fillStyle = "#9da7b3";
-      ctx.font = "14px system-ui";
-      ctx.fillText(label, 16, 30);
+      ctx.font = "11px system-ui";
+      ctx.fillText("Due-date spend trend", 16, 14);
     }
 
     function renderBillsTab(list){
@@ -1035,6 +1260,7 @@
 
     function renderBillCards(list, emptyText){
       if (!list.length) return `<div class="empty">${emptyText}</div>`;
+
       return list.map(b => {
         const status = billStatus(b);
         const days = daysUntil(b.date);
@@ -1196,18 +1422,20 @@
 
     function render(){
       saveAll();
+      generateRecurring();
       populateMonthControl();
       applyPrefs();
       const list = filteredBills();
+
       renderSnapshot(list);
       renderHealth(list);
       renderActionCenter(list);
       renderSubscriptions(list);
       renderGoals();
       renderBudgets(list);
-      drawPlaceholder("barChart", "Charts ready");
-      drawPlaceholder("pieChart", "Charts ready");
-      drawPlaceholder("trendChart", "Charts ready");
+      drawBarChart(list);
+      drawPieChart(list);
+      drawTrendChart(list);
       renderBillsTab(list);
       renderCashFlow(list);
       renderReport(list);
