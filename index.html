@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finance Command Center V5</title>
+  <title>Finance Command Center V5.2</title>
   <meta name="theme-color" content="#0b0f14" />
   <style>
     :root{
       --bg:#0b0f14;
       --panel:#161b22;
-      --panel-2:#111821;
+      --panel2:#111821;
       --line:#27313d;
       --text:#e6edf3;
       --muted:#9da7b3;
@@ -20,78 +20,80 @@
       --purple:#8b5cf6;
       --teal:#14b8a6;
     }
-
     *{box-sizing:border-box}
-
     body{
       margin:0;
-      background:linear-gradient(180deg,#0b0f14 0%, #0d1219 100%);
+      background:linear-gradient(180deg,#0b0f14 0%, #0e131a 100%);
       color:var(--text);
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
     }
-
     .wrap{
-      padding:14px;
-      max-width:840px;
+      max-width:900px;
       margin:0 auto;
+      padding:14px;
     }
-
     .hero{
-      padding:10px 2px 4px;
+      padding:8px 2px 4px;
     }
-
     .hero-title{
+      margin:0;
       font-size:30px;
       font-weight:800;
       letter-spacing:-.02em;
-      margin:0;
     }
-
     .hero-sub{
       margin:4px 0 0;
       color:var(--muted);
       font-size:13px;
     }
 
+    .tabs{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+    .tab-btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 10px;
+      background:#18212b;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      border:1px solid var(--line);
+    }
+    .tab-btn.active{
+      background:#122031;
+      color:#fff;
+      border-color:#396592;
+    }
+
+    .page{display:none}
+    .page.active{display:block}
+
     .section{
       margin-top:12px;
-      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
       border:1px solid var(--line);
       border-radius:18px;
       padding:14px;
       box-shadow:0 10px 28px rgba(0,0,0,.18);
     }
-
     .section-title{
+      margin:0 0 10px;
       font-size:16px;
       font-weight:800;
-      margin:0 0 10px;
     }
-
     .section-note{
       color:var(--muted);
       font-size:12px;
-      margin-top:-4px;
-      margin-bottom:10px;
+      margin:-4px 0 10px;
     }
 
-    .grid-2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .grid-3{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:10px;
-    }
-
-    .grid-4{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .grid-4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
     .kpi{
       background:#0f141b;
@@ -99,27 +101,18 @@
       border-radius:16px;
       padding:12px;
     }
-
     .kpi-label{
       color:var(--muted);
       font-size:12px;
       margin-bottom:5px;
     }
-
     .kpi-value{
       font-size:22px;
       font-weight:800;
       line-height:1.05;
     }
 
-    .hero-strip{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .input, input, select, button{
+    input,select,button,textarea{
       width:100%;
       border:none;
       border-radius:12px;
@@ -129,33 +122,25 @@
       color:var(--text);
       font:inherit;
     }
-
+    textarea{
+      min-height:160px;
+      resize:vertical;
+    }
     button{
       background:#238636;
       font-weight:800;
     }
-
     button.secondary{
       background:#1a2230;
       border:1px solid var(--line);
     }
-
     button.danger{
       background:#4b1f24;
       color:#ffd0d0;
     }
 
-    .toolbar-2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .toolbar-3{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:10px;
-    }
+    .toolbar-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .toolbar-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
     .month-bar{
       display:grid;
@@ -163,14 +148,12 @@
       gap:10px;
       align-items:end;
     }
-
     .month-tabs{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       margin-top:8px;
     }
-
     .month-pill{
       padding:8px 11px;
       border-radius:999px;
@@ -178,42 +161,12 @@
       border:1px solid var(--line);
       color:var(--muted);
       font-size:12px;
+      cursor:pointer;
     }
-
     .month-pill.active{
-      color:white;
-      border-color:#396592;
+      color:#fff;
       background:#122031;
-    }
-
-    .action-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .action-box{
-      background:#0f141b;
-      border:1px solid var(--line);
-      border-left:5px solid var(--blue);
-      border-radius:14px;
-      padding:12px;
-    }
-
-    .action-box.red{border-left-color:var(--red)}
-    .action-box.yellow{border-left-color:var(--yellow)}
-    .action-box.green{border-left-color:var(--green)}
-    .action-box.purple{border-left-color:var(--purple)}
-
-    .action-label{
-      color:var(--muted);
-      font-size:12px;
-      margin-bottom:5px;
-    }
-
-    .action-value{
-      font-size:20px;
-      font-weight:800;
+      border-color:#396592;
     }
 
     .chip-row{
@@ -222,7 +175,6 @@
       gap:8px;
       margin-top:8px;
     }
-
     .chip{
       padding:5px 8px;
       border-radius:999px;
@@ -231,91 +183,13 @@
       background:#1b2430;
       color:#d2d9e0;
     }
-
     .chip.red{color:#ffd0d0;background:#351920;border-color:#5a2c34}
     .chip.yellow{color:#ffe6a0;background:#342a10;border-color:#6d5a21}
     .chip.green{color:#c8ffd8;background:#13261a;border-color:#2f6c3d}
     .chip.blue{color:#d6e8ff;background:#122031;border-color:#2d557d}
     .chip.purple{color:#e3d7ff;background:#231736;border-color:#4d347a}
 
-    .health-bar{
-      height:12px;
-      border-radius:999px;
-      background:#0b1016;
-      border:1px solid var(--line);
-      overflow:hidden;
-      margin-top:10px;
-    }
-
-    .health-fill{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,var(--green),#53d07a);
-      transition:width .25s ease;
-    }
-
-    .budget-list,
-    .goal-list,
-    .bill-list,
-    .mini-list{
-      display:grid;
-      gap:8px;
-      margin-top:8px;
-    }
-
-    .row-card{
-      background:#0f141b;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:11px;
-    }
-
-    .row-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-    }
-
-    .row-title{
-      font-weight:800;
-      font-size:15px;
-    }
-
-    .row-sub{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:4px;
-    }
-
-    .row-amount{
-      font-size:18px;
-      font-weight:800;
-      white-space:nowrap;
-    }
-
-    .row-actions{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:8px;
-      margin-top:10px;
-    }
-
-    .budget-meta,
-    .goal-meta{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:8px;
-      margin-top:8px;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .status-good{color:var(--green); font-weight:800; font-size:12px}
-    .status-warn{color:var(--yellow); font-weight:800; font-size:12px}
-    .status-bad{color:var(--red); font-weight:800; font-size:12px}
-
-    .progress{
+    .health-bar,.progress{
       height:10px;
       border-radius:999px;
       background:#0b1016;
@@ -323,24 +197,101 @@
       overflow:hidden;
       margin-top:8px;
     }
-
-    .progress > div{
+    .health-fill,.progress > div{
       height:100%;
       width:0%;
-      background:linear-gradient(90deg,var(--blue),var(--teal));
+      background:linear-gradient(90deg,var(--green),#53d07a);
     }
 
-    .sub-grid{
+    .action-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
+    .action-box{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-left:5px solid var(--blue);
+      border-radius:14px;
+      padding:12px;
+    }
+    .action-box.red{border-left-color:var(--red)}
+    .action-box.yellow{border-left-color:var(--yellow)}
+    .action-box.green{border-left-color:var(--green)}
+    .action-box.purple{border-left-color:var(--purple)}
+    .action-label{color:var(--muted);font-size:12px;margin-bottom:5px}
+    .action-value{font-size:20px;font-weight:800}
 
-    .canvas-wrap{
-      width:100%;
-      overflow:hidden;
+    .row-card{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:11px;
+    }
+    .row-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .row-title{font-weight:800;font-size:15px}
+    .row-sub{color:var(--muted);font-size:12px;margin-top:4px}
+    .row-amount{font-size:18px;font-weight:800;white-space:nowrap}
+    .row-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      margin-top:10px;
     }
 
+    .budget-list,.goal-list,.mini-list,.bill-stack,.forecast-list,.report-list{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+    .budget-meta,.goal-meta,.forecast-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .status-good{color:var(--green);font-weight:800;font-size:12px}
+    .status-warn{color:var(--yellow);font-weight:800;font-size:12px}
+    .status-bad{color:var(--red);font-weight:800;font-size:12px}
+
+    .bill-area{
+      display:grid;
+      gap:12px;
+    }
+    .bill-group{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+    }
+    .bill-group-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+      font-size:15px;
+      font-weight:800;
+    }
+    .bill-card{
+      background:#111821;
+      border:1px solid var(--line);
+      border-left:4px solid var(--green);
+      border-radius:14px;
+      padding:11px;
+    }
+    .bill-card.overdue{border-left-color:var(--red)}
+    .bill-card.soon{border-left-color:var(--yellow)}
+    .bill-card.paid{border-left-color:var(--blue)}
+
+    .canvas-wrap{width:100%;overflow:hidden}
     canvas{
       width:100%;
       height:220px;
@@ -362,8 +313,8 @@
 
     @media (min-width:760px){
       .grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
-      .hero-strip{grid-template-columns:1.2fr .8fr .8fr .8fr .8fr}
       .action-grid{grid-template-columns:1fr 1fr 1fr 1fr}
+      .tabs{grid-template-columns:repeat(6,1fr)}
     }
   </style>
 </head>
@@ -371,43 +322,16 @@
   <div class="wrap">
     <div class="hero">
       <h1 class="hero-title">💳 Finance Command Center</h1>
-      <p class="hero-sub">Executive command dashboard · mobile-first · offline and saved on this device</p>
+      <p class="hero-sub">Tabbed dashboard · cleaner bill workflow · forecast and reporting built in</p>
     </div>
 
-    <div class="section">
-      <div class="section-title">Executive Snapshot</div>
-      <div class="hero-strip">
-        <div class="kpi">
-          <div class="kpi-label">Monthly income</div>
-          <input id="income" type="number" step="0.01" placeholder="Monthly Income">
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Total</div>
-          <div id="total" class="kpi-value">$0.00</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Unpaid</div>
-          <div id="unpaid" class="kpi-value">$0.00</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Overdue</div>
-          <div id="overdue" class="kpi-value">0</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Leftover</div>
-          <div id="leftover" class="kpi-value">$0.00</div>
-        </div>
-      </div>
-
-      <div class="section-title" style="margin-top:12px;">Budget Health</div>
-      <div class="section-note">How safe this month looks after unpaid bills and budget pressure</div>
-      <div class="chip-row">
-        <span id="healthStatus" class="chip blue">Calculating</span>
-        <span id="healthNote" class="chip">Waiting for data</span>
-      </div>
-      <div class="health-bar">
-        <div id="healthFill" class="health-fill"></div>
-      </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="bills">Bills</button>
+      <button class="tab-btn" data-tab="budget">Budget</button>
+      <button class="tab-btn" data-tab="goals">Goals</button>
+      <button class="tab-btn" data-tab="cashflow">Cash Flow</button>
+      <button class="tab-btn" data-tab="report">Report</button>
     </div>
 
     <div class="section">
@@ -419,122 +343,220 @@
       <div id="monthTabs" class="month-tabs"></div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Action Center</div>
-      <div class="section-note">What needs attention first</div>
-      <div class="action-grid">
-        <div class="action-box red">
-          <div class="action-label">Overdue bills</div>
-          <div id="alertOverdue" class="action-value">0</div>
-        </div>
-        <div class="action-box red">
-          <div class="action-label">Due today</div>
-          <div id="alertToday" class="action-value">0</div>
-        </div>
-        <div class="action-box yellow">
-          <div class="action-label">Due soon</div>
-          <div id="alertSoon" class="action-value">0</div>
-        </div>
-        <div class="action-box purple">
-          <div class="action-label">Highest unpaid</div>
-          <div id="alertHighest" class="action-value">$0.00</div>
-        </div>
-      </div>
-      <div class="chip-row" id="alertChips"></div>
-    </div>
-
-    <div class="sub-grid">
+    <div id="page-dashboard" class="page active">
       <div class="section">
-        <div class="section-title">Subscriptions Snapshot</div>
-        <div class="section-note">Recurring bills and subscription load</div>
-        <div class="kpi">
-          <div class="kpi-label">Monthly subscriptions</div>
-          <div id="subscriptionTotal" class="kpi-value">$0.00</div>
+        <div class="section-title">Executive Snapshot</div>
+        <div class="grid-4">
+          <div class="kpi">
+            <div class="kpi-label">Monthly income</div>
+            <input id="income" type="number" step="0.01" placeholder="Monthly Income">
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Total</div>
+            <div id="total" class="kpi-value">$0.00</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Unpaid</div>
+            <div id="unpaid" class="kpi-value">$0.00</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Leftover</div>
+            <div id="leftover" class="kpi-value">$0.00</div>
+          </div>
         </div>
-        <div id="subscriptionList" class="mini-list"></div>
+        <div class="chip-row" style="margin-top:12px;">
+          <span id="healthStatus" class="chip blue">Calculating</span>
+          <span id="healthNote" class="chip">Waiting for data</span>
+        </div>
+        <div class="health-bar">
+          <div id="healthFill" class="health-fill"></div>
+        </div>
       </div>
 
       <div class="section">
-        <div class="section-title">Savings Goals</div>
-        <div class="section-note">Track what you are building, not just what you owe</div>
-        <input id="goalName" placeholder="Goal name">
+        <div class="section-title">Action Center</div>
+        <div class="action-grid">
+          <div class="action-box red">
+            <div class="action-label">Overdue bills</div>
+            <div id="alertOverdue" class="action-value">0</div>
+          </div>
+          <div class="action-box red">
+            <div class="action-label">Due today</div>
+            <div id="alertToday" class="action-value">0</div>
+          </div>
+          <div class="action-box yellow">
+            <div class="action-label">Due soon</div>
+            <div id="alertSoon" class="action-value">0</div>
+          </div>
+          <div class="action-box purple">
+            <div class="action-label">Highest unpaid</div>
+            <div id="alertHighest" class="action-value">$0.00</div>
+          </div>
+        </div>
+        <div id="alertChips" class="chip-row"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Insights</div>
         <div class="grid-2">
-          <input id="goalSaved" type="number" step="0.01" placeholder="Saved so far">
-          <input id="goalTarget" type="number" step="0.01" placeholder="Target">
+          <div class="row-card">
+            <div class="section-title" style="margin-bottom:0;">Category Bar Chart</div>
+            <div class="canvas-wrap"><canvas id="barChart"></canvas></div>
+          </div>
+          <div class="row-card">
+            <div class="section-title" style="margin-bottom:0;">Spending Distribution</div>
+            <div class="canvas-wrap"><canvas id="pieChart"></canvas></div>
+          </div>
         </div>
+        <div class="row-card" style="margin-top:10px;">
+          <div class="section-title" style="margin-bottom:0;">Monthly Trend</div>
+          <div class="canvas-wrap"><canvas id="trendChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-bills" class="page">
+      <div class="section">
+        <div class="section-title" id="formTitle">Bill Operations</div>
+        <div class="section-note">Add, edit, and duplicate bills for the selected month</div>
+        <input id="name" placeholder="Bill Name">
+        <div class="grid-2">
+          <input id="amount" type="number" step="0.01" placeholder="Amount">
+          <input id="date" type="date">
+        </div>
+        <div class="grid-2">
+          <select id="category">
+            <option>Rent</option>
+            <option>Utilities</option>
+            <option>Subscriptions</option>
+            <option>Debt</option>
+            <option>Other</option>
+          </select>
+          <label class="chip" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="checkbox" id="recurring" style="width:auto;margin:0;"> Recurring monthly
+          </label>
+        </div>
+        <div class="toolbar-3">
+          <button id="saveBillBtn">Add</button>
+          <button id="cancelEditBtn" class="secondary">Cancel</button>
+          <button id="duplicateBillBtn" class="secondary">Duplicate Last</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bills</div>
+        <div class="bill-area">
+          <div class="bill-group">
+            <div class="bill-group-title">
+              <span>Urgent</span>
+              <span id="urgentCount" class="chip red">0</span>
+            </div>
+            <div id="urgentBills" class="bill-stack"></div>
+          </div>
+
+          <div class="bill-group">
+            <div class="bill-group-title">
+              <span>Upcoming</span>
+              <span id="upcomingCount" class="chip blue">0</span>
+            </div>
+            <div id="upcomingBills" class="bill-stack"></div>
+          </div>
+
+          <div class="bill-group">
+            <div class="bill-group-title">
+              <span>Paid</span>
+              <span id="paidCount" class="chip green">0</span>
+            </div>
+            <div id="paidBills" class="bill-stack"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-budget" class="page">
+      <div class="section">
+        <div class="section-title">Budget Tracking</div>
+        <div class="section-note">Planned versus actual for the selected month</div>
+        <div class="grid-3">
+          <select id="budgetCategory">
+            <option>Rent</option>
+            <option>Utilities</option>
+            <option>Subscriptions</option>
+            <option>Debt</option>
+            <option>Other</option>
+          </select>
+          <input id="budgetAmount" type="number" step="0.01" placeholder="Planned Budget">
+          <button id="saveBudgetBtn">Save Budget</button>
+        </div>
+        <div id="budgetList" class="budget-list"></div>
+      </div>
+    </div>
+
+    <div id="page-goals" class="page">
+      <div class="grid-2">
+        <div class="section">
+          <div class="section-title">Subscriptions Snapshot</div>
+          <div class="kpi">
+            <div class="kpi-label">Monthly subscriptions</div>
+            <div id="subscriptionTotal" class="kpi-value">$0.00</div>
+          </div>
+          <div id="subscriptionList" class="mini-list"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Savings Goals</div>
+          <input id="goalName" placeholder="Goal name">
+          <div class="grid-2">
+            <input id="goalSaved" type="number" step="0.01" placeholder="Saved so far">
+            <input id="goalTarget" type="number" step="0.01" placeholder="Target">
+          </div>
+          <div class="toolbar-2">
+            <button id="saveGoalBtn">Save Goal</button>
+            <button id="clearGoalBtn" class="secondary">Clear</button>
+          </div>
+          <div id="goalList" class="goal-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-cashflow" class="page">
+      <div class="section">
+        <div class="section-title">Cash Flow Forecast</div>
+        <div class="section-note">Projected balance after each unpaid bill in due-date order for the selected month</div>
+        <div class="grid-3">
+          <div class="kpi">
+            <div class="kpi-label">Starting balance</div>
+            <div id="cfStart" class="kpi-value">$0.00</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Lowest projected</div>
+            <div id="cfLowest" class="kpi-value">$0.00</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Ending projected</div>
+            <div id="cfEnding" class="kpi-value">$0.00</div>
+          </div>
+        </div>
+        <div id="cfChips" class="chip-row"></div>
+        <div id="cashflowList" class="forecast-list"></div>
+      </div>
+    </div>
+
+    <div id="page-report" class="page">
+      <div class="section">
+        <div class="section-title">Monthly Report</div>
+        <div class="section-note">Summary for the selected month</div>
+        <div id="reportSummary" class="report-list"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Export / Copy</div>
         <div class="toolbar-2">
-          <button id="saveGoalBtn">Save Goal</button>
-          <button id="clearGoalBtn" class="secondary">Clear</button>
+          <button id="exportJsonBtn">Export JSON Backup</button>
+          <button id="copyReportBtn" class="secondary">Copy Text Report</button>
         </div>
-        <div id="goalList" class="goal-list"></div>
+        <textarea id="reportText" readonly></textarea>
       </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Budget Tracking</div>
-      <div class="section-note">Planned versus actual for the selected month</div>
-      <div class="grid-3">
-        <select id="budgetCategory">
-          <option>Rent</option>
-          <option>Utilities</option>
-          <option>Subscriptions</option>
-          <option>Debt</option>
-          <option>Other</option>
-        </select>
-        <input id="budgetAmount" type="number" step="0.01" placeholder="Planned Budget">
-        <button id="saveBudgetBtn">Save Budget</button>
-      </div>
-      <div id="budgetList" class="budget-list"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Insights</div>
-      <div class="grid-2">
-        <div class="row-card">
-          <div class="section-title" style="margin-bottom:0;">Category Bar Chart</div>
-          <div class="canvas-wrap"><canvas id="barChart"></canvas></div>
-        </div>
-        <div class="row-card">
-          <div class="section-title" style="margin-bottom:0;">Spending Distribution</div>
-          <div class="canvas-wrap"><canvas id="pieChart"></canvas></div>
-        </div>
-      </div>
-      <div class="row-card" style="margin-top:10px;">
-        <div class="section-title" style="margin-bottom:0;">Monthly Trend</div>
-        <div class="canvas-wrap"><canvas id="trendChart"></canvas></div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title" id="formTitle">Bill Operations</div>
-      <div class="section-note">Add, edit, and duplicate bills</div>
-      <input id="name" placeholder="Bill Name">
-      <div class="grid-2">
-        <input id="amount" type="number" step="0.01" placeholder="Amount">
-        <input id="date" type="date">
-      </div>
-      <div class="grid-2">
-        <select id="category">
-          <option>Rent</option>
-          <option>Utilities</option>
-          <option>Subscriptions</option>
-          <option>Debt</option>
-          <option>Other</option>
-        </select>
-        <label class="chip" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-          <input type="checkbox" id="recurring" style="width:auto;margin:0;"> Recurring monthly
-        </label>
-      </div>
-      <div class="toolbar-3">
-        <button id="saveBillBtn">Add</button>
-        <button id="cancelEditBtn" class="secondary">Cancel</button>
-        <button id="duplicateBillBtn" class="secondary">Duplicate Last</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Bills</div>
-      <div id="billList" class="bill-list"></div>
     </div>
 
     <div class="footer-space"></div>
@@ -546,10 +568,6 @@
     const GOAL_KEY = "finance_v5_layout_goals";
     const INCOME_KEY = "finance_v5_layout_income";
     const MONTH_KEY = "finance_v5_layout_month";
-    const LEGACY_BILL_KEYS = ["bills_v47","bills_v46","bills_v45_fixed","bills_v45","finance_exec_v1","bills_v44","finance_v4_lite_data","bills_v43","bills_v42","bills_v41"];
-    const LEGACY_BUDGET_KEYS = ["budgets_v47","budgets_v46"];
-    const LEGACY_GOAL_KEYS = [];
-    const LEGACY_INCOME_KEYS = ["income_v47","income_v46","income_v45_fixed","income_v45","finance_exec_income","income_v44"];
 
     let bills = [];
     let budgets = {};
@@ -563,7 +581,6 @@
 
     const totalEl = document.getElementById("total");
     const unpaidEl = document.getElementById("unpaid");
-    const overdueEl = document.getElementById("overdue");
     const leftoverEl = document.getElementById("leftover");
 
     const healthStatusEl = document.getElementById("healthStatus");
@@ -576,6 +593,24 @@
     const alertHighestEl = document.getElementById("alertHighest");
     const alertChipsEl = document.getElementById("alertChips");
 
+    const formTitleEl = document.getElementById("formTitle");
+    const nameEl = document.getElementById("name");
+    const amountEl = document.getElementById("amount");
+    const dateEl = document.getElementById("date");
+    const categoryEl = document.getElementById("category");
+    const recurringEl = document.getElementById("recurring");
+
+    const urgentBillsEl = document.getElementById("urgentBills");
+    const upcomingBillsEl = document.getElementById("upcomingBills");
+    const paidBillsEl = document.getElementById("paidBills");
+    const urgentCountEl = document.getElementById("urgentCount");
+    const upcomingCountEl = document.getElementById("upcomingCount");
+    const paidCountEl = document.getElementById("paidCount");
+
+    const budgetCategoryEl = document.getElementById("budgetCategory");
+    const budgetAmountEl = document.getElementById("budgetAmount");
+    const budgetListEl = document.getElementById("budgetList");
+
     const subscriptionTotalEl = document.getElementById("subscriptionTotal");
     const subscriptionListEl = document.getElementById("subscriptionList");
 
@@ -584,17 +619,14 @@
     const goalTargetEl = document.getElementById("goalTarget");
     const goalListEl = document.getElementById("goalList");
 
-    const budgetCategoryEl = document.getElementById("budgetCategory");
-    const budgetAmountEl = document.getElementById("budgetAmount");
-    const budgetListEl = document.getElementById("budgetList");
+    const cfStartEl = document.getElementById("cfStart");
+    const cfLowestEl = document.getElementById("cfLowest");
+    const cfEndingEl = document.getElementById("cfEnding");
+    const cfChipsEl = document.getElementById("cfChips");
+    const cashflowListEl = document.getElementById("cashflowList");
 
-    const formTitleEl = document.getElementById("formTitle");
-    const billListEl = document.getElementById("billList");
-    const nameEl = document.getElementById("name");
-    const amountEl = document.getElementById("amount");
-    const dateEl = document.getElementById("date");
-    const categoryEl = document.getElementById("category");
-    const recurringEl = document.getElementById("recurring");
+    const reportSummaryEl = document.getElementById("reportSummary");
+    const reportTextEl = document.getElementById("reportText");
 
     function money(v){
       return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number(v || 0));
@@ -638,18 +670,6 @@
       return Math.round((due - now)/86400000);
     }
 
-    function loadFirstValid(keys, fallback){
-      for (const key of keys){
-        try{
-          const raw = localStorage.getItem(key);
-          if (!raw) continue;
-          const parsed = JSON.parse(raw);
-          if (parsed !== null && parsed !== undefined) return parsed;
-        }catch(e){}
-      }
-      return fallback;
-    }
-
     function saveBills(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(bills)); }
     function saveBudgets(){ localStorage.setItem(BUDGET_KEY, JSON.stringify(budgets)); }
     function saveGoals(){ localStorage.setItem(GOAL_KEY, JSON.stringify(goals)); }
@@ -657,8 +677,11 @@
     function saveMonth(){ localStorage.setItem(MONTH_KEY, monthFilterEl.value || currentMonthKey()); }
 
     function loadData(){
-      const loadedBills = loadFirstValid(LEGACY_BILL_KEYS, []);
-      bills = Array.isArray(loadedBills) ? loadedBills.map(b => ({
+      try{ bills = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e){ bills = []; }
+      try{ budgets = JSON.parse(localStorage.getItem(BUDGET_KEY)) || {}; } catch(e){ budgets = {}; }
+      try{ goals = JSON.parse(localStorage.getItem(GOAL_KEY)) || []; } catch(e){ goals = []; }
+
+      bills = Array.isArray(bills) ? bills.map(b => ({
         id: b.id || uid("bill"),
         name: b.name || "",
         amount: Number(b.amount || 0),
@@ -668,31 +691,14 @@
         recurring: !!b.recurring
       })) : [];
 
-      const loadedBudgets = loadFirstValid(LEGACY_BUDGET_KEYS, {});
-      budgets = loadedBudgets && typeof loadedBudgets === "object" ? loadedBudgets : {};
-
-      const loadedGoals = loadFirstValid(LEGACY_GOAL_KEYS, []);
-      goals = Array.isArray(loadedGoals) ? loadedGoals.map(g => ({
+      goals = Array.isArray(goals) ? goals.map(g => ({
         id: g.id || uid("goal"),
         name: g.name || "",
         saved: Number(g.saved || 0),
         target: Number(g.target || 0)
       })) : [];
 
-      let income = "";
-      for (const key of LEGACY_INCOME_KEYS){
-        const val = localStorage.getItem(key);
-        if (val !== null && val !== ""){
-          income = val;
-          break;
-        }
-      }
-      incomeEl.value = localStorage.getItem(INCOME_KEY) || income || "";
-
-      saveBills();
-      saveBudgets();
-      saveGoals();
-      saveIncome();
+      incomeEl.value = localStorage.getItem(INCOME_KEY) || "";
     }
 
     function generateRecurring(){
@@ -822,10 +828,7 @@
       } else {
         bills.push({
           id: uid("bill"),
-          name,
-          amount,
-          date,
-          category,
+          name, amount, date, category,
           paid:false,
           recurring
         });
@@ -850,7 +853,8 @@
       dateEl.value = bill.date;
       categoryEl.value = bill.category;
       recurringEl.checked = !!bill.recurring;
-      window.scrollTo({ top: document.body.scrollHeight * 0.72, behavior:"smooth" });
+      switchTab("bills");
+      window.scrollTo({ top: document.body.scrollHeight * 0.3, behavior:"smooth" });
     }
     window.editBill = editBill;
 
@@ -934,12 +938,7 @@
         g.saved = saved;
         g.target = target;
       } else {
-        goals.push({
-          id: uid("goal"),
-          name,
-          saved,
-          target
-        });
+        goals.push({ id: uid("goal"), name, saved, target });
       }
 
       saveGoals();
@@ -955,7 +954,7 @@
       goalSavedEl.value = g.saved;
       goalTargetEl.value = g.target;
       document.getElementById("saveGoalBtn").textContent = "Update Goal";
-      window.scrollTo({ top: document.body.scrollHeight * 0.35, behavior:"smooth" });
+      switchTab("goals");
     }
     window.editGoal = editGoal;
 
@@ -967,14 +966,37 @@
     }
     window.removeGoal = removeGoal;
 
+    function quickAddToGoal(id){
+      const g = goals.find(x => x.id === id);
+      if (!g) return;
+      const amt = prompt("Add amount to saved total:");
+      if (amt === null) return;
+      const n = Number(amt);
+      if (!n || n <= 0) return;
+      g.saved += n;
+      saveGoals();
+      render();
+    }
+    window.quickAddToGoal = quickAddToGoal;
+
+    function renderSnapshot(list){
+      const income = Number(incomeEl.value || 0);
+      const total = list.reduce((s,b)=>s+b.amount,0);
+      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s+b.amount,0);
+      const leftover = income - unpaid;
+
+      totalEl.textContent = money(total);
+      unpaidEl.textContent = money(unpaid);
+      leftoverEl.textContent = money(leftover);
+    }
+
     function renderHealth(list){
       const income = Number(incomeEl.value || 0);
-      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s + b.amount, 0);
-      const usage = income > 0 ? unpaid / income : 0;
+      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s+b.amount,0);
       const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
 
       let score = 100;
-      if (income > 0) score -= Math.min(usage * 100, 85);
+      if (income > 0) score -= Math.min((unpaid / income) * 100, 85);
       score -= overdue * 12;
       score = Math.max(0, Math.min(100, Math.round(score)));
 
@@ -984,7 +1006,7 @@
       if (score < 75){
         label = "Tight";
         cls = "yellow";
-        note = "Watch upcoming obligations closely.";
+        note = "Watch upcoming bills closely.";
       }
       if (score < 45){
         label = "Overextended";
@@ -1001,19 +1023,6 @@
         : cls === "yellow"
           ? "linear-gradient(90deg,#f2cc60,#ffd97a)"
           : "linear-gradient(90deg,#ff6b6b,#ff8a8a)";
-    }
-
-    function renderSnapshot(list){
-      const income = Number(incomeEl.value || 0);
-      const total = list.reduce((s,b)=>s + b.amount, 0);
-      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s + b.amount, 0);
-      const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
-      const leftover = income - unpaid;
-
-      totalEl.textContent = money(total);
-      unpaidEl.textContent = money(unpaid);
-      overdueEl.textContent = String(overdue);
-      leftoverEl.textContent = money(leftover);
     }
 
     function renderActionCenter(list){
@@ -1040,11 +1049,8 @@
     }
 
     function renderSubscriptions(list){
-      const subs = sortBills(list.filter(b =>
-        b.recurring ||
-        b.category === "Subscriptions"
-      ));
-      const total = subs.reduce((s,b)=>s + b.amount, 0);
+      const subs = sortBills(list.filter(b => b.recurring || b.category === "Subscriptions"));
+      const total = subs.reduce((s,b)=>s+b.amount,0);
       subscriptionTotalEl.textContent = money(total);
 
       if (!subs.length){
@@ -1104,25 +1110,10 @@
       }).join("");
     }
 
-    function quickAddToGoal(id){
-      const g = goals.find(x => x.id === id);
-      if (!g) return;
-      const amt = prompt("Add amount to saved total:");
-      if (amt === null) return;
-      const n = Number(amt);
-      if (!n || n <= 0) return;
-      g.saved += n;
-      saveGoals();
-      render();
-    }
-    window.quickAddToGoal = quickAddToGoal;
-
     function renderBudgets(list){
       const categories = ["Rent","Utilities","Subscriptions","Debt","Other"];
       const actuals = {};
-      list.forEach(b => {
-        actuals[b.category] = (actuals[b.category] || 0) + b.amount;
-      });
+      list.forEach(b => { actuals[b.category] = (actuals[b.category] || 0) + b.amount; });
 
       const rows = categories
         .filter(cat => budgets[cat] || actuals[cat])
@@ -1297,24 +1288,46 @@
       });
     }
 
-    function renderBills(list){
+    function renderBillsTab(list){
       const sorted = sortBills(list);
-      if (!sorted.length){
-        billListEl.innerHTML = `<div class="empty">No bills in this month.</div>`;
-        return;
-      }
+      const urgent = sorted.filter(b => !b.paid && (billStatus(b) === "overdue" || billStatus(b) === "today" || billStatus(b) === "soon"));
+      const upcoming = sorted.filter(b => !b.paid && billStatus(b) === "upcoming");
+      const paid = sorted.filter(b => b.paid);
 
-      billListEl.innerHTML = sorted.map(b=>{
+      urgentCountEl.textContent = urgent.length;
+      upcomingCountEl.textContent = upcoming.length;
+      paidCountEl.textContent = paid.length;
+
+      urgentBillsEl.innerHTML = renderBillCards(urgent, "No urgent bills.");
+      upcomingBillsEl.innerHTML = renderBillCards(upcoming, "No upcoming bills.");
+      paidBillsEl.innerHTML = renderBillCards(paid, "No paid bills yet.");
+    }
+
+    function renderBillCards(list, emptyText){
+      if (!list.length) return `<div class="empty">${emptyText}</div>`;
+
+      return list.map(b => {
         const status = billStatus(b);
         const days = daysUntil(b.date);
         let chip = `<span class="chip green">Paid</span>`;
-        if (!b.paid && status === "overdue") chip = `<span class="chip red">${Math.abs(days)} day${Math.abs(days)===1?"":"s"} overdue</span>`;
-        else if (!b.paid && status === "today") chip = `<span class="chip red">Due today</span>`;
-        else if (!b.paid && status === "soon") chip = `<span class="chip yellow">Due in ${days} day${days===1?"":"s"}</span>`;
-        else if (!b.paid) chip = `<span class="chip blue">Upcoming</span>`;
+        let cls = "paid";
+
+        if (!b.paid && status === "overdue"){
+          chip = `<span class="chip red">${Math.abs(days)} day${Math.abs(days)===1?"":"s"} overdue</span>`;
+          cls = "overdue";
+        } else if (!b.paid && status === "today"){
+          chip = `<span class="chip red">Due today</span>`;
+          cls = "overdue";
+        } else if (!b.paid && status === "soon"){
+          chip = `<span class="chip yellow">Due in ${days} day${days===1?"":"s"}</span>`;
+          cls = "soon";
+        } else if (!b.paid){
+          chip = `<span class="chip blue">Upcoming</span>`;
+          cls = "";
+        }
 
         return `
-          <div class="row-card">
+          <div class="bill-card ${cls}">
             <div class="row-top">
               <div>
                 <div class="row-title">${escapeHtml(b.name)}</div>
@@ -1336,6 +1349,156 @@
       }).join("");
     }
 
+    function renderCashFlow(list){
+      const income = Number(incomeEl.value || 0);
+      const unpaid = sortBills(list.filter(b => !b.paid));
+      let running = income;
+      let lowest = income;
+
+      cfStartEl.textContent = money(income);
+
+      if (!unpaid.length){
+        cfLowestEl.textContent = money(income);
+        cfEndingEl.textContent = money(income);
+        cfChipsEl.innerHTML = `<span class="chip green">No unpaid bills to forecast</span>`;
+        cashflowListEl.innerHTML = `<div class="empty">No unpaid bills in this month.</div>`;
+        return;
+      }
+
+      const rows = unpaid.map(b => {
+        running -= b.amount;
+        lowest = Math.min(lowest, running);
+        const statusChip = running < 0
+          ? `<span class="chip red">Negative after this bill</span>`
+          : running < income * 0.2
+            ? `<span class="chip yellow">Low balance point</span>`
+            : `<span class="chip blue">Still positive</span>`;
+
+        return `
+          <div class="row-card">
+            <div class="row-top">
+              <div>
+                <div class="row-title">${escapeHtml(b.name)}</div>
+                <div class="row-sub">${escapeHtml(b.category)} · due ${escapeHtml(b.date)}</div>
+              </div>
+              <div class="row-amount">-${money(b.amount).replace("$","")}</div>
+            </div>
+            <div class="forecast-meta">
+              <div>Before: ${money(running + b.amount)}</div>
+              <div>After: ${money(running)}</div>
+              <div>${daysUntil(b.date) < 0 ? "Past due" : "In " + daysUntil(b.date) + "d"}</div>
+            </div>
+            <div class="chip-row">${statusChip}</div>
+          </div>
+        `;
+      }).join("");
+
+      cfLowestEl.textContent = money(lowest);
+      cfEndingEl.textContent = money(running);
+
+      const chips = [];
+      if (lowest < 0) chips.push(`<span class="chip red">Forecast goes negative</span>`);
+      else if (lowest < income * 0.2) chips.push(`<span class="chip yellow">Tight low point this month</span>`);
+      else chips.push(`<span class="chip green">Forecast stays healthy</span>`);
+      chips.push(`<span class="chip blue">${unpaid.length} unpaid bill${unpaid.length === 1 ? "" : "s"} in forecast</span>`);
+      cfChipsEl.innerHTML = chips.join("");
+      cashflowListEl.innerHTML = rows;
+    }
+
+    function renderReport(list){
+      const income = Number(incomeEl.value || 0);
+      const total = list.reduce((s,b)=>s + b.amount, 0);
+      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s + b.amount, 0);
+      const paid = total - unpaid;
+      const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
+      const today = list.filter(b => !b.paid && daysUntil(b.date) === 0).length;
+      const soon = list.filter(b => !b.paid && daysUntil(b.date) > 0 && daysUntil(b.date) <= 3).length;
+      const leftover = income - unpaid;
+
+      const catTotals = {};
+      list.forEach(b => { catTotals[b.category] = (catTotals[b.category] || 0) + b.amount; });
+
+      const topCats = Object.entries(catTotals)
+        .sort((a,b) => b[1] - a[1])
+        .slice(0,5);
+
+      reportSummaryEl.innerHTML = `
+        <div class="row-card">
+          <div class="row-title">${formatMonthLabel(monthFilterEl.value || currentMonthKey())}</div>
+          <div class="budget-meta">
+            <div>Income: ${money(income)}</div>
+            <div>Total Bills: ${money(total)}</div>
+            <div>Paid: ${money(paid)}</div>
+          </div>
+          <div class="budget-meta">
+            <div>Unpaid: ${money(unpaid)}</div>
+            <div>Overdue: ${overdue}</div>
+            <div>Leftover: ${money(leftover)}</div>
+          </div>
+          <div class="chip-row">
+            ${today ? `<span class="chip red">${today} due today</span>` : ``}
+            ${soon ? `<span class="chip yellow">${soon} due soon</span>` : ``}
+            ${!today && !soon && !overdue ? `<span class="chip green">No urgent items</span>` : ``}
+          </div>
+        </div>
+        ${topCats.map(([cat,val]) => `
+          <div class="row-card">
+            <div class="row-top">
+              <div class="row-title">${escapeHtml(cat)}</div>
+              <div class="row-amount">${money(val)}</div>
+            </div>
+          </div>
+        `).join("")}
+      `;
+
+      const reportLines = [
+        `Finance Report - ${formatMonthLabel(monthFilterEl.value || currentMonthKey())}`,
+        ``,
+        `Income: ${money(income)}`,
+        `Total Bills: ${money(total)}`,
+        `Paid: ${money(paid)}`,
+        `Unpaid: ${money(unpaid)}`,
+        `Overdue Count: ${overdue}`,
+        `Due Today: ${today}`,
+        `Due Soon: ${soon}`,
+        `Projected Leftover: ${money(leftover)}`,
+        ``,
+        `Top Categories:`,
+        ...topCats.map(([cat,val]) => `- ${cat}: ${money(val)}`)
+      ];
+
+      reportTextEl.value = reportLines.join("\n");
+    }
+
+    function exportJson(){
+      const payload = {
+        bills,
+        budgets,
+        goals,
+        income: incomeEl.value || "",
+        month: monthFilterEl.value || currentMonthKey(),
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `finance-report-${monthFilterEl.value || currentMonthKey()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function copyReport(){
+      try{
+        await navigator.clipboard.writeText(reportTextEl.value);
+        alert("Report copied.");
+      } catch(e){
+        reportTextEl.select();
+        document.execCommand("copy");
+        alert("Report copied.");
+      }
+    }
+
     function escapeHtml(str){
       return String(str || "")
         .replace(/&/g,"&amp;")
@@ -1345,6 +1508,14 @@
         .replace(/'/g,"&#39;");
     }
 
+    function switchTab(tabName){
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tabName);
+      });
+      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+      document.getElementById("page-" + tabName).classList.add("active");
+    }
+
     function render(){
       saveIncome();
       generateRecurring();
@@ -1352,6 +1523,7 @@
       saveMonth();
 
       const list = filteredBills();
+
       renderSnapshot(list);
       renderHealth(list);
       renderActionCenter(list);
@@ -1367,8 +1539,14 @@
       drawBar(catTotals);
       drawPie(catTotals);
       drawTrend(list);
-      renderBills(list);
+      renderBillsTab(list);
+      renderCashFlow(list);
+      renderReport(list);
     }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    });
 
     document.getElementById("saveBillBtn").addEventListener("click", saveBill);
     document.getElementById("cancelEditBtn").addEventListener("click", resetBillForm);
@@ -1376,6 +1554,8 @@
     document.getElementById("saveBudgetBtn").addEventListener("click", saveBudget);
     document.getElementById("saveGoalBtn").addEventListener("click", saveGoal);
     document.getElementById("clearGoalBtn").addEventListener("click", resetGoalForm);
+    document.getElementById("exportJsonBtn").addEventListener("click", exportJson);
+    document.getElementById("copyReportBtn").addEventListener("click", copyReport);
     incomeEl.addEventListener("input", render);
     monthFilterEl.addEventListener("change", render);
     document.getElementById("goCurrentMonthBtn").addEventListener("click", () => {
