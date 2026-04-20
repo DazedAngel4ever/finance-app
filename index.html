@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finance Command Center V5.4</title>
+  <title>Finance Command Center</title>
   <meta name="theme-color" content="#0b0f14" />
   <style>
     :root{
@@ -18,14 +18,12 @@
       --yellow:#f2cc60;
       --blue:#58a6ff;
       --purple:#8b5cf6;
-      --teal:#14b8a6;
     }
 
     *{box-sizing:border-box}
-
     body{
       margin:0;
-      background:linear-gradient(180deg,#0b0f14 0%, #0e131a 100%);
+      background:linear-gradient(180deg,#0b0f14 0%, #0f141b 100%);
       color:var(--text);
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
     }
@@ -37,14 +35,13 @@
     }
 
     .hero{
-      padding:8px 2px 4px;
+      margin-bottom:10px;
     }
 
     .hero-title{
       margin:0;
       font-size:28px;
       font-weight:800;
-      letter-spacing:-.02em;
       line-height:1.05;
     }
 
@@ -57,33 +54,35 @@
     .tabs{
       display:flex;
       gap:8px;
-      margin-top:12px;
       overflow-x:auto;
-      padding-bottom:4px;
+      padding:4px 0 8px;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:none;
+      position:sticky;
+      top:0;
+      background:linear-gradient(180deg,#0b0f14 0%, #0f141b 100%);
+      z-index:20;
     }
 
-    .tabs::-webkit-scrollbar{
-      display:none;
-    }
+    .tabs::-webkit-scrollbar{display:none}
 
     .tab-btn{
       flex:0 0 auto;
-      min-width:110px;
-      border:none;
-      border-radius:14px;
+      min-width:108px;
       padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
       background:#18212b;
       color:var(--muted);
       font-weight:800;
       font-size:13px;
-      border:1px solid var(--line);
+      cursor:pointer;
+      user-select:none;
     }
 
     .tab-btn.active{
       background:#122031;
-      color:#fff;
+      color:white;
       border-color:#396592;
     }
 
@@ -96,7 +95,7 @@
       border:1px solid var(--line);
       border-radius:16px;
       padding:12px;
-      box-shadow:0 10px 28px rgba(0,0,0,.18);
+      box-shadow:0 10px 24px rgba(0,0,0,.16);
     }
 
     .section-title{
@@ -106,52 +105,22 @@
     }
 
     .section-note{
+      margin:-4px 0 10px;
       color:var(--muted);
       font-size:12px;
-      margin:-4px 0 10px;
     }
 
-    .grid-2{
+    .grid-2,.grid-3,.grid-4,.action-grid,.toolbar-2,.toolbar-3,.month-bar,.row-actions,.budget-meta,.goal-meta,.forecast-meta{
       display:grid;
-      grid-template-columns:1fr;
       gap:10px;
     }
 
-    .grid-3{
-      display:grid;
+    .grid-2,.grid-3,.toolbar-3,.month-bar,.row-actions,.budget-meta,.goal-meta,.forecast-meta{
       grid-template-columns:1fr;
-      gap:10px;
     }
 
-    .grid-4{
-      display:grid;
+    .grid-4,.action-grid,.toolbar-2{
       grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .action-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .toolbar-2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .toolbar-3{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-    }
-
-    .month-bar{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-      align-items:end;
     }
 
     .month-tabs{
@@ -164,51 +133,57 @@
     .month-pill{
       padding:8px 11px;
       border-radius:999px;
-      background:#18212b;
       border:1px solid var(--line);
+      background:#18212b;
       color:var(--muted);
       font-size:12px;
       cursor:pointer;
     }
 
     .month-pill.active{
-      color:#fff;
+      color:white;
       background:#122031;
       border-color:#396592;
     }
 
-    .kpi{
+    .kpi,.row-card,.bill-group,.action-box{
       background:#0f141b;
       border:1px solid var(--line);
       border-radius:14px;
       padding:12px;
     }
 
-    .kpi-label{
+    .kpi-label,.action-label{
       color:var(--muted);
       font-size:12px;
       margin-bottom:5px;
     }
 
-    .kpi-value{
-      font-size:21px;
+    .kpi-value,.action-value{
+      font-size:20px;
       font-weight:800;
-      line-height:1.05;
     }
+
+    .action-box{
+      border-left:5px solid var(--blue);
+    }
+    .action-box.red{border-left-color:var(--red)}
+    .action-box.yellow{border-left-color:var(--yellow)}
+    .action-box.purple{border-left-color:var(--purple)}
 
     input,select,button,textarea{
       width:100%;
+      margin-top:6px;
+      padding:11px 12px;
       border:none;
       border-radius:12px;
-      padding:11px 12px;
-      margin-top:6px;
       background:#0f141b;
       color:var(--text);
       font:inherit;
     }
 
     textarea{
-      min-height:160px;
+      min-height:150px;
       resize:vertical;
     }
 
@@ -237,10 +212,10 @@
     .chip{
       padding:5px 8px;
       border-radius:999px;
-      font-size:12px;
       border:1px solid var(--line);
       background:#1b2430;
       color:#d2d9e0;
+      font-size:12px;
     }
 
     .chip.red{color:#ffd0d0;background:#351920;border-color:#5a2c34}
@@ -262,37 +237,6 @@
       height:100%;
       width:0%;
       background:linear-gradient(90deg,var(--green),#53d07a);
-    }
-
-    .action-box{
-      background:#0f141b;
-      border:1px solid var(--line);
-      border-left:5px solid var(--blue);
-      border-radius:14px;
-      padding:12px;
-    }
-
-    .action-box.red{border-left-color:var(--red)}
-    .action-box.yellow{border-left-color:var(--yellow)}
-    .action-box.green{border-left-color:var(--green)}
-    .action-box.purple{border-left-color:var(--purple)}
-
-    .action-label{
-      color:var(--muted);
-      font-size:12px;
-      margin-bottom:5px;
-    }
-
-    .action-value{
-      font-size:20px;
-      font-weight:800;
-    }
-
-    .row-card{
-      background:#0f141b;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px;
     }
 
     .row-top{
@@ -319,44 +263,15 @@
       white-space:nowrap;
     }
 
-    .row-actions{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
-      margin-top:10px;
-    }
-
-    .budget-list,.goal-list,.mini-list,.bill-stack,.forecast-list,.report-list,.settings-list{
+    .budget-list,.goal-list,.mini-list,.bill-stack,.forecast-list,.report-list{
       display:grid;
       gap:8px;
       margin-top:8px;
     }
-
-    .budget-meta,
-    .goal-meta,
-    .forecast-meta{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:6px;
-      margin-top:8px;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .status-good{color:var(--green);font-weight:800;font-size:12px}
-    .status-warn{color:var(--yellow);font-weight:800;font-size:12px}
-    .status-bad{color:var(--red);font-weight:800;font-size:12px}
 
     .bill-area{
       display:grid;
       gap:12px;
-    }
-
-    .bill-group{
-      background:#0f141b;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
     }
 
     .bill-group-title{
@@ -380,18 +295,6 @@
     .bill-card.overdue{border-left-color:var(--red)}
     .bill-card.soon{border-left-color:var(--yellow)}
     .bill-card.paid{border-left-color:var(--blue)}
-
-    .bill-card .row-top{
-      align-items:flex-start;
-    }
-
-    .bill-card .row-amount{
-      font-size:17px;
-    }
-
-    .bill-card .chip-row{
-      margin-top:10px;
-    }
 
     .bill-card .row-actions button{
       min-height:42px;
@@ -420,14 +323,12 @@
       border-bottom:1px solid var(--line);
     }
 
-    .toggle-row:last-child{
-      border-bottom:none;
-    }
+    .toggle-row:last-child{border-bottom:none}
+    .toggle-row input{width:auto;margin:0}
 
-    .toggle-row input{
-      width:auto;
-      margin:0;
-    }
+    .status-good{color:var(--green);font-weight:800;font-size:12px}
+    .status-warn{color:var(--yellow);font-weight:800;font-size:12px}
+    .status-bad{color:var(--red);font-weight:800;font-size:12px}
 
     .empty{
       color:var(--muted);
@@ -435,44 +336,15 @@
       padding:8px 0;
     }
 
-    .footer-space{
-      height:12px;
-    }
-
     @media (min-width:700px){
-      .grid-2{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .grid-3{
-        grid-template-columns:1fr 1fr 1fr;
-      }
-
-      .grid-4{
-        grid-template-columns:1fr 1fr 1fr 1fr;
-      }
-
-      .action-grid{
-        grid-template-columns:1fr 1fr 1fr 1fr;
-      }
-
-      .toolbar-3{
-        grid-template-columns:1fr 1fr 1fr;
-      }
-
-      .month-bar{
-        grid-template-columns:1fr auto;
-      }
-
-      .row-actions{
-        grid-template-columns:1fr 1fr 1fr;
-      }
-
-      .budget-meta,
-      .goal-meta,
-      .forecast-meta{
-        grid-template-columns:1fr 1fr 1fr;
-      }
+      .grid-2{grid-template-columns:1fr 1fr}
+      .grid-3{grid-template-columns:1fr 1fr 1fr}
+      .grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
+      .action-grid{grid-template-columns:1fr 1fr 1fr 1fr}
+      .toolbar-3{grid-template-columns:1fr 1fr 1fr}
+      .month-bar{grid-template-columns:1fr auto}
+      .row-actions{grid-template-columns:1fr 1fr 1fr}
+      .budget-meta,.goal-meta,.forecast-meta{grid-template-columns:1fr 1fr 1fr}
     }
   </style>
 </head>
@@ -480,10 +352,10 @@
   <div class="wrap">
     <div class="hero">
       <h1 class="hero-title">💳 Finance Command Center</h1>
-      <p class="hero-sub">Mobile-polished layout with tabs, forecast, reporting, and settings</p>
+      <p class="hero-sub">Fixed tabbed version with dashboard, bills, budget, goals, cash flow, report, and settings</p>
     </div>
 
-    <div class="tabs">
+    <div class="tabs" id="tabs">
       <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
       <button class="tab-btn" data-tab="bills">Bills</button>
       <button class="tab-btn" data-tab="budget">Budget</button>
@@ -523,7 +395,6 @@
             <div id="leftover" class="kpi-value">$0.00</div>
           </div>
         </div>
-
         <div class="chip-row" style="margin-top:12px;">
           <span id="healthStatus" class="chip blue">Calculating</span>
           <span id="healthNote" class="chip">Waiting for data</span>
@@ -722,26 +593,24 @@
     <div id="page-settings" class="page">
       <div class="section">
         <div class="section-title">Display Preferences</div>
-        <div class="settings-list">
-          <div class="toggle-row">
-            <div>
-              <div class="row-title">Show paid bills section</div>
-              <div class="row-sub">Hide or show the Paid group on the Bills tab</div>
-            </div>
-            <input id="toggleShowPaid" type="checkbox">
+        <div class="toggle-row">
+          <div>
+            <div class="row-title">Show paid bills section</div>
+            <div class="row-sub">Hide or show the Paid group on Bills</div>
           </div>
-          <div class="toggle-row">
-            <div>
-              <div class="row-title">Show charts on Dashboard</div>
-              <div class="row-sub">Hide or show the Dashboard charts section</div>
-            </div>
-            <input id="toggleShowCharts" type="checkbox">
+          <input id="toggleShowPaid" type="checkbox">
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="row-title">Show charts on Dashboard</div>
+            <div class="row-sub">Hide or show charts in the Dashboard</div>
           </div>
+          <input id="toggleShowCharts" type="checkbox">
         </div>
       </div>
 
       <div class="section">
-        <div class="section-title">Data Actions</div>
+        <div class="section-title">Backup</div>
         <div class="toolbar-2">
           <button id="exportFullBackupBtn">Export Full Backup</button>
           <button id="importFullBackupBtn" class="secondary">Import Full Backup</button>
@@ -765,93 +634,33 @@
         </div>
       </div>
     </div>
-
-    <div class="footer-space"></div>
   </div>
 
   <script>
-    const STORAGE_KEY = "finance_v5_layout_bills";
-    const BUDGET_KEY = "finance_v5_layout_budgets";
-    const GOAL_KEY = "finance_v5_layout_goals";
-    const INCOME_KEY = "finance_v5_layout_income";
-    const MONTH_KEY = "finance_v5_layout_month";
-    const PREFS_KEY = "finance_v54_preferences";
+    const KEYS = {
+      bills: "finance_fixed_bills",
+      budgets: "finance_fixed_budgets",
+      goals: "finance_fixed_goals",
+      income: "finance_fixed_income",
+      month: "finance_fixed_month",
+      prefs: "finance_fixed_prefs"
+    };
 
     let bills = [];
     let budgets = {};
     let goals = [];
     let editingBillId = null;
     let editingGoalId = null;
-    let prefs = {
-      showPaidBills: true,
-      showCharts: true
-    };
+    let prefs = { showPaidBills: true, showCharts: true };
 
-    const incomeEl = document.getElementById("income");
-    const monthFilterEl = document.getElementById("monthFilter");
-    const monthTabsEl = document.getElementById("monthTabs");
-
-    const totalEl = document.getElementById("total");
-    const unpaidEl = document.getElementById("unpaid");
-    const leftoverEl = document.getElementById("leftover");
-
-    const healthStatusEl = document.getElementById("healthStatus");
-    const healthNoteEl = document.getElementById("healthNote");
-    const healthFillEl = document.getElementById("healthFill");
-
-    const alertOverdueEl = document.getElementById("alertOverdue");
-    const alertTodayEl = document.getElementById("alertToday");
-    const alertSoonEl = document.getElementById("alertSoon");
-    const alertHighestEl = document.getElementById("alertHighest");
-    const alertChipsEl = document.getElementById("alertChips");
-
-    const formTitleEl = document.getElementById("formTitle");
-    const nameEl = document.getElementById("name");
-    const amountEl = document.getElementById("amount");
-    const dateEl = document.getElementById("date");
-    const categoryEl = document.getElementById("category");
-    const recurringEl = document.getElementById("recurring");
-
-    const urgentBillsEl = document.getElementById("urgentBills");
-    const upcomingBillsEl = document.getElementById("upcomingBills");
-    const paidBillsEl = document.getElementById("paidBills");
-    const urgentCountEl = document.getElementById("urgentCount");
-    const upcomingCountEl = document.getElementById("upcomingCount");
-    const paidCountEl = document.getElementById("paidCount");
-    const paidGroupEl = document.getElementById("paidGroup");
-
-    const budgetCategoryEl = document.getElementById("budgetCategory");
-    const budgetAmountEl = document.getElementById("budgetAmount");
-    const budgetListEl = document.getElementById("budgetList");
-
-    const subscriptionTotalEl = document.getElementById("subscriptionTotal");
-    const subscriptionListEl = document.getElementById("subscriptionList");
-
-    const goalNameEl = document.getElementById("goalName");
-    const goalSavedEl = document.getElementById("goalSaved");
-    const goalTargetEl = document.getElementById("goalTarget");
-    const goalListEl = document.getElementById("goalList");
-
-    const cfStartEl = document.getElementById("cfStart");
-    const cfLowestEl = document.getElementById("cfLowest");
-    const cfEndingEl = document.getElementById("cfEnding");
-    const cfChipsEl = document.getElementById("cfChips");
-    const cashflowListEl = document.getElementById("cashflowList");
-
-    const reportSummaryEl = document.getElementById("reportSummary");
-    const reportTextEl = document.getElementById("reportText");
-
-    const dashboardChartsSectionEl = document.getElementById("dashboardChartsSection");
-    const toggleShowPaidEl = document.getElementById("toggleShowPaid");
-    const toggleShowChartsEl = document.getElementById("toggleShowCharts");
-    const importFileEl = document.getElementById("importFile");
+    const $ = id => document.getElementById(id);
 
     function money(v){
       return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number(v || 0));
     }
 
     function uid(prefix="id"){
-      return prefix + "_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      return `${prefix}_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
     }
 
     function todayString(){
@@ -878,36 +687,30 @@
 
     function formatMonthLabel(monthKey){
       const [y,m] = monthKey.split("-").map(Number);
-      return new Date(y,m-1,1).toLocaleString("en-US",{month:"long", year:"numeric"});
+      return new Date(y,m-1,1).toLocaleString("en-US",{month:"long",year:"numeric"});
     }
 
     function daysUntil(dateStr){
       const due = toLocalDate(dateStr);
       const now = toLocalDate(todayString());
       if (!due || !now) return 9999;
-      return Math.round((due - now)/86400000);
+      return Math.round((due - now) / 86400000);
     }
 
-    function saveBills(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(bills)); }
-    function saveBudgets(){ localStorage.setItem(BUDGET_KEY, JSON.stringify(budgets)); }
-    function saveGoals(){ localStorage.setItem(GOAL_KEY, JSON.stringify(goals)); }
-    function saveIncome(){ localStorage.setItem(INCOME_KEY, incomeEl.value || ""); }
-    function saveMonth(){ localStorage.setItem(MONTH_KEY, monthFilterEl.value || currentMonthKey()); }
-    function savePrefs(){ localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }
+    function saveAll(){
+      localStorage.setItem(KEYS.bills, JSON.stringify(bills));
+      localStorage.setItem(KEYS.budgets, JSON.stringify(budgets));
+      localStorage.setItem(KEYS.goals, JSON.stringify(goals));
+      localStorage.setItem(KEYS.income, $("income").value || "");
+      localStorage.setItem(KEYS.month, $("monthFilter").value || currentMonthKey());
+      localStorage.setItem(KEYS.prefs, JSON.stringify(prefs));
+    }
 
-    function loadData(){
-      try{ bills = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e){ bills = []; }
-      try{ budgets = JSON.parse(localStorage.getItem(BUDGET_KEY)) || {}; } catch(e){ budgets = {}; }
-      try{ goals = JSON.parse(localStorage.getItem(GOAL_KEY)) || []; } catch(e){ goals = []; }
-      try{
-        prefs = {
-          showPaidBills: true,
-          showCharts: true,
-          ...(JSON.parse(localStorage.getItem(PREFS_KEY)) || {})
-        };
-      } catch(e){
-        prefs = { showPaidBills:true, showCharts:true };
-      }
+    function loadAll(){
+      try { bills = JSON.parse(localStorage.getItem(KEYS.bills)) || []; } catch { bills = []; }
+      try { budgets = JSON.parse(localStorage.getItem(KEYS.budgets)) || {}; } catch { budgets = {}; }
+      try { goals = JSON.parse(localStorage.getItem(KEYS.goals)) || []; } catch { goals = []; }
+      try { prefs = { showPaidBills:true, showCharts:true, ...(JSON.parse(localStorage.getItem(KEYS.prefs)) || {}) }; } catch { prefs = { showPaidBills:true, showCharts:true }; }
 
       bills = Array.isArray(bills) ? bills.map(b => ({
         id: b.id || uid("bill"),
@@ -926,18 +729,18 @@
         target: Number(g.target || 0)
       })) : [];
 
-      incomeEl.value = localStorage.getItem(INCOME_KEY) || "";
-      toggleShowPaidEl.checked = !!prefs.showPaidBills;
-      toggleShowChartsEl.checked = !!prefs.showCharts;
+      $("income").value = localStorage.getItem(KEYS.income) || "";
+      $("toggleShowPaid").checked = !!prefs.showPaidBills;
+      $("toggleShowCharts").checked = !!prefs.showCharts;
     }
 
     function generateRecurring(){
       const now = new Date();
       const month = now.getMonth();
       const year = now.getFullYear();
+      const snapshot = [...bills];
       let changed = false;
 
-      const snapshot = [...bills];
       snapshot.forEach(b => {
         if (!b.recurring) return;
         const original = toLocalDate(b.date);
@@ -945,8 +748,8 @@
 
         const lastDay = new Date(year, month + 1, 0).getDate();
         const targetDay = Math.min(original.getDate(), lastDay);
-        const target = new Date(year, month, targetDay, 12, 0, 0);
-        const targetStr = `${target.getFullYear()}-${String(target.getMonth()+1).padStart(2,"0")}-${String(target.getDate()).padStart(2,"0")}`;
+        const targetDate = new Date(year, month, targetDay, 12, 0, 0);
+        const targetStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
 
         const exists = bills.some(x =>
           x.name === b.name &&
@@ -969,7 +772,7 @@
         }
       });
 
-      if (changed) saveBills();
+      if (changed) saveAll();
     }
 
     function populateMonthControl(){
@@ -978,24 +781,25 @@
       if (!months.includes(current)) months.push(current);
       months.sort();
 
-      const saved = localStorage.getItem(MONTH_KEY) || current;
-      monthFilterEl.innerHTML = months.map(m => `<option value="${m}">${formatMonthLabel(m)}</option>`).join("");
-      monthFilterEl.value = months.includes(saved) ? saved : current;
+      const saved = localStorage.getItem(KEYS.month) || current;
+      $("monthFilter").innerHTML = months.map(m => `<option value="${m}">${formatMonthLabel(m)}</option>`).join("");
+      $("monthFilter").value = months.includes(saved) ? saved : current;
 
-      monthTabsEl.innerHTML = months.slice(-6).map(m =>
-        `<button class="month-pill ${m === monthFilterEl.value ? "active" : ""}" onclick="selectMonth('${m}')">${formatMonthLabel(m)}</button>`
+      $("monthTabs").innerHTML = months.slice(-6).map(m =>
+        `<button class="month-pill ${m === $("monthFilter").value ? "active" : ""}" data-month="${m}">${formatMonthLabel(m)}</button>`
       ).join("");
-    }
 
-    function selectMonth(m){
-      monthFilterEl.value = m;
-      saveMonth();
-      render();
+      document.querySelectorAll(".month-pill").forEach(btn => {
+        btn.onclick = () => {
+          $("monthFilter").value = btn.dataset.month;
+          saveAll();
+          render();
+        };
+      });
     }
-    window.selectMonth = selectMonth;
 
     function filteredBills(){
-      const month = monthFilterEl.value || currentMonthKey();
+      const month = $("monthFilter").value || currentMonthKey();
       return bills.filter(b => monthKeyFromDate(b.date) === month);
     }
 
@@ -1010,7 +814,7 @@
 
     function sortBills(list){
       return [...list].sort((a,b)=>{
-        const rank = (x) => {
+        const rank = x => {
           const s = billStatus(x);
           if (s === "overdue") return 1;
           if (s === "today") return 2;
@@ -1024,23 +828,39 @@
       });
     }
 
+    function escapeHtml(str){
+      return String(str || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+    }
+
+    function switchTab(tabName){
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tabName));
+      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+      const page = $("page-" + tabName);
+      if (page) page.classList.add("active");
+    }
+
     function resetBillForm(){
       editingBillId = null;
-      formTitleEl.textContent = "Bill Operations";
-      document.getElementById("saveBillBtn").textContent = "Add";
-      nameEl.value = "";
-      amountEl.value = "";
-      dateEl.value = "";
-      categoryEl.value = "Rent";
-      recurringEl.checked = false;
+      $("formTitle").textContent = "Bill Operations";
+      $("saveBillBtn").textContent = "Add";
+      $("name").value = "";
+      $("amount").value = "";
+      $("date").value = "";
+      $("category").value = "Rent";
+      $("recurring").checked = false;
     }
 
     function saveBill(){
-      const name = nameEl.value.trim();
-      const amount = Number(amountEl.value);
-      const date = dateEl.value;
-      const category = categoryEl.value;
-      const recurring = recurringEl.checked;
+      const name = $("name").value.trim();
+      const amount = Number($("amount").value);
+      const date = $("date").value;
+      const category = $("category").value;
+      const recurring = $("recurring").checked;
 
       if (!name || !amount || amount <= 0 || !date){
         alert("Enter a bill name, amount, and due date.");
@@ -1064,10 +884,8 @@
         });
       }
 
-      saveBills();
-      populateMonthControl();
-      monthFilterEl.value = monthKeyFromDate(date) || currentMonthKey();
-      saveMonth();
+      saveAll();
+      $("monthFilter").value = monthKeyFromDate(date) || currentMonthKey();
       resetBillForm();
       render();
     }
@@ -1076,35 +894,31 @@
       const bill = bills.find(b => b.id === id);
       if (!bill) return;
       editingBillId = id;
-      formTitleEl.textContent = "Edit Bill";
-      document.getElementById("saveBillBtn").textContent = "Update";
-      nameEl.value = bill.name;
-      amountEl.value = bill.amount;
-      dateEl.value = bill.date;
-      categoryEl.value = bill.category;
-      recurringEl.checked = !!bill.recurring;
+      $("formTitle").textContent = "Edit Bill";
+      $("saveBillBtn").textContent = "Update";
+      $("name").value = bill.name;
+      $("amount").value = bill.amount;
+      $("date").value = bill.date;
+      $("category").value = bill.category;
+      $("recurring").checked = !!bill.recurring;
       switchTab("bills");
       window.scrollTo({ top: document.body.scrollHeight * 0.3, behavior:"smooth" });
     }
-    window.editBill = editBill;
 
     function togglePaid(id){
       const bill = bills.find(b => b.id === id);
       if (!bill) return;
       bill.paid = !bill.paid;
-      saveBills();
+      saveAll();
       render();
     }
-    window.togglePaid = togglePaid;
 
     function removeBill(id){
       bills = bills.filter(b => b.id !== id);
-      saveBills();
       if (editingBillId === id) resetBillForm();
-      populateMonthControl();
+      saveAll();
       render();
     }
-    window.removeBill = removeBill;
 
     function duplicateLastBill(){
       const list = sortBills(filteredBills());
@@ -1114,47 +928,46 @@
       }
       const bill = list[list.length - 1];
       editingBillId = null;
-      formTitleEl.textContent = "Duplicate Bill";
-      document.getElementById("saveBillBtn").textContent = "Add";
-      nameEl.value = bill.name;
-      amountEl.value = bill.amount;
-      dateEl.value = bill.date;
-      categoryEl.value = bill.category;
-      recurringEl.checked = !!bill.recurring;
+      $("formTitle").textContent = "Duplicate Bill";
+      $("saveBillBtn").textContent = "Add";
+      $("name").value = bill.name;
+      $("amount").value = bill.amount;
+      $("date").value = bill.date;
+      $("category").value = bill.category;
+      $("recurring").checked = !!bill.recurring;
     }
 
     function saveBudget(){
-      const category = budgetCategoryEl.value;
-      const amount = Number(budgetAmountEl.value);
+      const category = $("budgetCategory").value;
+      const amount = Number($("budgetAmount").value);
       if (!category || !amount || amount <= 0){
         alert("Enter a valid planned budget.");
         return;
       }
       budgets[category] = amount;
-      saveBudgets();
-      budgetAmountEl.value = "";
+      $("budgetAmount").value = "";
+      saveAll();
       render();
     }
 
     function deleteBudget(category){
       delete budgets[category];
-      saveBudgets();
+      saveAll();
       render();
     }
-    window.deleteBudget = deleteBudget;
 
     function resetGoalForm(){
       editingGoalId = null;
-      goalNameEl.value = "";
-      goalSavedEl.value = "";
-      goalTargetEl.value = "";
-      document.getElementById("saveGoalBtn").textContent = "Save Goal";
+      $("goalName").value = "";
+      $("goalSaved").value = "";
+      $("goalTarget").value = "";
+      $("saveGoalBtn").textContent = "Save Goal";
     }
 
     function saveGoal(){
-      const name = goalNameEl.value.trim();
-      const saved = Number(goalSavedEl.value);
-      const target = Number(goalTargetEl.value);
+      const name = $("goalName").value.trim();
+      const saved = Number($("goalSaved").value);
+      const target = Number($("goalTarget").value);
 
       if (!name || saved < 0 || !target || target <= 0){
         alert("Enter a goal name, saved amount, and target.");
@@ -1171,8 +984,8 @@
         goals.push({ id: uid("goal"), name, saved, target });
       }
 
-      saveGoals();
       resetGoalForm();
+      saveAll();
       render();
     }
 
@@ -1180,21 +993,19 @@
       const g = goals.find(x => x.id === id);
       if (!g) return;
       editingGoalId = id;
-      goalNameEl.value = g.name;
-      goalSavedEl.value = g.saved;
-      goalTargetEl.value = g.target;
-      document.getElementById("saveGoalBtn").textContent = "Update Goal";
+      $("goalName").value = g.name;
+      $("goalSaved").value = g.saved;
+      $("goalTarget").value = g.target;
+      $("saveGoalBtn").textContent = "Update Goal";
       switchTab("goals");
     }
-    window.editGoal = editGoal;
 
     function removeGoal(id){
       goals = goals.filter(g => g.id !== id);
-      saveGoals();
       if (editingGoalId === id) resetGoalForm();
+      saveAll();
       render();
     }
-    window.removeGoal = removeGoal;
 
     function quickAddToGoal(id){
       const g = goals.find(x => x.id === id);
@@ -1204,24 +1015,23 @@
       const n = Number(amt);
       if (!n || n <= 0) return;
       g.saved += n;
-      saveGoals();
+      saveAll();
       render();
     }
-    window.quickAddToGoal = quickAddToGoal;
 
     function renderSnapshot(list){
-      const income = Number(incomeEl.value || 0);
+      const income = Number($("income").value || 0);
       const total = list.reduce((s,b)=>s+b.amount,0);
       const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s+b.amount,0);
       const leftover = income - unpaid;
 
-      totalEl.textContent = money(total);
-      unpaidEl.textContent = money(unpaid);
-      leftoverEl.textContent = money(leftover);
+      $("total").textContent = money(total);
+      $("unpaid").textContent = money(unpaid);
+      $("leftover").textContent = money(leftover);
     }
 
     function renderHealth(list){
-      const income = Number(incomeEl.value || 0);
+      const income = Number($("income").value || 0);
       const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s+b.amount,0);
       const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
 
@@ -1244,11 +1054,11 @@
         note = "Urgent bills are putting pressure on the month.";
       }
 
-      healthStatusEl.className = "chip " + cls;
-      healthStatusEl.textContent = label;
-      healthNoteEl.textContent = note;
-      healthFillEl.style.width = score + "%";
-      healthFillEl.style.background = cls === "green"
+      $("healthStatus").className = "chip " + cls;
+      $("healthStatus").textContent = label;
+      $("healthNote").textContent = note;
+      $("healthFill").style.width = score + "%";
+      $("healthFill").style.background = cls === "green"
         ? "linear-gradient(90deg,#2ea043,#53d07a)"
         : cls === "yellow"
           ? "linear-gradient(90deg,#f2cc60,#ffd97a)"
@@ -1265,30 +1075,30 @@
       });
       const highest = unpaid.reduce((max,b)=>b.amount > max.amount ? b : max, {amount:0});
 
-      alertOverdueEl.textContent = overdue.length;
-      alertTodayEl.textContent = today.length;
-      alertSoonEl.textContent = soon.length;
-      alertHighestEl.textContent = money(highest.amount || 0);
+      $("alertOverdue").textContent = overdue.length;
+      $("alertToday").textContent = today.length;
+      $("alertSoon").textContent = soon.length;
+      $("alertHighest").textContent = money(highest.amount || 0);
 
       const chips = [];
       if (overdue.length) chips.push(`<span class="chip red">${overdue.length} overdue</span>`);
       if (today.length) chips.push(`<span class="chip red">${today.length} due today</span>`);
       if (soon.length) chips.push(`<span class="chip yellow">${soon.length} due soon</span>`);
       if (!overdue.length && !today.length && !soon.length) chips.push(`<span class="chip green">No urgent items</span>`);
-      alertChipsEl.innerHTML = chips.join("");
+      $("alertChips").innerHTML = chips.join("");
     }
 
     function renderSubscriptions(list){
       const subs = sortBills(list.filter(b => b.recurring || b.category === "Subscriptions"));
       const total = subs.reduce((s,b)=>s+b.amount,0);
-      subscriptionTotalEl.textContent = money(total);
+      $("subscriptionTotal").textContent = money(total);
 
       if (!subs.length){
-        subscriptionListEl.innerHTML = `<div class="empty">No subscriptions in this month.</div>`;
+        $("subscriptionList").innerHTML = `<div class="empty">No subscriptions in this month.</div>`;
         return;
       }
 
-      subscriptionListEl.innerHTML = subs.slice(0,6).map(b => `
+      $("subscriptionList").innerHTML = subs.slice(0,6).map(b => `
         <div class="row-card">
           <div class="row-top">
             <div>
@@ -1303,11 +1113,11 @@
 
     function renderGoals(){
       if (!goals.length){
-        goalListEl.innerHTML = `<div class="empty">No goals added yet.</div>`;
+        $("goalList").innerHTML = `<div class="empty">No goals added yet.</div>`;
         return;
       }
 
-      goalListEl.innerHTML = goals.map(g => {
+      $("goalList").innerHTML = goals.map(g => {
         const pct = g.target > 0 ? Math.min(100, (g.saved / g.target) * 100) : 0;
         const remaining = Math.max(0, g.target - g.saved);
         let status = "On track";
@@ -1345,38 +1155,36 @@
       const actuals = {};
       list.forEach(b => { actuals[b.category] = (actuals[b.category] || 0) + b.amount; });
 
-      const rows = categories
-        .filter(cat => budgets[cat] || actuals[cat])
-        .map(cat => {
-          const planned = Number(budgets[cat] || 0);
-          const actual = Number(actuals[cat] || 0);
-          const diff = planned - actual;
+      const rows = categories.filter(cat => budgets[cat] || actuals[cat]).map(cat => {
+        const planned = Number(budgets[cat] || 0);
+        const actual = Number(actuals[cat] || 0);
+        const diff = planned - actual;
 
-          let status = `<span class="status-good">Under budget</span>`;
-          if (planned <= 0) status = `<span class="status-warn">No budget</span>`;
-          else if (actual >= planned * 0.85) status = `<span class="status-warn">Close</span>`;
-          if (planned > 0 && actual > planned) status = `<span class="status-bad">Over budget</span>`;
+        let status = `<span class="status-good">Under budget</span>`;
+        if (planned <= 0) status = `<span class="status-warn">No budget</span>`;
+        else if (actual >= planned * 0.85) status = `<span class="status-warn">Close</span>`;
+        if (planned > 0 && actual > planned) status = `<span class="status-bad">Over budget</span>`;
 
-          return `
-            <div class="row-card">
-              <div class="row-top">
-                <div>
-                  <div class="row-title">${escapeHtml(cat)}</div>
-                  <div>${status}</div>
-                </div>
-                <div class="row-amount">${money(actual)}</div>
+        return `
+          <div class="row-card">
+            <div class="row-top">
+              <div>
+                <div class="row-title">${escapeHtml(cat)}</div>
+                <div>${status}</div>
               </div>
-              <div class="budget-meta">
-                <div>Planned: ${money(planned)}</div>
-                <div>Actual: ${money(actual)}</div>
-                <div>${planned > 0 ? (diff >= 0 ? "Left: " + money(diff) : "Over: " + money(Math.abs(diff))) : "Set a budget"}</div>
-              </div>
-              <button class="danger" style="margin-top:8px;" onclick="deleteBudget('${cat}')">Delete Budget</button>
+              <div class="row-amount">${money(actual)}</div>
             </div>
-          `;
-        });
+            <div class="budget-meta">
+              <div>Planned: ${money(planned)}</div>
+              <div>Actual: ${money(actual)}</div>
+              <div>${planned > 0 ? (diff >= 0 ? "Left: " + money(diff) : "Over: " + money(Math.abs(diff))) : "Set a budget"}</div>
+            </div>
+            <button class="danger" style="margin-top:8px;" onclick="deleteBudget('${cat}')">Delete Budget</button>
+          </div>
+        `;
+      });
 
-      budgetListEl.innerHTML = rows.length ? rows.join("") : `<div class="empty">No budgets set.</div>`;
+      $("budgetList").innerHTML = rows.length ? rows.join("") : `<div class="empty">No budgets set.</div>`;
     }
 
     function setupCanvas(canvas){
@@ -1386,13 +1194,13 @@
       canvas.height = Math.floor(220 * ratio);
       const ctx = canvas.getContext("2d");
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      return ctx;
+      return {ctx, width: canvas.width / ratio, height: 220};
     }
 
     function drawBar(catTotals){
-      const canvas = document.getElementById("barChart");
-      const ctx = setupCanvas(canvas);
-      const width = canvas.width / (window.devicePixelRatio || 1);
+      const canvas = $("barChart");
+      if (!canvas) return;
+      const {ctx, width} = setupCanvas(canvas);
       ctx.clearRect(0,0,width,220);
 
       const entries = Object.entries(catTotals);
@@ -1406,7 +1214,7 @@
       const max = Math.max(...entries.map(([,v])=>v),1);
       const chartBottom = 180;
       const chartHeight = 160;
-      const barWidth = Math.min(44, (width - 30) / entries.length - 16);
+      const barWidth = Math.max(18, Math.min(44, (width - 30) / entries.length - 16));
       const gap = 16;
       const colors = ["#58a6ff","#2ea043","#f2cc60","#ff6b6b","#8b5cf6"];
 
@@ -1423,9 +1231,9 @@
     }
 
     function drawPie(catTotals){
-      const canvas = document.getElementById("pieChart");
-      const ctx = setupCanvas(canvas);
-      const width = canvas.width / (window.devicePixelRatio || 1);
+      const canvas = $("pieChart");
+      if (!canvas) return;
+      const {ctx, width} = setupCanvas(canvas);
       ctx.clearRect(0,0,width,220);
 
       const entries = Object.entries(catTotals);
@@ -1471,9 +1279,9 @@
     }
 
     function drawTrend(list){
-      const canvas = document.getElementById("trendChart");
-      const ctx = setupCanvas(canvas);
-      const width = canvas.width / (window.devicePixelRatio || 1);
+      const canvas = $("trendChart");
+      if (!canvas) return;
+      const {ctx, width} = setupCanvas(canvas);
       ctx.clearRect(0,0,width,220);
 
       const sorted = [...list].sort((a,b)=>new Date(a.date)-new Date(b.date));
@@ -1516,22 +1324,6 @@
         ctx.arc(x,y,3,0,Math.PI*2);
         ctx.fill();
       });
-    }
-
-    function renderBillsTab(list){
-      const sorted = sortBills(list);
-      const urgent = sorted.filter(b => !b.paid && (billStatus(b) === "overdue" || billStatus(b) === "today" || billStatus(b) === "soon"));
-      const upcoming = sorted.filter(b => !b.paid && billStatus(b) === "upcoming");
-      const paid = sorted.filter(b => b.paid);
-
-      urgentCountEl.textContent = urgent.length;
-      upcomingCountEl.textContent = upcoming.length;
-      paidCountEl.textContent = paid.length;
-
-      urgentBillsEl.innerHTML = renderBillCards(urgent, "No urgent bills.");
-      upcomingBillsEl.innerHTML = renderBillCards(upcoming, "No upcoming bills.");
-      paidBillsEl.innerHTML = renderBillCards(paid, "No paid bills yet.");
-      paidGroupEl.style.display = prefs.showPaidBills ? "" : "none";
     }
 
     function renderBillCards(list, emptyText){
@@ -1580,19 +1372,35 @@
       }).join("");
     }
 
+    function renderBillsTab(list){
+      const sorted = sortBills(list);
+      const urgent = sorted.filter(b => !b.paid && ["overdue","today","soon"].includes(billStatus(b)));
+      const upcoming = sorted.filter(b => !b.paid && billStatus(b) === "upcoming");
+      const paid = sorted.filter(b => b.paid);
+
+      $("urgentCount").textContent = urgent.length;
+      $("upcomingCount").textContent = upcoming.length;
+      $("paidCount").textContent = paid.length;
+
+      $("urgentBills").innerHTML = renderBillCards(urgent, "No urgent bills.");
+      $("upcomingBills").innerHTML = renderBillCards(upcoming, "No upcoming bills.");
+      $("paidBills").innerHTML = renderBillCards(paid, "No paid bills yet.");
+      $("paidGroup").style.display = prefs.showPaidBills ? "" : "none";
+    }
+
     function renderCashFlow(list){
-      const income = Number(incomeEl.value || 0);
+      const income = Number($("income").value || 0);
       const unpaid = sortBills(list.filter(b => !b.paid));
       let running = income;
       let lowest = income;
 
-      cfStartEl.textContent = money(income);
+      $("cfStart").textContent = money(income);
 
       if (!unpaid.length){
-        cfLowestEl.textContent = money(income);
-        cfEndingEl.textContent = money(income);
-        cfChipsEl.innerHTML = `<span class="chip green">No unpaid bills to forecast</span>`;
-        cashflowListEl.innerHTML = `<div class="empty">No unpaid bills in this month.</div>`;
+        $("cfLowest").textContent = money(income);
+        $("cfEnding").textContent = money(income);
+        $("cfChips").innerHTML = `<span class="chip green">No unpaid bills to forecast</span>`;
+        $("cashflowList").innerHTML = `<div class="empty">No unpaid bills in this month.</div>`;
         return;
       }
 
@@ -1626,20 +1434,20 @@
         `;
       }).join("");
 
-      cfLowestEl.textContent = money(lowest);
-      cfEndingEl.textContent = money(running);
+      $("cfLowest").textContent = money(lowest);
+      $("cfEnding").textContent = money(running);
 
       const chips = [];
       if (lowest < 0) chips.push(`<span class="chip red">Forecast goes negative</span>`);
       else if (lowest < income * 0.2) chips.push(`<span class="chip yellow">Tight low point this month</span>`);
       else chips.push(`<span class="chip green">Forecast stays healthy</span>`);
       chips.push(`<span class="chip blue">${unpaid.length} unpaid bill${unpaid.length === 1 ? "" : "s"} in forecast</span>`);
-      cfChipsEl.innerHTML = chips.join("");
-      cashflowListEl.innerHTML = rows;
+      $("cfChips").innerHTML = chips.join("");
+      $("cashflowList").innerHTML = rows;
     }
 
     function renderReport(list){
-      const income = Number(incomeEl.value || 0);
+      const income = Number($("income").value || 0);
       const total = list.reduce((s,b)=>s + b.amount, 0);
       const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s + b.amount, 0);
       const paid = total - unpaid;
@@ -1651,13 +1459,11 @@
       const catTotals = {};
       list.forEach(b => { catTotals[b.category] = (catTotals[b.category] || 0) + b.amount; });
 
-      const topCats = Object.entries(catTotals)
-        .sort((a,b) => b[1] - a[1])
-        .slice(0,5);
+      const topCats = Object.entries(catTotals).sort((a,b) => b[1] - a[1]).slice(0,5);
 
-      reportSummaryEl.innerHTML = `
+      $("reportSummary").innerHTML = `
         <div class="row-card">
-          <div class="row-title">${formatMonthLabel(monthFilterEl.value || currentMonthKey())}</div>
+          <div class="row-title">${formatMonthLabel($("monthFilter").value || currentMonthKey())}</div>
           <div class="budget-meta">
             <div>Income: ${money(income)}</div>
             <div>Total Bills: ${money(total)}</div>
@@ -1684,8 +1490,8 @@
         `).join("")}
       `;
 
-      const reportLines = [
-        `Finance Report - ${formatMonthLabel(monthFilterEl.value || currentMonthKey())}`,
+      $("reportText").value = [
+        `Finance Report - ${formatMonthLabel($("monthFilter").value || currentMonthKey())}`,
         ``,
         `Income: ${money(income)}`,
         `Total Bills: ${money(total)}`,
@@ -1698,18 +1504,14 @@
         ``,
         `Top Categories:`,
         ...topCats.map(([cat,val]) => `- ${cat}: ${money(val)}`)
-      ];
-
-      reportTextEl.value = reportLines.join("\n");
+      ].join("\n");
     }
 
-    function exportJson(){
+    function exportBackup(){
       const payload = {
-        bills,
-        budgets,
-        goals,
-        income: incomeEl.value || "",
-        month: monthFilterEl.value || currentMonthKey(),
+        bills, budgets, goals,
+        income: $("income").value || "",
+        month: $("monthFilter").value || currentMonthKey(),
         prefs,
         exportedAt: new Date().toISOString()
       };
@@ -1717,43 +1519,39 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `finance-report-${monthFilterEl.value || currentMonthKey()}.json`;
+      a.download = `finance-backup-${$("monthFilter").value || currentMonthKey()}.json`;
       a.click();
       URL.revokeObjectURL(url);
     }
 
     async function copyReport(){
       try{
-        await navigator.clipboard.writeText(reportTextEl.value);
+        await navigator.clipboard.writeText($("reportText").value);
         alert("Report copied.");
-      } catch(e){
-        reportTextEl.select();
+      } catch {
+        $("reportText").select();
         document.execCommand("copy");
         alert("Report copied.");
       }
     }
 
-    function importFullBackup(file){
+    function importBackup(file){
       const reader = new FileReader();
       reader.onload = () => {
         try{
           const data = JSON.parse(reader.result);
-          if (data.bills && Array.isArray(data.bills)) bills = data.bills;
+          if (Array.isArray(data.bills)) bills = data.bills;
           if (data.budgets && typeof data.budgets === "object") budgets = data.budgets;
-          if (data.goals && Array.isArray(data.goals)) goals = data.goals;
-          if (typeof data.income === "string" || typeof data.income === "number") incomeEl.value = data.income;
+          if (Array.isArray(data.goals)) goals = data.goals;
+          if (typeof data.income === "string" || typeof data.income === "number") $("income").value = data.income;
           if (data.prefs && typeof data.prefs === "object") prefs = { ...prefs, ...data.prefs };
 
-          saveBills();
-          saveBudgets();
-          saveGoals();
-          saveIncome();
-          savePrefs();
-          toggleShowPaidEl.checked = !!prefs.showPaidBills;
-          toggleShowChartsEl.checked = !!prefs.showCharts;
+          $("toggleShowPaid").checked = !!prefs.showPaidBills;
+          $("toggleShowCharts").checked = !!prefs.showCharts;
+          saveAll();
           render();
           alert("Backup imported.");
-        } catch (err){
+        } catch {
           alert("Import failed.");
         }
       };
@@ -1761,81 +1559,58 @@
     }
 
     function applyPrefs(){
-      paidGroupEl.style.display = prefs.showPaidBills ? "" : "none";
-      dashboardChartsSectionEl.style.display = prefs.showCharts ? "" : "none";
+      $("paidGroup").style.display = prefs.showPaidBills ? "" : "none";
+      $("dashboardChartsSection").style.display = prefs.showCharts ? "" : "none";
     }
 
     function resetBills(){
       if (!confirm("Reset all bills?")) return;
       bills = [];
-      saveBills();
       resetBillForm();
+      saveAll();
       render();
     }
 
     function resetBudgets(){
       if (!confirm("Reset all budgets?")) return;
       budgets = {};
-      saveBudgets();
+      saveAll();
       render();
     }
 
     function resetGoals(){
       if (!confirm("Reset all goals?")) return;
       goals = [];
-      saveGoals();
       resetGoalForm();
+      saveAll();
       render();
     }
 
     function clearIncome(){
       if (!confirm("Clear saved income?")) return;
-      incomeEl.value = "";
-      saveIncome();
+      $("income").value = "";
+      saveAll();
       render();
     }
 
     function resetMonthFilter(){
-      monthFilterEl.value = currentMonthKey();
-      saveMonth();
+      $("monthFilter").value = currentMonthKey();
+      saveAll();
       render();
     }
 
     function resetPreferences(){
-      prefs = {
-        showPaidBills: true,
-        showCharts: true
-      };
-      savePrefs();
-      toggleShowPaidEl.checked = true;
-      toggleShowChartsEl.checked = true;
-      applyPrefs();
+      prefs = { showPaidBills: true, showCharts: true };
+      $("toggleShowPaid").checked = true;
+      $("toggleShowCharts").checked = true;
+      saveAll();
       render();
     }
 
-    function escapeHtml(str){
-      return String(str || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#39;");
-    }
-
-    function switchTab(tabName){
-      document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.tab === tabName);
-      });
-      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
-      document.getElementById("page-" + tabName).classList.add("active");
-    }
-
     function render(){
-      saveIncome();
-      savePrefs();
+      saveAll();
       generateRecurring();
       populateMonthControl();
-      saveMonth();
       applyPrefs();
 
       const list = filteredBills();
@@ -1848,9 +1623,7 @@
       renderBudgets(list);
 
       const catTotals = {};
-      list.forEach(b => {
-        catTotals[b.category] = (catTotals[b.category] || 0) + b.amount;
-      });
+      list.forEach(b => { catTotals[b.category] = (catTotals[b.category] || 0) + b.amount; });
 
       drawBar(catTotals);
       drawPie(catTotals);
@@ -1864,56 +1637,62 @@
       btn.addEventListener("click", () => switchTab(btn.dataset.tab));
     });
 
-    document.getElementById("saveBillBtn").addEventListener("click", saveBill);
-    document.getElementById("cancelEditBtn").addEventListener("click", resetBillForm);
-    document.getElementById("duplicateBillBtn").addEventListener("click", duplicateLastBill);
-    document.getElementById("saveBudgetBtn").addEventListener("click", saveBudget);
-    document.getElementById("saveGoalBtn").addEventListener("click", saveGoal);
-    document.getElementById("clearGoalBtn").addEventListener("click", resetGoalForm);
-    document.getElementById("exportJsonBtn").addEventListener("click", exportJson);
-    document.getElementById("copyReportBtn").addEventListener("click", copyReport);
-
-    document.getElementById("goCurrentMonthBtn").addEventListener("click", () => {
-      monthFilterEl.value = currentMonthKey();
-      saveMonth();
+    $("saveBillBtn").addEventListener("click", saveBill);
+    $("cancelEditBtn").addEventListener("click", resetBillForm);
+    $("duplicateBillBtn").addEventListener("click", duplicateLastBill);
+    $("saveBudgetBtn").addEventListener("click", saveBudget);
+    $("saveGoalBtn").addEventListener("click", saveGoal);
+    $("clearGoalBtn").addEventListener("click", resetGoalForm);
+    $("goCurrentMonthBtn").addEventListener("click", () => {
+      $("monthFilter").value = currentMonthKey();
+      saveAll();
       render();
     });
 
-    toggleShowPaidEl.addEventListener("change", () => {
-      prefs.showPaidBills = toggleShowPaidEl.checked;
+    $("toggleShowPaid").addEventListener("change", () => {
+      prefs.showPaidBills = $("toggleShowPaid").checked;
       render();
     });
 
-    toggleShowChartsEl.addEventListener("change", () => {
-      prefs.showCharts = toggleShowChartsEl.checked;
+    $("toggleShowCharts").addEventListener("change", () => {
+      prefs.showCharts = $("toggleShowCharts").checked;
       render();
     });
 
-    document.getElementById("exportFullBackupBtn").addEventListener("click", exportJson);
-    document.getElementById("importFullBackupBtn").addEventListener("click", () => importFileEl.click());
-    importFileEl.addEventListener("change", (e) => {
+    $("exportJsonBtn").addEventListener("click", exportBackup);
+    $("exportFullBackupBtn").addEventListener("click", exportBackup);
+    $("copyReportBtn").addEventListener("click", copyReport);
+
+    $("importFullBackupBtn").addEventListener("click", () => $("importFile").click());
+    $("importFile").addEventListener("change", e => {
       const file = e.target.files[0];
-      if (file) importFullBackup(file);
+      if (file) importBackup(file);
       e.target.value = "";
     });
 
-    document.getElementById("resetBillsBtn").addEventListener("click", resetBills);
-    document.getElementById("resetBudgetsBtn").addEventListener("click", resetBudgets);
-    document.getElementById("resetGoalsBtn").addEventListener("click", resetGoals);
-    document.getElementById("clearIncomeBtn").addEventListener("click", clearIncome);
-    document.getElementById("resetMonthBtn").addEventListener("click", resetMonthFilter);
-    document.getElementById("resetPreferencesBtn").addEventListener("click", resetPreferences);
+    $("resetBillsBtn").addEventListener("click", resetBills);
+    $("resetBudgetsBtn").addEventListener("click", resetBudgets);
+    $("resetGoalsBtn").addEventListener("click", resetGoals);
+    $("clearIncomeBtn").addEventListener("click", clearIncome);
+    $("resetMonthBtn").addEventListener("click", resetMonthFilter);
+    $("resetPreferencesBtn").addEventListener("click", resetPreferences);
 
-    incomeEl.addEventListener("input", render);
-    monthFilterEl.addEventListener("change", render);
+    $("income").addEventListener("input", render);
+    $("monthFilter").addEventListener("change", render);
     window.addEventListener("resize", render);
 
-    loadData();
-    populateMonthControl();
+    loadAll();
     resetBillForm();
     resetGoalForm();
-    applyPrefs();
     render();
+
+    window.editBill = editBill;
+    window.togglePaid = togglePaid;
+    window.removeBill = removeBill;
+    window.deleteBudget = deleteBudget;
+    window.editGoal = editGoal;
+    window.removeGoal = removeGoal;
+    window.quickAddToGoal = quickAddToGoal;
   </script>
 </body>
 </html>
