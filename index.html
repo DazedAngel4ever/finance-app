@@ -3,280 +3,477 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finance Command Center V4.7</title>
+  <title>Finance Command Center V5</title>
   <meta name="theme-color" content="#0b0f14" />
   <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#161b22;
+      --panel-2:#111821;
+      --line:#27313d;
+      --text:#e6edf3;
+      --muted:#9da7b3;
+      --green:#2ea043;
+      --red:#ff6b6b;
+      --yellow:#f2cc60;
+      --blue:#58a6ff;
+      --purple:#8b5cf6;
+      --teal:#14b8a6;
+    }
+
+    *{box-sizing:border-box}
+
     body{
       margin:0;
-      background:#0b0f14;
-      color:#e6edf3;
+      background:linear-gradient(180deg,#0b0f14 0%, #0d1219 100%);
+      color:var(--text);
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
     }
+
     .wrap{
-      padding:15px;
-      max-width:760px;
-      margin:auto;
+      padding:14px;
+      max-width:840px;
+      margin:0 auto;
     }
-    .title{
-      font-size:26px;
+
+    .hero{
+      padding:10px 2px 4px;
+    }
+
+    .hero-title{
+      font-size:30px;
       font-weight:800;
-      margin-bottom:10px;
+      letter-spacing:-.02em;
+      margin:0;
     }
-    .card{
-      background:#161b22;
-      padding:12px;
-      border-radius:12px;
-      margin-top:10px;
-      border:1px solid #27313d;
+
+    .hero-sub{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px;
     }
+
+    .section{
+      margin-top:12px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:0 10px 28px rgba(0,0,0,.18);
+    }
+
     .section-title{
       font-size:16px;
-      font-weight:700;
-      margin-bottom:8px;
+      font-weight:800;
+      margin:0 0 10px;
     }
-    input,select,button{
-      width:100%;
-      padding:10px;
-      margin-top:6px;
-      border-radius:10px;
-      border:none;
-      background:#0f141b;
-      color:white;
-      box-sizing:border-box;
-      font:inherit;
+
+    .section-note{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:-4px;
+      margin-bottom:10px;
     }
-    button{
-      background:#238636;
-      font-weight:700;
-    }
-    button.secondary{
-      background:#1a2230;
-      border:1px solid #27313d;
-    }
-    button.danger{
-      background:#4b1f24;
-      color:#ffd0d0;
-    }
-    .grid{
+
+    .grid-2{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
+
     .grid-3{
       display:grid;
       grid-template-columns:1fr 1fr 1fr;
       gap:10px;
     }
-    .stat{
-      background:#111821;
-      padding:10px;
-      border-radius:10px;
-    }
-    .stat-label{
-      font-size:12px;
-      color:#9da7b3;
-      margin-bottom:4px;
-    }
-    .stat-value{
-      font-size:18px;
-      font-weight:800;
-    }
-    .alert-grid{
+
+    .grid-4{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
-    .alert-box{
-      background:#111821;
-      padding:10px;
-      border-radius:10px;
-      border-left:4px solid #58a6ff;
+
+    .kpi{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
     }
-    .alert-box.red{ border-left-color:#ff6b6b; }
-    .alert-box.yellow{ border-left-color:#f2cc60; }
-    .alert-box.green{ border-left-color:#2ea043; }
-    .alert-box.blue{ border-left-color:#58a6ff; }
-    .alert-label{
+
+    .kpi-label{
+      color:var(--muted);
       font-size:12px;
-      color:#9da7b3;
-      margin-bottom:4px;
+      margin-bottom:5px;
     }
-    .alert-value{
-      font-size:17px;
+
+    .kpi-value{
+      font-size:22px;
       font-weight:800;
+      line-height:1.05;
     }
-    .month-row{
+
+    .hero-strip{
       display:grid;
       grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .input, input, select, button{
+      width:100%;
+      border:none;
+      border-radius:12px;
+      padding:11px 12px;
+      margin-top:6px;
+      background:#0f141b;
+      color:var(--text);
+      font:inherit;
+    }
+
+    button{
+      background:#238636;
+      font-weight:800;
+    }
+
+    button.secondary{
+      background:#1a2230;
+      border:1px solid var(--line);
+    }
+
+    button.danger{
+      background:#4b1f24;
+      color:#ffd0d0;
+    }
+
+    .toolbar-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .toolbar-3{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+    }
+
+    .month-bar{
+      display:grid;
+      grid-template-columns:1fr auto;
       gap:10px;
       align-items:end;
     }
-    .bill{
-      background:#111821;
-      padding:10px;
-      border-radius:10px;
-      margin-top:8px;
-      border-left:4px solid #2ea043;
-    }
-    .bill.overdue{ border-left-color:#ff6b6b; }
-    .bill.soon{ border-left-color:#f2cc60; }
-    .bill-top{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:flex-start;
-    }
-    .small{
-      font-size:12px;
-      color:#9da7b3;
-      margin-top:4px;
-    }
-    .chip-row{
+
+    .month-tabs{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       margin-top:8px;
     }
-    .chip{
+
+    .month-pill{
+      padding:8px 11px;
+      border-radius:999px;
+      background:#18212b;
+      border:1px solid var(--line);
+      color:var(--muted);
       font-size:12px;
+    }
+
+    .month-pill.active{
+      color:white;
+      border-color:#396592;
+      background:#122031;
+    }
+
+    .action-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .action-box{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-left:5px solid var(--blue);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .action-box.red{border-left-color:var(--red)}
+    .action-box.yellow{border-left-color:var(--yellow)}
+    .action-box.green{border-left-color:var(--green)}
+    .action-box.purple{border-left-color:var(--purple)}
+
+    .action-label{
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:5px;
+    }
+
+    .action-value{
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .chip{
       padding:5px 8px;
       border-radius:999px;
+      font-size:12px;
+      border:1px solid var(--line);
       background:#1b2430;
-      border:1px solid #27313d;
-      color:#cdd6df;
+      color:#d2d9e0;
     }
-    .chip.red{ color:#ffd0d0; background:#351920; border-color:#5a2c34; }
-    .chip.yellow{ color:#ffe6a0; background:#342a10; border-color:#6d5a21; }
-    .chip.green{ color:#c8ffd8; background:#13261a; border-color:#2f6c3d; }
-    .chip.blue{ color:#d6e8ff; background:#122031; border-color:#2d557d; }
-    .bill-actions{
+
+    .chip.red{color:#ffd0d0;background:#351920;border-color:#5a2c34}
+    .chip.yellow{color:#ffe6a0;background:#342a10;border-color:#6d5a21}
+    .chip.green{color:#c8ffd8;background:#13261a;border-color:#2f6c3d}
+    .chip.blue{color:#d6e8ff;background:#122031;border-color:#2d557d}
+    .chip.purple{color:#e3d7ff;background:#231736;border-color:#4d347a}
+
+    .health-bar{
+      height:12px;
+      border-radius:999px;
+      background:#0b1016;
+      border:1px solid var(--line);
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .health-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--green),#53d07a);
+      transition:width .25s ease;
+    }
+
+    .budget-list,
+    .goal-list,
+    .bill-list,
+    .mini-list{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .row-card{
+      background:#0f141b;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:11px;
+    }
+
+    .row-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .row-title{
+      font-weight:800;
+      font-size:15px;
+    }
+
+    .row-sub{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:4px;
+    }
+
+    .row-amount{
+      font-size:18px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .row-actions{
       display:grid;
       grid-template-columns:1fr 1fr 1fr;
       gap:8px;
       margin-top:10px;
     }
+
+    .budget-meta,
+    .goal-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .status-good{color:var(--green); font-weight:800; font-size:12px}
+    .status-warn{color:var(--yellow); font-weight:800; font-size:12px}
+    .status-bad{color:var(--red); font-weight:800; font-size:12px}
+
+    .progress{
+      height:10px;
+      border-radius:999px;
+      background:#0b1016;
+      border:1px solid var(--line);
+      overflow:hidden;
+      margin-top:8px;
+    }
+
+    .progress > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--blue),var(--teal));
+    }
+
+    .sub-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
     .canvas-wrap{
       width:100%;
       overflow:hidden;
     }
+
     canvas{
       width:100%;
       height:220px;
       display:block;
       background:#0f141b;
-      border-radius:10px;
+      border-radius:14px;
       margin-top:8px;
     }
+
     .empty{
-      color:#9da7b3;
+      color:var(--muted);
       font-size:13px;
       padding:8px 0;
     }
-    .budget-row{
-      display:grid;
-      grid-template-columns:1.2fr .8fr auto;
-      gap:8px;
-      align-items:end;
-      margin-top:8px;
+
+    .footer-space{
+      height:12px;
     }
-    .budget-list{
-      display:grid;
-      gap:8px;
-      margin-top:10px;
-    }
-    .budget-item{
-      background:#111821;
-      border:1px solid #27313d;
-      border-radius:10px;
-      padding:10px;
-    }
-    .budget-top{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom:8px;
-    }
-    .budget-name{
-      font-weight:700;
-    }
-    .budget-status{
-      font-size:12px;
-      font-weight:700;
-    }
-    .budget-status.good{ color:#2ea043; }
-    .budget-status.warn{ color:#f2cc60; }
-    .budget-status.bad{ color:#ff6b6b; }
-    .budget-meta{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:8px;
-      font-size:12px;
-      color:#9da7b3;
+
+    @media (min-width:760px){
+      .grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
+      .hero-strip{grid-template-columns:1.2fr .8fr .8fr .8fr .8fr}
+      .action-grid{grid-template-columns:1fr 1fr 1fr 1fr}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="title">💳 Finance Command Center</div>
+    <div class="hero">
+      <h1 class="hero-title">💳 Finance Command Center</h1>
+      <p class="hero-sub">Executive command dashboard · mobile-first · offline and saved on this device</p>
+    </div>
 
-    <div class="card">
-      <div class="section-title">Month View</div>
-      <div class="month-row">
+    <div class="section">
+      <div class="section-title">Executive Snapshot</div>
+      <div class="hero-strip">
+        <div class="kpi">
+          <div class="kpi-label">Monthly income</div>
+          <input id="income" type="number" step="0.01" placeholder="Monthly Income">
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Total</div>
+          <div id="total" class="kpi-value">$0.00</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Unpaid</div>
+          <div id="unpaid" class="kpi-value">$0.00</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Overdue</div>
+          <div id="overdue" class="kpi-value">0</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Leftover</div>
+          <div id="leftover" class="kpi-value">$0.00</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:12px;">Budget Health</div>
+      <div class="section-note">How safe this month looks after unpaid bills and budget pressure</div>
+      <div class="chip-row">
+        <span id="healthStatus" class="chip blue">Calculating</span>
+        <span id="healthNote" class="chip">Waiting for data</span>
+      </div>
+      <div class="health-bar">
+        <div id="healthFill" class="health-fill"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Month Control</div>
+      <div class="month-bar">
         <select id="monthFilter"></select>
-        <button class="secondary" id="goCurrentMonthBtn">Go to Current Month</button>
+        <button id="goCurrentMonthBtn" class="secondary">Current Month</button>
+      </div>
+      <div id="monthTabs" class="month-tabs"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Action Center</div>
+      <div class="section-note">What needs attention first</div>
+      <div class="action-grid">
+        <div class="action-box red">
+          <div class="action-label">Overdue bills</div>
+          <div id="alertOverdue" class="action-value">0</div>
+        </div>
+        <div class="action-box red">
+          <div class="action-label">Due today</div>
+          <div id="alertToday" class="action-value">0</div>
+        </div>
+        <div class="action-box yellow">
+          <div class="action-label">Due soon</div>
+          <div id="alertSoon" class="action-value">0</div>
+        </div>
+        <div class="action-box purple">
+          <div class="action-label">Highest unpaid</div>
+          <div id="alertHighest" class="action-value">$0.00</div>
+        </div>
+      </div>
+      <div class="chip-row" id="alertChips"></div>
+    </div>
+
+    <div class="sub-grid">
+      <div class="section">
+        <div class="section-title">Subscriptions Snapshot</div>
+        <div class="section-note">Recurring bills and subscription load</div>
+        <div class="kpi">
+          <div class="kpi-label">Monthly subscriptions</div>
+          <div id="subscriptionTotal" class="kpi-value">$0.00</div>
+        </div>
+        <div id="subscriptionList" class="mini-list"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Savings Goals</div>
+        <div class="section-note">Track what you are building, not just what you owe</div>
+        <input id="goalName" placeholder="Goal name">
+        <div class="grid-2">
+          <input id="goalSaved" type="number" step="0.01" placeholder="Saved so far">
+          <input id="goalTarget" type="number" step="0.01" placeholder="Target">
+        </div>
+        <div class="toolbar-2">
+          <button id="saveGoalBtn">Save Goal</button>
+          <button id="clearGoalBtn" class="secondary">Clear</button>
+        </div>
+        <div id="goalList" class="goal-list"></div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="section-title">Monthly Income</div>
-      <input id="income" placeholder="Monthly Income" type="number" step="0.01">
-    </div>
-
-    <div class="card">
-      <div class="section-title">Alerts Panel</div>
-      <div class="alert-grid">
-        <div class="alert-box red">
-          <div class="alert-label">Overdue Bills</div>
-          <div id="alertOverdue" class="alert-value">0</div>
-        </div>
-        <div class="alert-box red">
-          <div class="alert-label">Due Today</div>
-          <div id="alertToday" class="alert-value">0</div>
-        </div>
-        <div class="alert-box yellow">
-          <div class="alert-label">Due Soon (3 days)</div>
-          <div id="alertSoon" class="alert-value">0</div>
-        </div>
-        <div class="alert-box blue">
-          <div class="alert-label">Highest Unpaid</div>
-          <div id="alertHighest" class="alert-value">$0.00</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card grid">
-      <div class="stat">
-        <div class="stat-label">Total</div>
-        <div id="total" class="stat-value">$0.00</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Unpaid</div>
-        <div id="unpaid" class="stat-value">$0.00</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Overdue</div>
-        <div id="overdue" class="stat-value">0</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Leftover</div>
-        <div id="leftover" class="stat-value">$0.00</div>
-      </div>
-    </div>
-
-    <div class="card">
+    <div class="section">
       <div class="section-title">Budget Tracking</div>
-      <div class="budget-row">
+      <div class="section-note">Planned versus actual for the selected month</div>
+      <div class="grid-3">
         <select id="budgetCategory">
           <option>Rent</option>
           <option>Utilities</option>
@@ -285,220 +482,217 @@
           <option>Other</option>
         </select>
         <input id="budgetAmount" type="number" step="0.01" placeholder="Planned Budget">
-        <button id="saveBudgetBtn">Save</button>
+        <button id="saveBudgetBtn">Save Budget</button>
       </div>
       <div id="budgetList" class="budget-list"></div>
     </div>
 
-    <div class="card">
-      <div class="section-title">📊 Category Bar Chart</div>
-      <div class="canvas-wrap"><canvas id="barChart"></canvas></div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">🥧 Spending Distribution</div>
-      <div class="canvas-wrap"><canvas id="pieChart"></canvas></div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">📈 Spending Trend</div>
-      <div class="canvas-wrap"><canvas id="trendChart"></canvas></div>
-    </div>
-
-    <div class="card">
-      <div class="section-title" id="formTitle">Add Bill</div>
-      <input id="name" placeholder="Bill Name">
-      <input id="amount" type="number" step="0.01" placeholder="Amount">
-      <input id="date" type="date">
-
-      <select id="category">
-        <option>Rent</option>
-        <option>Utilities</option>
-        <option>Subscriptions</option>
-        <option>Debt</option>
-        <option>Other</option>
-      </select>
-
-      <label class="small">
-        <input type="checkbox" id="recurring" style="width:auto;margin-right:8px;"> Recurring
-      </label>
-
-      <div class="grid-3">
-        <button id="saveBillBtn">Add</button>
-        <button class="secondary" id="cancelEditBtn">Cancel</button>
-        <button class="secondary" id="duplicateBillBtn">Duplicate Last</button>
+    <div class="section">
+      <div class="section-title">Insights</div>
+      <div class="grid-2">
+        <div class="row-card">
+          <div class="section-title" style="margin-bottom:0;">Category Bar Chart</div>
+          <div class="canvas-wrap"><canvas id="barChart"></canvas></div>
+        </div>
+        <div class="row-card">
+          <div class="section-title" style="margin-bottom:0;">Spending Distribution</div>
+          <div class="canvas-wrap"><canvas id="pieChart"></canvas></div>
+        </div>
+      </div>
+      <div class="row-card" style="margin-top:10px;">
+        <div class="section-title" style="margin-bottom:0;">Monthly Trend</div>
+        <div class="canvas-wrap"><canvas id="trendChart"></canvas></div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="section-title">Bills</div>
-      <div id="list"></div>
+    <div class="section">
+      <div class="section-title" id="formTitle">Bill Operations</div>
+      <div class="section-note">Add, edit, and duplicate bills</div>
+      <input id="name" placeholder="Bill Name">
+      <div class="grid-2">
+        <input id="amount" type="number" step="0.01" placeholder="Amount">
+        <input id="date" type="date">
+      </div>
+      <div class="grid-2">
+        <select id="category">
+          <option>Rent</option>
+          <option>Utilities</option>
+          <option>Subscriptions</option>
+          <option>Debt</option>
+          <option>Other</option>
+        </select>
+        <label class="chip" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <input type="checkbox" id="recurring" style="width:auto;margin:0;"> Recurring monthly
+        </label>
+      </div>
+      <div class="toolbar-3">
+        <button id="saveBillBtn">Add</button>
+        <button id="cancelEditBtn" class="secondary">Cancel</button>
+        <button id="duplicateBillBtn" class="secondary">Duplicate Last</button>
+      </div>
     </div>
+
+    <div class="section">
+      <div class="section-title">Bills</div>
+      <div id="billList" class="bill-list"></div>
+    </div>
+
+    <div class="footer-space"></div>
   </div>
 
   <script>
-    const STORAGE_KEY = "bills_v47";
-    const BUDGET_KEY = "budgets_v47";
-    const INCOME_KEY = "income_v47";
-    const MONTH_KEY = "month_filter_v47";
-    const LEGACY_KEYS = ["bills_v46", "bills_v45_fixed", "bills_v45", "finance_exec_v1", "bills_v44", "finance_v4_lite_data", "bills_v43", "bills_v42", "bills_v41"];
-    const LEGACY_BUDGET_KEYS = ["budgets_v46"];
-    const LEGACY_INCOME_KEYS = ["income_v46", "income_v45_fixed", "income_v45", "finance_exec_income", "income_v44"];
+    const STORAGE_KEY = "finance_v5_layout_bills";
+    const BUDGET_KEY = "finance_v5_layout_budgets";
+    const GOAL_KEY = "finance_v5_layout_goals";
+    const INCOME_KEY = "finance_v5_layout_income";
+    const MONTH_KEY = "finance_v5_layout_month";
+    const LEGACY_BILL_KEYS = ["bills_v47","bills_v46","bills_v45_fixed","bills_v45","finance_exec_v1","bills_v44","finance_v4_lite_data","bills_v43","bills_v42","bills_v41"];
+    const LEGACY_BUDGET_KEYS = ["budgets_v47","budgets_v46"];
+    const LEGACY_GOAL_KEYS = [];
+    const LEGACY_INCOME_KEYS = ["income_v47","income_v46","income_v45_fixed","income_v45","finance_exec_income","income_v44"];
 
     let bills = [];
     let budgets = {};
-    let editingId = null;
+    let goals = [];
+    let editingBillId = null;
+    let editingGoalId = null;
 
     const incomeEl = document.getElementById("income");
     const monthFilterEl = document.getElementById("monthFilter");
+    const monthTabsEl = document.getElementById("monthTabs");
+
     const totalEl = document.getElementById("total");
     const unpaidEl = document.getElementById("unpaid");
     const overdueEl = document.getElementById("overdue");
     const leftoverEl = document.getElementById("leftover");
-    const listEl = document.getElementById("list");
-    const formTitleEl = document.getElementById("formTitle");
 
+    const healthStatusEl = document.getElementById("healthStatus");
+    const healthNoteEl = document.getElementById("healthNote");
+    const healthFillEl = document.getElementById("healthFill");
+
+    const alertOverdueEl = document.getElementById("alertOverdue");
+    const alertTodayEl = document.getElementById("alertToday");
+    const alertSoonEl = document.getElementById("alertSoon");
+    const alertHighestEl = document.getElementById("alertHighest");
+    const alertChipsEl = document.getElementById("alertChips");
+
+    const subscriptionTotalEl = document.getElementById("subscriptionTotal");
+    const subscriptionListEl = document.getElementById("subscriptionList");
+
+    const goalNameEl = document.getElementById("goalName");
+    const goalSavedEl = document.getElementById("goalSaved");
+    const goalTargetEl = document.getElementById("goalTarget");
+    const goalListEl = document.getElementById("goalList");
+
+    const budgetCategoryEl = document.getElementById("budgetCategory");
+    const budgetAmountEl = document.getElementById("budgetAmount");
+    const budgetListEl = document.getElementById("budgetList");
+
+    const formTitleEl = document.getElementById("formTitle");
+    const billListEl = document.getElementById("billList");
     const nameEl = document.getElementById("name");
     const amountEl = document.getElementById("amount");
     const dateEl = document.getElementById("date");
     const categoryEl = document.getElementById("category");
     const recurringEl = document.getElementById("recurring");
 
-    const saveBillBtn = document.getElementById("saveBillBtn");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
-    const duplicateBillBtn = document.getElementById("duplicateBillBtn");
-    const goCurrentMonthBtn = document.getElementById("goCurrentMonthBtn");
-
-    const budgetCategoryEl = document.getElementById("budgetCategory");
-    const budgetAmountEl = document.getElementById("budgetAmount");
-    const saveBudgetBtn = document.getElementById("saveBudgetBtn");
-    const budgetListEl = document.getElementById("budgetList");
-
     function money(v){
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD"
-      }).format(Number(v || 0));
+      return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number(v || 0));
     }
 
-    function uid(){
-      return "bill_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    function uid(prefix="id"){
+      return prefix + "_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
     }
 
     function todayString(){
       const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      return `${y}-${m}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
     }
 
     function currentMonthKey(){
       const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
     }
 
     function toLocalDate(dateStr){
       const parts = String(dateStr || "").split("-");
       if (parts.length !== 3) return null;
-      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]), 12, 0, 0);
+      return new Date(Number(parts[0]), Number(parts[1])-1, Number(parts[2]), 12, 0, 0);
     }
 
     function monthKeyFromDate(dateStr){
       const d = toLocalDate(dateStr);
       if (!d) return "";
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
     }
 
     function formatMonthLabel(monthKey){
-      const [y, m] = monthKey.split("-").map(Number);
-      const d = new Date(y, m - 1, 1);
-      return d.toLocaleString("en-US", { month: "long", year: "numeric" });
+      const [y,m] = monthKey.split("-").map(Number);
+      return new Date(y,m-1,1).toLocaleString("en-US",{month:"long", year:"numeric"});
     }
 
     function daysUntil(dateStr){
       const due = toLocalDate(dateStr);
       const now = toLocalDate(todayString());
       if (!due || !now) return 9999;
-      return Math.round((due - now) / 86400000);
+      return Math.round((due - now)/86400000);
     }
 
-    function saveBills(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(bills));
-    }
-
-    function loadBills(){
-      let loaded = [];
-      for (const key of LEGACY_KEYS){
+    function loadFirstValid(keys, fallback){
+      for (const key of keys){
         try{
           const raw = localStorage.getItem(key);
-          if (raw){
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)){
-              loaded = parsed;
-              break;
-            }
-          }
-        } catch(e){}
+          if (!raw) continue;
+          const parsed = JSON.parse(raw);
+          if (parsed !== null && parsed !== undefined) return parsed;
+        }catch(e){}
       }
+      return fallback;
+    }
 
-      bills = loaded.map(b => ({
-        id: b.id || uid(),
+    function saveBills(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(bills)); }
+    function saveBudgets(){ localStorage.setItem(BUDGET_KEY, JSON.stringify(budgets)); }
+    function saveGoals(){ localStorage.setItem(GOAL_KEY, JSON.stringify(goals)); }
+    function saveIncome(){ localStorage.setItem(INCOME_KEY, incomeEl.value || ""); }
+    function saveMonth(){ localStorage.setItem(MONTH_KEY, monthFilterEl.value || currentMonthKey()); }
+
+    function loadData(){
+      const loadedBills = loadFirstValid(LEGACY_BILL_KEYS, []);
+      bills = Array.isArray(loadedBills) ? loadedBills.map(b => ({
+        id: b.id || uid("bill"),
         name: b.name || "",
         amount: Number(b.amount || 0),
         date: b.date || "",
         category: b.category || "Other",
         paid: !!b.paid,
         recurring: !!b.recurring
-      }));
+      })) : [];
 
-      saveBills();
-    }
+      const loadedBudgets = loadFirstValid(LEGACY_BUDGET_KEYS, {});
+      budgets = loadedBudgets && typeof loadedBudgets === "object" ? loadedBudgets : {};
 
-    function saveBudgets(){
-      localStorage.setItem(BUDGET_KEY, JSON.stringify(budgets));
-    }
+      const loadedGoals = loadFirstValid(LEGACY_GOAL_KEYS, []);
+      goals = Array.isArray(loadedGoals) ? loadedGoals.map(g => ({
+        id: g.id || uid("goal"),
+        name: g.name || "",
+        saved: Number(g.saved || 0),
+        target: Number(g.target || 0)
+      })) : [];
 
-    function loadBudgets(){
-      try{
-        budgets = JSON.parse(localStorage.getItem(BUDGET_KEY)) || {};
-      } catch(e){
-        budgets = {};
-      }
-      if (!Object.keys(budgets).length) {
-        for (const key of LEGACY_BUDGET_KEYS){
-          try{
-            const raw = localStorage.getItem(key);
-            if (raw){
-              const parsed = JSON.parse(raw);
-              if (parsed && typeof parsed === "object"){
-                budgets = parsed;
-                break;
-              }
-            }
-          } catch(e){}
-        }
-      }
-    }
-
-    function saveIncome(){
-      localStorage.setItem(INCOME_KEY, incomeEl.value || "");
-    }
-
-    function loadIncome(){
+      let income = "";
       for (const key of LEGACY_INCOME_KEYS){
         const val = localStorage.getItem(key);
         if (val !== null && val !== ""){
-          incomeEl.value = val;
-          localStorage.setItem(INCOME_KEY, val);
-          return;
+          income = val;
+          break;
         }
       }
-      incomeEl.value = localStorage.getItem(INCOME_KEY) || "";
-    }
+      incomeEl.value = localStorage.getItem(INCOME_KEY) || income || "";
 
-    function saveMonthFilter(){
-      localStorage.setItem(MONTH_KEY, monthFilterEl.value || currentMonthKey());
+      saveBills();
+      saveBudgets();
+      saveGoals();
+      saveIncome();
     }
 
     function generateRecurring(){
@@ -510,14 +704,13 @@
       const snapshot = [...bills];
       snapshot.forEach(b => {
         if (!b.recurring) return;
-
         const original = toLocalDate(b.date);
         if (!original) return;
 
         const lastDay = new Date(year, month + 1, 0).getDate();
         const targetDay = Math.min(original.getDate(), lastDay);
         const target = new Date(year, month, targetDay, 12, 0, 0);
-        const targetStr = `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, "0")}-${String(target.getDate()).padStart(2, "0")}`;
+        const targetStr = `${target.getFullYear()}-${String(target.getMonth()+1).padStart(2,"0")}-${String(target.getDate()).padStart(2,"0")}`;
 
         const exists = bills.some(x =>
           x.name === b.name &&
@@ -528,7 +721,7 @@
 
         if (!exists && (original.getMonth() !== month || original.getFullYear() !== year)){
           bills.push({
-            id: uid(),
+            id: uid("bill"),
             name: b.name,
             amount: b.amount,
             date: targetStr,
@@ -543,29 +736,7 @@
       if (changed) saveBills();
     }
 
-    function billStatus(b){
-      if (b.paid) return "paid";
-      const days = daysUntil(b.date);
-      if (days < 0) return "overdue";
-      if (days <= 3) return "soon";
-      return "normal";
-    }
-
-    function sortBills(list){
-      return [...list].sort((a, b) => {
-        const pa = billStatus(a) === "overdue" ? 1 : billStatus(a) === "soon" ? 2 : billStatus(a) === "normal" ? 3 : 4;
-        const pb = billStatus(b) === "overdue" ? 1 : billStatus(b) === "soon" ? 2 : billStatus(b) === "normal" ? 3 : 4;
-        if (pa !== pb) return pa - pb;
-        return daysUntil(a.date) - daysUntil(b.date);
-      });
-    }
-
-    function filteredBills(){
-      const selectedMonth = monthFilterEl.value || currentMonthKey();
-      return bills.filter(b => monthKeyFromDate(b.date) === selectedMonth);
-    }
-
-    function populateMonthFilter(){
+    function populateMonthControl(){
       const months = [...new Set(bills.map(b => monthKeyFromDate(b.date)).filter(Boolean))];
       const current = currentMonthKey();
       if (!months.includes(current)) months.push(current);
@@ -574,12 +745,53 @@
       const saved = localStorage.getItem(MONTH_KEY) || current;
       monthFilterEl.innerHTML = months.map(m => `<option value="${m}">${formatMonthLabel(m)}</option>`).join("");
       monthFilterEl.value = months.includes(saved) ? saved : current;
+
+      monthTabsEl.innerHTML = months.slice(-6).map(m =>
+        `<button class="month-pill ${m === monthFilterEl.value ? "active" : ""}" onclick="selectMonth('${m}')">${formatMonthLabel(m)}</button>`
+      ).join("");
     }
 
-    function resetForm(){
-      editingId = null;
-      formTitleEl.textContent = "Add Bill";
-      saveBillBtn.textContent = "Add";
+    function selectMonth(m){
+      monthFilterEl.value = m;
+      saveMonth();
+      render();
+    }
+    window.selectMonth = selectMonth;
+
+    function filteredBills(){
+      const month = monthFilterEl.value || currentMonthKey();
+      return bills.filter(b => monthKeyFromDate(b.date) === month);
+    }
+
+    function billStatus(b){
+      if (b.paid) return "paid";
+      const days = daysUntil(b.date);
+      if (days < 0) return "overdue";
+      if (days === 0) return "today";
+      if (days <= 3) return "soon";
+      return "upcoming";
+    }
+
+    function sortBills(list){
+      return [...list].sort((a,b)=>{
+        const rank = (x) => {
+          const s = billStatus(x);
+          if (s === "overdue") return 1;
+          if (s === "today") return 2;
+          if (s === "soon") return 3;
+          if (s === "upcoming") return 4;
+          return 5;
+        };
+        const r = rank(a) - rank(b);
+        if (r !== 0) return r;
+        return daysUntil(a.date) - daysUntil(b.date);
+      });
+    }
+
+    function resetBillForm(){
+      editingBillId = null;
+      formTitleEl.textContent = "Bill Operations";
+      document.getElementById("saveBillBtn").textContent = "Add";
       nameEl.value = "";
       amountEl.value = "";
       dateEl.value = "";
@@ -599,8 +811,8 @@
         return;
       }
 
-      if (editingId){
-        const bill = bills.find(b => b.id === editingId);
+      if (editingBillId){
+        const bill = bills.find(b => b.id === editingBillId);
         if (!bill) return;
         bill.name = name;
         bill.amount = amount;
@@ -609,67 +821,81 @@
         bill.recurring = recurring;
       } else {
         bills.push({
-          id: uid(),
+          id: uid("bill"),
           name,
           amount,
           date,
           category,
-          paid: false,
+          paid:false,
           recurring
         });
       }
 
       saveBills();
-      populateMonthFilter();
-      if (!editingId) {
-        monthFilterEl.value = monthKeyFromDate(date) || currentMonthKey();
-        saveMonthFilter();
-      }
-      resetForm();
+      populateMonthControl();
+      monthFilterEl.value = monthKeyFromDate(date) || currentMonthKey();
+      saveMonth();
+      resetBillForm();
       render();
     }
 
     function editBill(id){
       const bill = bills.find(b => b.id === id);
       if (!bill) return;
-
-      editingId = id;
+      editingBillId = id;
       formTitleEl.textContent = "Edit Bill";
-      saveBillBtn.textContent = "Update";
+      document.getElementById("saveBillBtn").textContent = "Update";
       nameEl.value = bill.name;
       amountEl.value = bill.amount;
       dateEl.value = bill.date;
       categoryEl.value = bill.category;
       recurringEl.checked = !!bill.recurring;
-      window.scrollTo({ top: document.body.scrollHeight * 0.35, behavior: "smooth" });
+      window.scrollTo({ top: document.body.scrollHeight * 0.72, behavior:"smooth" });
     }
+    window.editBill = editBill;
+
+    function togglePaid(id){
+      const bill = bills.find(b => b.id === id);
+      if (!bill) return;
+      bill.paid = !bill.paid;
+      saveBills();
+      render();
+    }
+    window.togglePaid = togglePaid;
+
+    function removeBill(id){
+      bills = bills.filter(b => b.id !== id);
+      saveBills();
+      if (editingBillId === id) resetBillForm();
+      populateMonthControl();
+      render();
+    }
+    window.removeBill = removeBill;
 
     function duplicateLastBill(){
-      const list = filteredBills();
+      const list = sortBills(filteredBills());
       if (!list.length){
         alert("No bill in this month to duplicate.");
         return;
       }
-      const bill = sortBills(list)[list.length - 1];
+      const bill = list[list.length - 1];
+      editingBillId = null;
+      formTitleEl.textContent = "Duplicate Bill";
+      document.getElementById("saveBillBtn").textContent = "Add";
       nameEl.value = bill.name;
       amountEl.value = bill.amount;
       dateEl.value = bill.date;
       categoryEl.value = bill.category;
       recurringEl.checked = !!bill.recurring;
-      editingId = null;
-      formTitleEl.textContent = "Duplicate Bill";
-      saveBillBtn.textContent = "Add";
     }
 
     function saveBudget(){
       const category = budgetCategoryEl.value;
       const amount = Number(budgetAmountEl.value);
-
       if (!category || !amount || amount <= 0){
         alert("Enter a valid planned budget.");
         return;
       }
-
       budgets[category] = amount;
       saveBudgets();
       budgetAmountEl.value = "";
@@ -681,21 +907,255 @@
       saveBudgets();
       render();
     }
+    window.deleteBudget = deleteBudget;
 
-    function togglePaid(id){
-      const bill = bills.find(b => b.id === id);
-      if (!bill) return;
-      bill.paid = !bill.paid;
-      saveBills();
+    function resetGoalForm(){
+      editingGoalId = null;
+      goalNameEl.value = "";
+      goalSavedEl.value = "";
+      goalTargetEl.value = "";
+      document.getElementById("saveGoalBtn").textContent = "Save Goal";
+    }
+
+    function saveGoal(){
+      const name = goalNameEl.value.trim();
+      const saved = Number(goalSavedEl.value);
+      const target = Number(goalTargetEl.value);
+
+      if (!name || saved < 0 || !target || target <= 0){
+        alert("Enter a goal name, saved amount, and target.");
+        return;
+      }
+
+      if (editingGoalId){
+        const g = goals.find(x => x.id === editingGoalId);
+        if (!g) return;
+        g.name = name;
+        g.saved = saved;
+        g.target = target;
+      } else {
+        goals.push({
+          id: uid("goal"),
+          name,
+          saved,
+          target
+        });
+      }
+
+      saveGoals();
+      resetGoalForm();
       render();
     }
 
-    function removeBill(id){
-      bills = bills.filter(b => b.id !== id);
-      saveBills();
-      if (editingId === id) resetForm();
-      populateMonthFilter();
+    function editGoal(id){
+      const g = goals.find(x => x.id === id);
+      if (!g) return;
+      editingGoalId = id;
+      goalNameEl.value = g.name;
+      goalSavedEl.value = g.saved;
+      goalTargetEl.value = g.target;
+      document.getElementById("saveGoalBtn").textContent = "Update Goal";
+      window.scrollTo({ top: document.body.scrollHeight * 0.35, behavior:"smooth" });
+    }
+    window.editGoal = editGoal;
+
+    function removeGoal(id){
+      goals = goals.filter(g => g.id !== id);
+      saveGoals();
+      if (editingGoalId === id) resetGoalForm();
       render();
+    }
+    window.removeGoal = removeGoal;
+
+    function renderHealth(list){
+      const income = Number(incomeEl.value || 0);
+      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s + b.amount, 0);
+      const usage = income > 0 ? unpaid / income : 0;
+      const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
+
+      let score = 100;
+      if (income > 0) score -= Math.min(usage * 100, 85);
+      score -= overdue * 12;
+      score = Math.max(0, Math.min(100, Math.round(score)));
+
+      let label = "Healthy";
+      let cls = "green";
+      let note = "Bills are in a manageable range.";
+      if (score < 75){
+        label = "Tight";
+        cls = "yellow";
+        note = "Watch upcoming obligations closely.";
+      }
+      if (score < 45){
+        label = "Overextended";
+        cls = "red";
+        note = "Urgent bills are putting pressure on the month.";
+      }
+
+      healthStatusEl.className = "chip " + cls;
+      healthStatusEl.textContent = label;
+      healthNoteEl.textContent = note;
+      healthFillEl.style.width = score + "%";
+      healthFillEl.style.background = cls === "green"
+        ? "linear-gradient(90deg,#2ea043,#53d07a)"
+        : cls === "yellow"
+          ? "linear-gradient(90deg,#f2cc60,#ffd97a)"
+          : "linear-gradient(90deg,#ff6b6b,#ff8a8a)";
+    }
+
+    function renderSnapshot(list){
+      const income = Number(incomeEl.value || 0);
+      const total = list.reduce((s,b)=>s + b.amount, 0);
+      const unpaid = list.filter(b => !b.paid).reduce((s,b)=>s + b.amount, 0);
+      const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
+      const leftover = income - unpaid;
+
+      totalEl.textContent = money(total);
+      unpaidEl.textContent = money(unpaid);
+      overdueEl.textContent = String(overdue);
+      leftoverEl.textContent = money(leftover);
+    }
+
+    function renderActionCenter(list){
+      const unpaid = list.filter(b => !b.paid);
+      const overdue = unpaid.filter(b => daysUntil(b.date) < 0);
+      const today = unpaid.filter(b => daysUntil(b.date) === 0);
+      const soon = unpaid.filter(b => {
+        const d = daysUntil(b.date);
+        return d > 0 && d <= 3;
+      });
+      const highest = unpaid.reduce((max,b)=>b.amount > max.amount ? b : max, {amount:0});
+
+      alertOverdueEl.textContent = overdue.length;
+      alertTodayEl.textContent = today.length;
+      alertSoonEl.textContent = soon.length;
+      alertHighestEl.textContent = money(highest.amount || 0);
+
+      const chips = [];
+      if (overdue.length) chips.push(`<span class="chip red">${overdue.length} overdue</span>`);
+      if (today.length) chips.push(`<span class="chip red">${today.length} due today</span>`);
+      if (soon.length) chips.push(`<span class="chip yellow">${soon.length} due soon</span>`);
+      if (!overdue.length && !today.length && !soon.length) chips.push(`<span class="chip green">No urgent items</span>`);
+      alertChipsEl.innerHTML = chips.join("");
+    }
+
+    function renderSubscriptions(list){
+      const subs = sortBills(list.filter(b =>
+        b.recurring ||
+        b.category === "Subscriptions"
+      ));
+      const total = subs.reduce((s,b)=>s + b.amount, 0);
+      subscriptionTotalEl.textContent = money(total);
+
+      if (!subs.length){
+        subscriptionListEl.innerHTML = `<div class="empty">No subscriptions in this month.</div>`;
+        return;
+      }
+
+      subscriptionListEl.innerHTML = subs.slice(0,6).map(b => `
+        <div class="row-card">
+          <div class="row-top">
+            <div>
+              <div class="row-title">${escapeHtml(b.name)}</div>
+              <div class="row-sub">${escapeHtml(b.category)} · ${escapeHtml(b.date)}</div>
+            </div>
+            <div class="row-amount">${money(b.amount)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderGoals(){
+      if (!goals.length){
+        goalListEl.innerHTML = `<div class="empty">No goals added yet.</div>`;
+        return;
+      }
+
+      goalListEl.innerHTML = goals.map(g => {
+        const pct = g.target > 0 ? Math.min(100, (g.saved / g.target) * 100) : 0;
+        const remaining = Math.max(0, g.target - g.saved);
+        let status = "On track";
+        let cls = "status-good";
+        if (pct < 50){ status = "Behind"; cls = "status-warn"; }
+        if (pct < 15){ status = "No progress"; cls = "status-bad"; }
+
+        return `
+          <div class="row-card">
+            <div class="row-top">
+              <div>
+                <div class="row-title">${escapeHtml(g.name)}</div>
+                <div class="${cls}">${status}</div>
+              </div>
+              <div class="row-amount">${Math.round(pct)}%</div>
+            </div>
+            <div class="goal-meta">
+              <div>Saved: ${money(g.saved)}</div>
+              <div>Target: ${money(g.target)}</div>
+              <div>Left: ${money(remaining)}</div>
+            </div>
+            <div class="progress"><div style="width:${pct}%"></div></div>
+            <div class="row-actions">
+              <button class="secondary" onclick="editGoal('${g.id}')">Edit</button>
+              <button class="danger" onclick="removeGoal('${g.id}')">Delete</button>
+              <button class="secondary" onclick="quickAddToGoal('${g.id}')">+ Save</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function quickAddToGoal(id){
+      const g = goals.find(x => x.id === id);
+      if (!g) return;
+      const amt = prompt("Add amount to saved total:");
+      if (amt === null) return;
+      const n = Number(amt);
+      if (!n || n <= 0) return;
+      g.saved += n;
+      saveGoals();
+      render();
+    }
+    window.quickAddToGoal = quickAddToGoal;
+
+    function renderBudgets(list){
+      const categories = ["Rent","Utilities","Subscriptions","Debt","Other"];
+      const actuals = {};
+      list.forEach(b => {
+        actuals[b.category] = (actuals[b.category] || 0) + b.amount;
+      });
+
+      const rows = categories
+        .filter(cat => budgets[cat] || actuals[cat])
+        .map(cat => {
+          const planned = Number(budgets[cat] || 0);
+          const actual = Number(actuals[cat] || 0);
+          const diff = planned - actual;
+
+          let status = `<span class="status-good">Under budget</span>`;
+          if (planned <= 0) status = `<span class="status-warn">No budget</span>`;
+          else if (actual >= planned * 0.85) status = `<span class="status-warn">Close</span>`;
+          if (planned > 0 && actual > planned) status = `<span class="status-bad">Over budget</span>`;
+
+          return `
+            <div class="row-card">
+              <div class="row-top">
+                <div>
+                  <div class="row-title">${escapeHtml(cat)}</div>
+                  <div>${status}</div>
+                </div>
+                <div class="row-amount">${money(actual)}</div>
+              </div>
+              <div class="budget-meta">
+                <div>Planned: ${money(planned)}</div>
+                <div>Actual: ${money(actual)}</div>
+                <div>${planned > 0 ? (diff >= 0 ? "Left: " + money(diff) : "Over: " + money(Math.abs(diff))) : "Set a budget"}</div>
+              </div>
+              <button class="danger" style="margin-top:8px;" onclick="deleteBudget('${cat}')">Delete Budget</button>
+            </div>
+          `;
+        });
+
+      budgetListEl.innerHTML = rows.length ? rows.join("") : `<div class="empty">No budgets set.</div>`;
     }
 
     function setupCanvas(canvas){
@@ -712,7 +1172,7 @@
       const canvas = document.getElementById("barChart");
       const ctx = setupCanvas(canvas);
       const width = canvas.width / (window.devicePixelRatio || 1);
-      ctx.clearRect(0, 0, width, 220);
+      ctx.clearRect(0,0,width,220);
 
       const entries = Object.entries(catTotals);
       if (!entries.length){
@@ -722,22 +1182,22 @@
         return;
       }
 
-      const max = Math.max(...entries.map(([,v]) => v), 1);
+      const max = Math.max(...entries.map(([,v])=>v),1);
       const chartBottom = 180;
       const chartHeight = 160;
       const barWidth = Math.min(44, (width - 30) / entries.length - 16);
       const gap = 16;
-      const colors = ["#58a6ff", "#2ea043", "#f2cc60", "#ff6b6b", "#8b5cf6"];
+      const colors = ["#58a6ff","#2ea043","#f2cc60","#ff6b6b","#8b5cf6"];
 
-      entries.forEach(([cat, val], i) => {
+      entries.forEach(([cat,val],i)=>{
         const x = 20 + i * (barWidth + gap);
         const h = (val / max) * chartHeight;
         const y = chartBottom - h;
         ctx.fillStyle = colors[i % colors.length];
-        ctx.fillRect(x, y, barWidth, h);
+        ctx.fillRect(x,y,barWidth,h);
         ctx.fillStyle = "#e6edf3";
         ctx.font = "11px system-ui";
-        ctx.fillText(cat.slice(0, 10), x, 198);
+        ctx.fillText(cat.slice(0,10),x,198);
       });
     }
 
@@ -745,7 +1205,7 @@
       const canvas = document.getElementById("pieChart");
       const ctx = setupCanvas(canvas);
       const width = canvas.width / (window.devicePixelRatio || 1);
-      ctx.clearRect(0, 0, width, 220);
+      ctx.clearRect(0,0,width,220);
 
       const entries = Object.entries(catTotals);
       if (!entries.length){
@@ -755,16 +1215,16 @@
         return;
       }
 
-      const total = entries.reduce((sum, [,v]) => sum + v, 0);
+      const total = entries.reduce((s,[,v])=>s+v,0);
       const cx = 110, cy = 110, r = 72;
-      const colors = ["#2ea043", "#58a6ff", "#f2cc60", "#ff6b6b", "#8b5cf6", "#14b8a6"];
+      const colors = ["#2ea043","#58a6ff","#f2cc60","#ff6b6b","#8b5cf6","#14b8a6"];
       let start = -Math.PI / 2;
 
-      entries.forEach(([cat, val], i) => {
+      entries.forEach(([cat,val],i)=>{
         const slice = (val / total) * Math.PI * 2;
         ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, r, start, start + slice);
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,start,start+slice);
         ctx.closePath();
         ctx.fillStyle = colors[i % colors.length];
         ctx.fill();
@@ -773,19 +1233,19 @@
 
       ctx.beginPath();
       ctx.fillStyle = "#0f141b";
-      ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+      ctx.arc(cx,cy,38,0,Math.PI*2);
       ctx.fill();
 
-      entries.slice(0, 4).forEach(([cat, val], i) => {
+      entries.slice(0,4).forEach(([cat,val],i)=>{
         const lx = 220;
         const ly = 38 + i * 32;
         ctx.fillStyle = colors[i % colors.length];
-        ctx.fillRect(lx, ly, 12, 12);
+        ctx.fillRect(lx,ly,12,12);
         ctx.fillStyle = "#e6edf3";
         ctx.font = "12px system-ui";
-        ctx.fillText(cat, lx + 18, ly + 10);
+        ctx.fillText(cat,lx+18,ly+10);
         ctx.fillStyle = "#9da7b3";
-        ctx.fillText(Math.round((val / total) * 100) + "%", lx + 90, ly + 10);
+        ctx.fillText(Math.round((val/total)*100)+"%", lx+90, ly+10);
       });
     }
 
@@ -793,147 +1253,81 @@
       const canvas = document.getElementById("trendChart");
       const ctx = setupCanvas(canvas);
       const width = canvas.width / (window.devicePixelRatio || 1);
-      ctx.clearRect(0, 0, width, 220);
+      ctx.clearRect(0,0,width,220);
 
-      const sorted = [...list].sort((a,b) => new Date(a.date) - new Date(b.date));
+      const sorted = [...list].sort((a,b)=>new Date(a.date)-new Date(b.date));
       if (!sorted.length){
         ctx.fillStyle = "#9da7b3";
         ctx.font = "14px system-ui";
-        ctx.fillText("No trend data for this month", 16, 30);
+        ctx.fillText("No trend data for this month",16,30);
         return;
       }
 
-      const amounts = sorted.map(b => Number(b.amount || 0));
-      const max = Math.max(...amounts, 1);
+      const amounts = sorted.map(b=>Number(b.amount || 0));
+      const max = Math.max(...amounts,1);
       const left = 20, right = width - 20, top = 20, bottom = 180;
-      const spanX = Math.max(1, right - left), spanY = bottom - top;
+      const spanX = Math.max(1,right-left), spanY = bottom-top;
 
       ctx.strokeStyle = "#27313d";
       ctx.beginPath();
-      ctx.moveTo(left, bottom);
-      ctx.lineTo(right, bottom);
+      ctx.moveTo(left,bottom);
+      ctx.lineTo(right,bottom);
       ctx.stroke();
 
       ctx.strokeStyle = "#58a6ff";
       ctx.lineWidth = 2;
       ctx.beginPath();
 
-      sorted.forEach((b, i) => {
+      sorted.forEach((b,i)=>{
         const x = sorted.length === 1 ? left : left + (i / (sorted.length - 1)) * spanX;
         const y = bottom - (b.amount / max) * spanY;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
       });
 
       ctx.stroke();
 
-      sorted.forEach((b, i) => {
+      sorted.forEach((b,i)=>{
         const x = sorted.length === 1 ? left : left + (i / (sorted.length - 1)) * spanX;
         const y = bottom - (b.amount / max) * spanY;
         ctx.fillStyle = "#2ea043";
         ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.arc(x,y,3,0,Math.PI*2);
         ctx.fill();
       });
     }
 
-    function renderAlerts(list){
-      const unpaidBills = list.filter(b => !b.paid);
-      const overdueBills = unpaidBills.filter(b => daysUntil(b.date) < 0);
-      const todayBills = unpaidBills.filter(b => daysUntil(b.date) === 0);
-      const soonBills = unpaidBills.filter(b => {
-        const d = daysUntil(b.date);
-        return d > 0 && d <= 3;
-      });
-      const highest = unpaidBills.reduce((max, b) => b.amount > max.amount ? b : max, { amount: 0 });
-
-      document.getElementById("alertOverdue").textContent = overdueBills.length;
-      document.getElementById("alertToday").textContent = todayBills.length;
-      document.getElementById("alertSoon").textContent = soonBills.length;
-      document.getElementById("alertHighest").textContent = money(highest.amount || 0);
-    }
-
-    function renderBudget(list){
-      const categories = ["Rent", "Utilities", "Subscriptions", "Debt", "Other"];
-      const actuals = {};
-      list.forEach(b => {
-        actuals[b.category] = (actuals[b.category] || 0) + Number(b.amount || 0);
-      });
-
-      const rows = categories
-        .filter(cat => budgets[cat] || actuals[cat])
-        .map(cat => {
-          const planned = Number(budgets[cat] || 0);
-          const actual = Number(actuals[cat] || 0);
-          const diff = planned - actual;
-
-          let statusText = "No budget";
-          let statusClass = "";
-          if (planned > 0) {
-            if (actual > planned) {
-              statusText = "Over budget";
-              statusClass = "bad";
-            } else if (actual >= planned * 0.85) {
-              statusText = "Close";
-              statusClass = "warn";
-            } else {
-              statusText = "Under budget";
-              statusClass = "good";
-            }
-          }
-
-          return `
-            <div class="budget-item">
-              <div class="budget-top">
-                <div class="budget-name">${escapeHtml(cat)}</div>
-                <div class="budget-status ${statusClass}">${statusText}</div>
-              </div>
-              <div class="budget-meta">
-                <div>Planned: ${money(planned)}</div>
-                <div>Actual: ${money(actual)}</div>
-                <div>${planned > 0 ? (diff >= 0 ? "Left: " + money(diff) : "Over: " + money(Math.abs(diff))) : "Set budget"}</div>
-              </div>
-              <button class="danger" style="margin-top:8px;" onclick="deleteBudget('${cat}')">Delete Budget</button>
-            </div>
-          `;
-        });
-
-      budgetListEl.innerHTML = rows.length ? rows.join("") : '<div class="empty">No budgets set for this month view.</div>';
-    }
-
-    function renderList(list){
-      if (!list.length){
-        listEl.innerHTML = '<div class="empty">No bills in this month.</div>';
+    function renderBills(list){
+      const sorted = sortBills(list);
+      if (!sorted.length){
+        billListEl.innerHTML = `<div class="empty">No bills in this month.</div>`;
         return;
       }
 
-      listEl.innerHTML = sortBills(list).map(b => {
+      billListEl.innerHTML = sorted.map(b=>{
         const status = billStatus(b);
         const days = daysUntil(b.date);
-        const cls = status === "overdue" ? "overdue" : status === "soon" ? "soon" : "";
-
-        let chip = '<span class="chip green">Paid</span>';
-        if (!b.paid && status === "overdue") chip = `<span class="chip red">${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"} overdue</span>`;
-        else if (!b.paid && status === "soon") chip = days === 0
-          ? '<span class="chip red">Due today</span>'
-          : `<span class="chip yellow">Due in ${days} day${days === 1 ? "" : "s"}</span>`;
-        else if (!b.paid) chip = '<span class="chip green">Upcoming</span>';
+        let chip = `<span class="chip green">Paid</span>`;
+        if (!b.paid && status === "overdue") chip = `<span class="chip red">${Math.abs(days)} day${Math.abs(days)===1?"":"s"} overdue</span>`;
+        else if (!b.paid && status === "today") chip = `<span class="chip red">Due today</span>`;
+        else if (!b.paid && status === "soon") chip = `<span class="chip yellow">Due in ${days} day${days===1?"":"s"}</span>`;
+        else if (!b.paid) chip = `<span class="chip blue">Upcoming</span>`;
 
         return `
-          <div class="bill ${cls}">
-            <div class="bill-top">
+          <div class="row-card">
+            <div class="row-top">
               <div>
-                <div><strong>${escapeHtml(b.name)}</strong></div>
-                <div class="small">${escapeHtml(b.category)} | ${escapeHtml(b.date)}</div>
+                <div class="row-title">${escapeHtml(b.name)}</div>
+                <div class="row-sub">${escapeHtml(b.category)} · ${escapeHtml(b.date)}</div>
               </div>
-              <div><strong>${money(b.amount)}</strong></div>
+              <div class="row-amount">${money(b.amount)}</div>
             </div>
             <div class="chip-row">
               ${chip}
-              ${b.recurring ? '<span class="chip">Recurring</span>' : ''}
+              ${b.recurring ? `<span class="chip purple">Recurring</span>` : ``}
             </div>
-            <div class="bill-actions">
-              <button onclick="togglePaid('${b.id}')">${b.paid ? 'Undo' : 'Pay'}</button>
+            <div class="row-actions">
+              <button onclick="togglePaid('${b.id}')">${b.paid ? "Undo" : "Pay"}</button>
               <button class="secondary" onclick="editBill('${b.id}')">Edit</button>
               <button class="danger" onclick="removeBill('${b.id}')">Delete</button>
             </div>
@@ -944,62 +1338,57 @@
 
     function escapeHtml(str){
       return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
     }
 
     function render(){
       saveIncome();
-      saveMonthFilter();
       generateRecurring();
-      populateMonthFilter();
+      populateMonthControl();
+      saveMonth();
 
       const list = filteredBills();
-      const incomeVal = Number(incomeEl.value || 0);
-      const total = list.reduce((sum, b) => sum + Number(b.amount || 0), 0);
-      const unpaid = list.filter(b => !b.paid).reduce((sum, b) => sum + Number(b.amount || 0), 0);
-      const overdue = list.filter(b => !b.paid && daysUntil(b.date) < 0).length;
-      const leftover = incomeVal - unpaid;
-
-      totalEl.textContent = money(total);
-      unpaidEl.textContent = money(unpaid);
-      overdueEl.textContent = String(overdue);
-      leftoverEl.textContent = money(leftover);
+      renderSnapshot(list);
+      renderHealth(list);
+      renderActionCenter(list);
+      renderSubscriptions(list);
+      renderGoals();
+      renderBudgets(list);
 
       const catTotals = {};
       list.forEach(b => {
-        catTotals[b.category] = (catTotals[b.category] || 0) + Number(b.amount || 0);
+        catTotals[b.category] = (catTotals[b.category] || 0) + b.amount;
       });
 
-      renderAlerts(list);
-      renderBudget(list);
       drawBar(catTotals);
       drawPie(catTotals);
       drawTrend(list);
-      renderList(list);
+      renderBills(list);
     }
 
-    saveBillBtn.addEventListener("click", saveBill);
-    saveBudgetBtn.addEventListener("click", saveBudget);
-    duplicateBillBtn.addEventListener("click", duplicateLastBill);
-    cancelEditBtn.addEventListener("click", resetForm);
+    document.getElementById("saveBillBtn").addEventListener("click", saveBill);
+    document.getElementById("cancelEditBtn").addEventListener("click", resetBillForm);
+    document.getElementById("duplicateBillBtn").addEventListener("click", duplicateLastBill);
+    document.getElementById("saveBudgetBtn").addEventListener("click", saveBudget);
+    document.getElementById("saveGoalBtn").addEventListener("click", saveGoal);
+    document.getElementById("clearGoalBtn").addEventListener("click", resetGoalForm);
     incomeEl.addEventListener("input", render);
     monthFilterEl.addEventListener("change", render);
-    goCurrentMonthBtn.addEventListener("click", () => {
+    document.getElementById("goCurrentMonthBtn").addEventListener("click", () => {
       monthFilterEl.value = currentMonthKey();
-      saveMonthFilter();
+      saveMonth();
       render();
     });
     window.addEventListener("resize", render);
 
-    loadBills();
-    loadBudgets();
-    loadIncome();
-    populateMonthFilter();
-    resetForm();
+    loadData();
+    populateMonthControl();
+    resetBillForm();
+    resetGoalForm();
     render();
   </script>
 </body>
