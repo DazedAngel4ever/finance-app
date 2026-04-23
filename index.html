@@ -1,10 +1,12 @@
+
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>Finance Command Center</title>
-<meta name="theme-color" content="#0b0f14" />
+<meta name="theme-color" content="#0b0f14"/>
 <style>
 :root{
   --bg:#0b0f14;
@@ -18,521 +20,182 @@
   --yellow:#f2cc60;
   --blue:#58a6ff;
   --purple:#8b5cf6;
+  --teal:#3fb9c5;
   --shadow:0 10px 25px rgba(0,0,0,.22);
   --radius:18px;
 }
-
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-
 body{
   margin:0;
-  background:
-    radial-gradient(circle at top left, rgba(88,166,255,.08), transparent 32%),
-    linear-gradient(180deg,#060a11 0%, #0b0f14 40%, #0f141b 100%);
+  background:radial-gradient(circle at top left,rgba(88,166,255,.08),transparent 32%),
+    linear-gradient(180deg,#060a11 0%,#0b0f14 40%,#0f141b 100%);
   color:var(--text);
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
 }
-
 .wrap{
-  max-width:1280px;
-  margin:0 auto;
+  max-width:1280px;margin:0 auto;
   padding:12px;
-  padding-top:max(12px, env(safe-area-inset-top));
-  padding-bottom:max(18px, env(safe-area-inset-bottom));
+  padding-top:max(12px,env(safe-area-inset-top));
+  padding-bottom:max(18px,env(safe-area-inset-bottom));
 }
-
-.hero{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:6px;
-}
-
-.hero h1{
-  margin:0;
-  font-size:clamp(28px, 6.8vw, 54px);
-  line-height:1.02;
-  font-weight:950;
-  letter-spacing:-0.03em;
-}
-
-.sub{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-  font-weight:700;
-}
-
-.month{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  flex-wrap:nowrap;
-  width:100%;
-}
-
-.badge{
-  flex:1;
-  min-width:0;
-  border:1px solid var(--line);
-  border-radius:13px;
-  padding:10px 10px;
-  background:rgba(15,20,27,.9);
-  font-weight:900;
-  font-size:clamp(17px, 4.6vw, 23px);
-  text-align:center;
-  box-shadow:var(--shadow);
-}
-
-.tabs-wrap{
-  position:sticky;
-  top:0;
-  z-index:15;
-  margin:6px 0 8px 0;
-  padding:6px 0 3px 0;
-  background:linear-gradient(180deg, rgba(11,15,20,.97), rgba(11,15,20,.88));
-  backdrop-filter:blur(8px);
-}
-
-.tabs-scroll,
-.subtabs-scroll{
-  overflow-x:auto;
-  overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-}
-
-.tabs-scroll::-webkit-scrollbar,
-.subtabs-scroll::-webkit-scrollbar{
-  display:none;
-}
-
-.tabs,
-.subtabs{
-  display:flex;
-  gap:6px;
-  flex-wrap:nowrap;
-  width:max-content;
-  min-width:100%;
-}
-
-.tab-btn,
-.subtab-btn{
-  border:1px solid var(--line);
-  background:#0f141b;
-  color:var(--text);
-  border-radius:12px;
-  padding:9px 14px;
-  font-weight:900;
-  font-size:14px;
-  cursor:pointer;
-  white-space:nowrap;
-  box-shadow:var(--shadow);
-}
-
-.tab-btn.active,
-.subtab-btn.active{
-  background:var(--blue);
-  color:#08111b;
-  border-color:var(--blue);
-}
-
+.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.hero h1{margin:0;font-size:clamp(28px,6.8vw,54px);line-height:1.02;font-weight:950;letter-spacing:-0.03em}
+.sub{color:var(--muted);font-size:12px;margin-top:4px;font-weight:700}
+.month{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;width:100%}
+.badge{flex:1;min-width:0;border:1px solid var(--line);border-radius:13px;padding:10px;background:rgba(15,20,27,.9);font-weight:900;font-size:clamp(17px,4.6vw,23px);text-align:center;box-shadow:var(--shadow)}
+.tabs-wrap{position:sticky;top:0;z-index:15;margin:6px 0 8px;padding:6px 0 3px;background:linear-gradient(180deg,rgba(11,15,20,.97),rgba(11,15,20,.88));backdrop-filter:blur(8px)}
+.tabs-scroll,.subtabs-scroll,.quick-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs-scroll::-webkit-scrollbar,.subtabs-scroll::-webkit-scrollbar,.quick-scroll::-webkit-scrollbar{display:none}
+.tabs,.subtabs,.quick-row{display:flex;gap:6px;flex-wrap:nowrap;width:max-content;min-width:100%}
+.tab-btn,.subtab-btn,.quick-btn{border:1px solid var(--line);background:#0f141b;color:var(--text);border-radius:12px;padding:9px 14px;font-weight:900;font-size:14px;cursor:pointer;white-space:nowrap;box-shadow:var(--shadow)}
+.tab-btn.active,.subtab-btn.active{background:var(--blue);color:#08111b;border-color:var(--blue)}
+.quick-btn{padding:8px 12px;font-size:13px}
+.quick-btn.blue{background:rgba(88,166,255,.12);color:var(--blue);border-color:rgba(88,166,255,.25)}
+.quick-btn.green{background:rgba(46,160,67,.12);color:#7ee787;border-color:rgba(46,160,67,.25)}
+.quick-btn.red{background:rgba(255,107,107,.12);color:#ffb3b3;border-color:rgba(255,107,107,.25)}
+.quick-btn.yellow{background:rgba(242,204,96,.12);color:#f8dd85;border-color:rgba(242,204,96,.25)}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
-
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin-bottom:8px;
-}
-
-.kpi{
-  background:linear-gradient(180deg,rgba(22,27,34,.98),rgba(17,24,33,.98));
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px;
-  box-shadow:var(--shadow);
-  min-width:0;
-}
-
-.kpi .label{
-  font-size:11px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  font-weight:800;
-}
-
-.kpi .value{
-  font-size:clamp(22px, 6vw, 40px);
-  font-weight:950;
-  margin-top:6px;
-  line-height:1;
-}
-
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px}
+.kpi{background:linear-gradient(180deg,rgba(22,27,34,.98),rgba(17,24,33,.98));border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow);min-width:0}
+.kpi .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.kpi .value{font-size:clamp(22px,6vw,40px);font-weight:950;margin-top:6px;line-height:1}
 .kpi.blue .value{color:var(--blue)}
 .kpi.green .value{color:var(--green)}
 .kpi.red .value{color:var(--red)}
 .kpi.yellow .value{color:var(--yellow)}
 .kpi.purple .value{color:#c4b5fd}
-
-.card{
-  background:linear-gradient(180deg,rgba(22,27,34,.98),rgba(17,24,33,.98));
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-shadow:var(--shadow);
-  margin-bottom:8px;
-  overflow:hidden;
-}
-
-.card .head{
-  padding:10px 10px 0 10px;
-  font-weight:950;
-  font-size:16px;
-}
-
-.card .body{
-  padding:10px;
-}
-
+.card{background:linear-gradient(180deg,rgba(22,27,34,.98),rgba(17,24,33,.98));border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:8px;overflow:hidden}
+.card .head{padding:10px 10px 0;font-weight:950;font-size:16px}
+.card .body{padding:10px}
 .row{display:grid;gap:8px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .two-col{display:grid;grid-template-columns:360px 1fr;gap:10px}
-
-input,select,textarea{
-  width:100%;
-  background:#0b1119;
-  color:var(--text);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:11px 12px;
-  outline:none;
-  font:inherit;
-  min-height:44px;
-}
-
-input:focus,select:focus,textarea:focus{
-  border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(88,166,255,.15);
-}
-
-.btn{
-  border:none;
-  border-radius:12px;
-  padding:11px 12px;
-  font-weight:950;
-  font-size:14px;
-  cursor:pointer;
-  min-height:44px;
-}
-
+input,select,textarea{width:100%;background:#0b1119;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none;font:inherit;min-height:44px}
+textarea{min-height:72px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(88,166,255,.15)}
+.btn{border:none;border-radius:12px;padding:11px 12px;font-weight:950;font-size:14px;cursor:pointer;min-height:44px}
 .btn.blue{background:var(--blue);color:#08111b}
 .btn.green{background:var(--green);color:white}
 .btn.red{background:var(--red);color:white}
 .btn.yellow{background:var(--yellow);color:#1b1b1b}
-.btn.ghost{
-  background:transparent;
-  border:1px solid var(--line);
-  color:var(--text);
-}
-
-.alert{
-  border:1px solid rgba(255,107,107,.5);
-  background:rgba(255,107,107,.12);
-  color:#ffb3b3;
-  border-radius:12px;
-  padding:10px 12px;
-  margin-bottom:8px;
-  font-weight:800;
-}
-
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.alert{border:1px solid rgba(255,107,107,.5);background:rgba(255,107,107,.12);color:#ffb3b3;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-weight:800}
 .list{display:grid;gap:8px}
-
-.item{
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:10px;
-  background:rgba(255,255,255,.02);
-}
-
-.item-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.name{
-  font-weight:950;
-  font-size:16px;
-}
-
-.meta{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:3px;
-}
-
-.amount{
-  font-weight:950;
-  font-size:20px;
-  line-height:1;
-}
-
-.pills{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin:8px 0;
-}
-
-.pill{
-  font-size:10px;
-  font-weight:900;
-  border-radius:999px;
-  padding:5px 8px;
-  border:1px solid transparent;
-}
-
+.item{border:1px solid var(--line);border-radius:14px;padding:10px;background:rgba(255,255,255,.02)}
+.item-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.name{font-weight:950;font-size:16px}
+.meta{color:var(--muted);font-size:12px;margin-top:3px}
+.amount{font-weight:950;font-size:20px;line-height:1}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.pill{font-size:10px;font-weight:900;border-radius:999px;padding:5px 8px;border:1px solid transparent}
 .pill.blue{color:var(--blue);border-color:rgba(88,166,255,.25);background:rgba(88,166,255,.12)}
 .pill.green{color:#7ee787;border-color:rgba(46,160,67,.25);background:rgba(46,160,67,.12)}
 .pill.red{color:#ffb3b3;border-color:rgba(255,107,107,.25);background:rgba(255,107,107,.12)}
 .pill.yellow{color:#f8dd85;border-color:rgba(242,204,96,.25);background:rgba(242,204,96,.12)}
 .pill.purple{color:#c4b5fd;border-color:rgba(139,92,246,.25);background:rgba(139,92,246,.12)}
-
-.actions{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
-
-.actions .btn{
-  min-height:36px;
-  padding:8px 10px;
-  font-size:13px;
-}
-
-.calendar{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:4px;
-}
-
-.day{
-  border:1px solid var(--line);
-  border-radius:10px;
-  min-height:82px;
-  padding:5px;
-  font-size:10px;
-  background:#0f141b;
-}
-
-.day .d{
-  font-weight:950;
-  margin-bottom:3px;
-}
-
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.actions .btn{min-height:36px;padding:8px 10px;font-size:13px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.day{border:1px solid var(--line);border-radius:10px;min-height:82px;padding:5px;font-size:10px;background:#0f141b}
+.day .d{font-weight:950;margin-bottom:3px}
 .day.paid{background:rgba(46,160,67,.12)}
 .day.overdue{background:rgba(255,107,107,.12)}
 .day.upcoming{background:rgba(242,204,96,.12)}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.weekday{text-align:center;color:var(--muted);font-size:11px;font-weight:900}
+.small{font-size:11px;color:var(--muted)}
+.empty{color:var(--muted);text-align:center;border:1px dashed var(--line);border-radius:12px;padding:14px 12px;font-size:13px}
 
-.weekdays{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:4px;
-  margin-bottom:4px;
-}
-
-.weekday{
-  text-align:center;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:900;
-}
-
-.small{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.empty{
-  color:var(--muted);
-  text-align:center;
-  border:1px dashed var(--line);
-  border-radius:12px;
-  padding:14px 12px;
-  font-size:13px;
-}
-
-.edit-panel{
-  position:fixed;
-  right:0;
-  top:0;
-  height:100%;
-  width:min(360px, 92vw);
-  background:#0f141b;
-  border-left:1px solid var(--line);
-  transform:translateX(100%);
-  transition:.2s;
-  padding:14px;
-  z-index:30;
-  overflow:auto;
-  box-shadow:-10px 0 30px rgba(0,0,0,.35);
-}
+/* Edit panel + backdrop */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:29;opacity:0;pointer-events:none;transition:opacity .2s}
+.backdrop.open{opacity:1;pointer-events:all}
+.edit-panel{position:fixed;right:0;top:0;height:100%;width:min(380px,94vw);background:#0f141b;border-left:1px solid var(–line);transform:translateX(100%);transition:.22s cubic-bezier(.4,0,.2,1);padding:16px;z-index:30;overflow-y:auto;overflow-x:hidden;box-shadow:-12px 0 35px rgba(0,0,0,.4)}
 .edit-panel.open{transform:translateX(0)}
+.panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.panel-header h3{margin:0;font-size:18px;font-weight:950}
 
-.collapse-card .collapse-toggle{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  background:none;
-  border:none;
-  color:var(--text);
-  padding:10px 10px 0 10px;
-  font:inherit;
-  cursor:pointer;
-  text-align:left;
+/* Collapse cards */
+.collapse-card .collapse-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:none;border:none;color:var(–text);padding:10px 10px 0;font:inherit;cursor:pointer;text-align:left}
+.collapse-title{font-weight:950;font-size:16px}
+.collapse-icon{font-weight:950;color:var(–muted);font-size:18px;line-height:1}
+.collapse-content{display:none;padding:10px}
+.collapse-card.open .collapse-content{display:block}
+.bills-workspace-sticky{position:sticky;top:58px;z-index:10}
+.bills-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 8px}
+.bills-mini{border:1px solid var(–line);border-radius:12px;background:#0f141b;padding:8px;min-width:0}
+.bills-mini .label{color:var(–muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.bills-mini .value{margin-top:4px;font-size:14px;font-weight:950}
+.progress-shell{width:100%;height:10px;background:#0b1119;border:1px solid var(–line);border-radius:999px;overflow:hidden;margin-top:6px}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(–green),var(–blue));transition:width .3s ease}
+.progress-note{margin-top:6px;color:var(–muted);font-size:11px}
+
+/* Category breakdown chart */
+.cat-row{display:grid;grid-template-columns:108px 1fr 76px;align-items:center;gap:8px;margin-bottom:10px}
+.cat-label{font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(–text)}
+.cat-bar-shell{height:12px;background:#0b1119;border:1px solid var(–line);border-radius:999px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:999px;transition:width .4s ease}
+.cat-sub{font-size:10px;color:var(–muted);margin-top:2px}
+.cat-amount{font-size:11px;font-weight:900;color:var(–muted);text-align:right;white-space:nowrap}
+
+/* Trend chart */
+.trend-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 0}
+.trend-wrap::-webkit-scrollbar{display:none}
+.trend-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.trend-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:900;color:var(–muted)}
+.trend-dot{width:10px;height:10px;border-radius:3px}
+
+/* Notes display */
+.bill-notes{font-size:11px;color:var(–muted);background:rgba(255,255,255,.03);border:1px solid var(–line);border-radius:8px;padding:6px 8px;margin-top:6px;white-space:pre-wrap;word-break:break-word}
+
+/* Save error toast */
+.toast{position:fixed;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(20px);background:#ff6b6b;color:white;border-radius:12px;padding:10px 16px;font-weight:900;font-size:13px;opacity:0;transition:.2s;z-index:50;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:980px){.two-col{grid-template-columns:1fr}}
+@media(max-width:780px){
+.kpis{grid-template-columns:1fr 1fr}
+.kpi.net-span{grid-column:1/-1}
+.bills-summary{grid-template-columns:1fr 1fr}
+.cat-row{grid-template-columns:90px 1fr 68px}
 }
-
-.collapse-title{
-  font-weight:950;
-  font-size:16px;
-}
-
-.collapse-icon{
-  font-weight:950;
-  color:var(--muted);
-  font-size:18px;
-  line-height:1;
-}
-
-.collapse-content{
-  display:none;
-  padding:10px;
-}
-
-.collapse-card.open .collapse-content{
-  display:block;
-}
-
-.bills-workspace-sticky{
-  position:sticky;
-  top:58px;
-  z-index:10;
-}
-
-.bills-summary{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-  margin:0 0 8px 0;
-}
-
-.bills-mini{
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#0f141b;
-  padding:8px;
-  min-width:0;
-}
-
-.bills-mini .label{
-  color:var(--muted);
-  font-size:10px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-}
-
-.bills-mini .value{
-  margin-top:4px;
-  font-size:14px;
-  font-weight:950;
-}
-
-@media (max-width: 980px){
-  .two-col{grid-template-columns:1fr}
-}
-
-@media (max-width: 780px){
-  .kpis{grid-template-columns:1fr 1fr}
-  .kpi.net-span{grid-column:1 / -1}
-  .bills-summary{grid-template-columns:1fr 1fr}
-}
-
-@media (max-width: 640px){
-  .wrap{
-    padding:10px;
-    padding-top:max(10px, env(safe-area-inset-top));
-  }
-
-  .hero h1{
-    font-size:clamp(26px, 6.6vw, 42px);
-  }
-
-  .sub{font-size:11px}
-  .month{gap:5px}
-
-  .badge{
-    padding:9px 9px;
-    border-radius:12px;
-    font-size:17px;
-  }
-
-  .tab-btn,
-  .subtab-btn{
-    padding:8px 12px;
-    border-radius:11px;
-    font-size:13px;
-  }
-
-  .card .head{
-    padding:9px 9px 0 9px;
-    font-size:15px;
-  }
-
-  .card .body{padding:9px}
-  .row2{grid-template-columns:1fr}
-
-  .calendar{
-    grid-template-columns:repeat(7,minmax(0,1fr));
-    gap:3px;
-  }
-
-  .day{
-    min-height:68px;
-    padding:4px;
-    font-size:9px;
-  }
-
-  .day .d{font-size:10px}
-  .amount{font-size:18px}
-
-  .bills-workspace-sticky{
-    top:54px;
-  }
+@media(max-width:640px){
+.wrap{padding:10px;padding-top:max(10px,env(safe-area-inset-top))}
+.hero h1{font-size:clamp(26px,6.6vw,42px)}
+.sub{font-size:11px}
+.month{gap:5px}
+.badge{padding:9px;border-radius:12px;font-size:17px}
+.tab-btn,.subtab-btn,.quick-btn{padding:8px 12px;border-radius:11px;font-size:13px}
+.card .head{padding:9px 9px 0;font-size:15px}
+.card .body{padding:9px}
+.row2{grid-template-columns:1fr}
+.calendar{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.day{min-height:68px;padding:4px;font-size:9px}
+.day .d{font-size:10px}
+.amount{font-size:18px}
+.bills-workspace-sticky{top:54px}
+.cat-row{grid-template-columns:80px 1fr 60px;gap:6px}
 }
 </style>
+
 </head>
 <body>
+
+<div class="toast" id="toast">⚠ Save failed — storage may be full</div>
+<div class="backdrop" id="backdrop"></div>
+
 <div class="wrap">
   <div class="hero">
     <div>
       <h1>Finance Command Center</h1>
-      <div class="sub">Tabbed V4.1 • Compact layout • Bills workspace optimized</div>
+      <div class="sub" id="heroSub">v5 • Template editing • Category charts • Notes • Trend view</div>
     </div>
-
     <div class="month">
       <button class="btn ghost" id="prev">◀</button>
       <div class="badge" id="monthLabel"></div>
       <button class="btn ghost" id="next">▶</button>
-      <button class="btn ghost" id="today">Today</button>
+      <button class="btn ghost" id="today" id="todayBtn">Today</button>
     </div>
   </div>
 
@@ -548,9 +211,10 @@ input:focus,select:focus,textarea:focus{
     </div>
   </div>
 
+  <!-- DASHBOARD -->
+
   <div id="dashboard" class="tab-panel active">
     <div id="alerts"></div>
-
     <div class="kpis">
       <div class="kpi green"><div class="label">Income</div><div class="value" id="kIncome">$0</div></div>
       <div class="kpi blue"><div class="label">Bills</div><div class="value" id="kBills">$0</div></div>
@@ -559,20 +223,38 @@ input:focus,select:focus,textarea:focus{
       <div class="kpi yellow net-span"><div class="label">Net</div><div class="value" id="kNet">$0</div></div>
     </div>
 
-    <div class="card">
-      <div class="head">Monthly Summary</div>
-      <div class="body">
-        <div id="dashboardSummary" class="small"></div>
-      </div>
-    </div>
+```
+<div class="card">
+  <div class="head">Monthly Summary</div>
+  <div class="body"><div id="dashboardSummary" class="small"></div></div>
+</div>
 
-    <div class="card">
-      <div class="head">Upcoming / Overdue Bills</div>
-      <div class="body">
-        <div id="dashboardBills" class="list"></div>
+<div class="row2">
+  <div class="card">
+    <div class="head">Spending by Category</div>
+    <div class="body"><div id="categoryBreakdown"></div></div>
+  </div>
+  <div class="card">
+    <div class="head">6-Month Net Trend</div>
+    <div class="body">
+      <div class="trend-legend">
+        <div class="trend-legend-item"><div class="trend-dot" style="background:var(--green)"></div>Positive</div>
+        <div class="trend-legend-item"><div class="trend-dot" style="background:var(--red)"></div>Negative</div>
       </div>
+      <div id="trendChart"></div>
     </div>
   </div>
+</div>
+
+<div class="card">
+  <div class="head">Upcoming / Overdue Bills</div>
+  <div class="body"><div id="dashboardBills" class="list"></div></div>
+</div>
+```
+
+  </div>
+
+  <!-- BILLS -->
 
   <div id="bills" class="tab-panel">
     <div class="card bills-workspace-sticky">
@@ -580,99 +262,110 @@ input:focus,select:focus,textarea:focus{
       <div class="body">
         <div id="billsSummary" class="bills-summary"></div>
 
-        <div class="subtabs-scroll">
-          <div class="subtabs">
-            <button class="subtab-btn active" data-bill-view="all">All</button>
-            <button class="subtab-btn" data-bill-view="templates">Templates</button>
-            <button class="subtab-btn" data-bill-view="overdue">Overdue</button>
-            <button class="subtab-btn" data-bill-view="paid">Paid</button>
+```
+    <div class="card" style="margin:0 0 8px;background:#0f141b;">
+      <div class="body" style="padding:8px;">
+        <div class="quick-scroll">
+          <div class="quick-row">
+            <button class="quick-btn blue" id="qaFilters">Filters</button>
+            <button class="quick-btn green" id="qaRecurring">Add Recurring</button>
+            <button class="quick-btn yellow" id="qaOneTime">Add One-Time</button>
+            <button class="quick-btn red" id="qaOverdue">View Overdue</button>
+            <button class="quick-btn blue" id="qaNextUnpaid">Next Unpaid</button>
           </div>
-        </div>
-
-        <div id="billWorkspace" class="list" style="margin-top:8px;"></div>
-      </div>
-    </div>
-
-    <div class="card collapse-card" id="filtersCard">
-      <button class="collapse-toggle" type="button">
-        <span class="collapse-title">Filters</span>
-        <span class="collapse-icon">+</span>
-      </button>
-      <div class="collapse-content">
-        <div class="row2">
-          <input id="search" placeholder="Search..." />
-          <select id="fStatus">
-            <option value="all">All</option>
-            <option value="paid">Paid</option>
-            <option value="unpaid">Unpaid</option>
-            <option value="overdue">Overdue</option>
-          </select>
-          <select id="fCat">
-            <option value="all">All Categories</option>
-            <option>Housing</option>
-            <option>Utilities</option>
-            <option>Transportation</option>
-            <option>Insurance</option>
-            <option>Subscriptions</option>
-            <option>Debt</option>
-            <option>Other</option>
-          </select>
         </div>
       </div>
     </div>
 
-    <div class="card collapse-card" id="recurringCard">
-      <button class="collapse-toggle" type="button">
-        <span class="collapse-title">Add Recurring Bill</span>
-        <span class="collapse-icon">+</span>
-      </button>
-      <div class="collapse-content">
-        <div class="row">
-          <input id="rbName" placeholder="Name" />
-          <div class="row2">
-            <input id="rbAmount" type="number" placeholder="Amount" />
-            <input id="rbDay" type="number" min="1" max="31" placeholder="Due day" />
-          </div>
-          <select id="rbCat">
-            <option>Housing</option>
-            <option>Utilities</option>
-            <option>Transportation</option>
-            <option>Insurance</option>
-            <option>Subscriptions</option>
-            <option>Debt</option>
-            <option>Other</option>
-          </select>
-          <button class="btn blue" id="addRB">Add Recurring</button>
-        </div>
+    <div class="subtabs-scroll">
+      <div class="subtabs">
+        <button class="subtab-btn active" data-bill-view="all">All</button>
+        <button class="subtab-btn" data-bill-view="templates">Templates</button>
+        <button class="subtab-btn" data-bill-view="overdue">Overdue</button>
+        <button class="subtab-btn" data-bill-view="paid">Paid</button>
       </div>
     </div>
 
-    <div class="card collapse-card" id="oneTimeCard">
-      <button class="collapse-toggle" type="button">
-        <span class="collapse-title">Add One-Time Bill</span>
-        <span class="collapse-icon">+</span>
-      </button>
-      <div class="collapse-content">
-        <div class="row">
-          <input id="otName" placeholder="Name" />
-          <div class="row2">
-            <input id="otAmount" type="number" placeholder="Amount" />
-            <input id="otDate" type="date" />
-          </div>
-          <select id="otCat">
-            <option>Housing</option>
-            <option>Utilities</option>
-            <option>Transportation</option>
-            <option>Insurance</option>
-            <option>Subscriptions</option>
-            <option>Debt</option>
-            <option>Other</option>
-          </select>
-          <button class="btn blue" id="addOT">Add One-Time</button>
-        </div>
-      </div>
+    <div style="margin-top:8px;">
+      <div class="small" id="paidProgressText">0% paid</div>
+      <div class="progress-shell"><div class="progress-bar" id="paidProgressBar"></div></div>
+      <div class="progress-note" id="billsInsight"></div>
+    </div>
+
+    <div id="billWorkspace" class="list" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<div class="card collapse-card" id="filtersCard">
+  <button class="collapse-toggle" type="button">
+    <span class="collapse-title">Filters</span>
+    <span class="collapse-icon">+</span>
+  </button>
+  <div class="collapse-content">
+    <div class="row2">
+      <input id="search" placeholder="Search…"/>
+      <select id="fStatus">
+        <option value="all">All</option>
+        <option value="paid">Paid</option>
+        <option value="unpaid">Unpaid</option>
+        <option value="overdue">Overdue</option>
+      </select>
+      <select id="fCat">
+        <option value="all">All Categories</option>
+        <option>Housing</option><option>Utilities</option><option>Transportation</option>
+        <option>Insurance</option><option>Subscriptions</option><option>Debt</option><option>Other</option>
+      </select>
     </div>
   </div>
+</div>
+
+<div class="card collapse-card" id="recurringCard">
+  <button class="collapse-toggle" type="button">
+    <span class="collapse-title">Add Recurring Bill</span>
+    <span class="collapse-icon">+</span>
+  </button>
+  <div class="collapse-content">
+    <div class="row">
+      <input id="rbName" placeholder="Name"/>
+      <div class="row2">
+        <input id="rbAmount" type="number" placeholder="Amount"/>
+        <input id="rbDay" type="number" min="1" max="31" placeholder="Due day (1–31)"/>
+      </div>
+      <select id="rbCat">
+        <option>Housing</option><option>Utilities</option><option>Transportation</option>
+        <option>Insurance</option><option>Subscriptions</option><option>Debt</option><option>Other</option>
+      </select>
+      <button class="btn blue" id="addRB">Add Recurring</button>
+    </div>
+  </div>
+</div>
+
+<div class="card collapse-card" id="oneTimeCard">
+  <button class="collapse-toggle" type="button">
+    <span class="collapse-title">Add One-Time Bill</span>
+    <span class="collapse-icon">+</span>
+  </button>
+  <div class="collapse-content">
+    <div class="row">
+      <input id="otName" placeholder="Name"/>
+      <div class="row2">
+        <input id="otAmount" type="number" placeholder="Amount"/>
+        <input id="otDate" type="date"/>
+      </div>
+      <select id="otCat">
+        <option>Housing</option><option>Utilities</option><option>Transportation</option>
+        <option>Insurance</option><option>Subscriptions</option><option>Debt</option><option>Other</option>
+      </select>
+      <textarea id="otNotes" placeholder="Notes (optional)" style="min-height:56px"></textarea>
+      <button class="btn blue" id="addOT">Add One-Time</button>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- INCOME -->
 
   <div id="income" class="tab-panel">
     <div class="two-col">
@@ -680,190 +373,223 @@ input:focus,select:focus,textarea:focus{
         <div class="card">
           <div class="head">Add Income</div>
           <div class="body row">
-            <input id="incName" placeholder="Source" />
+            <input id="incName" placeholder="Source"/>
             <div class="row2">
-              <input id="incAmount" type="number" placeholder="Amount" />
-              <input id="incDate" type="date" />
+              <input id="incAmount" type="number" placeholder="Amount"/>
+              <input id="incDate" type="date"/>
             </div>
-            <label class="small"><input id="incRecurring" type="checkbox" style="width:auto;min-height:auto;margin-right:8px;" />Recurring monthly</label>
+            <label class="small"><input id="incRecurring" type="checkbox" style="width:auto;min-height:auto;margin-right:8px;"/>Recurring monthly</label>
             <button class="btn green" id="addInc">Add Income</button>
           </div>
         </div>
       </div>
-
       <div>
         <div class="card">
           <div class="head">Income for Selected Month</div>
-          <div class="body">
-            <div id="incomeList" class="list"></div>
-          </div>
+          <div class="body"><div id="incomeList" class="list"></div></div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- CALENDAR -->
 
   <div id="calendar" class="tab-panel">
     <div class="card">
       <div class="head">Monthly Calendar</div>
       <div class="body">
         <div class="weekdays">
-          <div class="weekday">Sun</div>
-          <div class="weekday">Mon</div>
-          <div class="weekday">Tue</div>
-          <div class="weekday">Wed</div>
-          <div class="weekday">Thu</div>
-          <div class="weekday">Fri</div>
-          <div class="weekday">Sat</div>
+          <div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div>
+          <div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div>
         </div>
         <div id="calendarGrid" class="calendar"></div>
       </div>
     </div>
   </div>
 
+  <!-- DATA -->
+
   <div id="data" class="tab-panel">
     <div class="card">
       <div class="head">Data Tools</div>
       <div class="body row">
         <button class="btn ghost" id="exportBtn">Export Data</button>
-        <label class="btn ghost" for="importFile" style="display:inline-flex;align-items:center;justify-content:center;">Import Data</label>
-        <input id="importFile" type="file" accept=".json" hidden />
+        <label class="btn ghost" for="importFile" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">Import Data</label>
+        <input id="importFile" type="file" accept=".json" hidden/>
         <button class="btn red" id="clearBtn">Clear All Data</button>
       </div>
     </div>
-
     <div class="card">
       <div class="head">Storage Notes</div>
-      <div class="body">
-        <div class="small">
-          This app saves in your browser using localStorage. Export regularly if you want a backup.
-        </div>
+      <div class="body small">
+        Data is stored in your browser via localStorage. Export regularly as a backup — especially before clearing cache or switching browsers. Import a previously exported .json file to restore.
       </div>
     </div>
   </div>
 </div>
 
+<!-- EDIT PANEL (bills + templates) -->
+
 <div id="panel" class="edit-panel">
-  <h3 style="margin-top:0;">Edit Bill</h3>
+  <div class="panel-header">
+    <h3 id="panelTitle">Edit</h3>
+    <button class="btn ghost" id="closePanel" style="min-height:36px;padding:6px 10px;font-size:13px;">✕ Close</button>
+  </div>
   <div class="row">
-    <input id="eName" placeholder="Bill name" />
-    <input id="eAmount" type="number" placeholder="Amount" />
-    <select id="eCat">
-      <option>Housing</option>
-      <option>Utilities</option>
-      <option>Transportation</option>
-      <option>Insurance</option>
-      <option>Subscriptions</option>
-      <option>Debt</option>
-      <option>Other</option>
-    </select>
-    <input id="eDate" type="date" />
-    <button class="btn blue" id="saveEdit">Save</button>
-    <button class="btn ghost" id="closePanel">Close</button>
+    <div>
+      <div class="small" style="margin-bottom:4px;">Name</div>
+      <input id="eName" placeholder="Name"/>
+    </div>
+    <div>
+      <div class="small" style="margin-bottom:4px;">Amount ($)</div>
+      <input id="eAmount" type="number" placeholder="Amount"/>
+    </div>
+    <div>
+      <div class="small" style="margin-bottom:4px;">Category</div>
+      <select id="eCat">
+        <option>Housing</option><option>Utilities</option><option>Transportation</option>
+        <option>Insurance</option><option>Subscriptions</option><option>Debt</option><option>Other</option>
+      </select>
+    </div>
+    <div id="eDateWrap">
+      <div class="small" style="margin-bottom:4px;">Due Date</div>
+      <input id="eDate" type="date"/>
+    </div>
+    <div id="eDayWrap" style="display:none">
+      <div class="small" style="margin-bottom:4px;">Due Day of Month (1–31)</div>
+      <input id="eDay" type="number" min="1" max="31" placeholder="e.g. 15"/>
+    </div>
+    <div id="eNotesWrap">
+      <div class="small" style="margin-bottom:4px;">Notes (optional)</div>
+      <textarea id="eNotes" placeholder="Account number, payment URL, etc." style="min-height:72px"></textarea>
+    </div>
+    <button class="btn blue" id="saveEdit">Save Changes</button>
   </div>
 </div>
 
 <script>
-const KEY = "v3_cc_tabbed";
-let state = JSON.parse(localStorage.getItem(KEY)) || {
-  templates: [],
-  instances: [],
-  income: []
-};
+const KEY = "v5_cc_tabbed";
+let state = (() => {
+  try {
+    return JSON.parse(localStorage.getItem(KEY)) || { templates: [], instances: [], income: [] };
+  } catch {
+    return { templates: [], instances: [], income: [] };
+  }
+})();
 
 let current = new Date();
 let editId = null;
+let editMode = "bill"; // "bill" | "template"
 let currentBillView = "all";
 
-const $ = (id) => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-function save(){
-  localStorage.setItem(KEY, JSON.stringify(state));
+// ─── Persistence ───────────────────────────────────────────────
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  } catch (e) {
+    showToast("⚠ Save failed — storage may be full");
+  }
 }
 
-function monthKey(){
-  const year = current.getFullYear();
-  const month = String(current.getMonth() + 1).padStart(2, "0");
-  return `${year}-${month}`;
+function showToast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3500);
 }
 
-function fmtMonth(){
+// ─── Helpers ───────────────────────────────────────────────────
+function monthKey() {
+  return `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`;
+}
+
+function monthKeyFor(date) {
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}`;
+}
+
+function fmtMonth() {
   return current.toLocaleDateString("en-US", { month:"long", year:"numeric" });
 }
 
-function fmtDate(d){
-  return new Date(d + "T00:00:00").toLocaleDateString("en-US", {
-    month:"short",
-    day:"numeric"
-  });
+function fmtDate(d) {
+  return new Date(d+"T00:00:00").toLocaleDateString("en-US", { month:"short", day:"numeric" });
 }
 
-function money(n){
-  return Number(n || 0).toLocaleString("en-US", {
-    style:"currency",
-    currency:"USD"
-  });
+function money(n) {
+  return Number(n||0).toLocaleString("en-US", { style:"currency", currency:"USD" });
 }
 
-function daysInMonth(year, monthOneBased){
+function daysInMonth(year, monthOneBased) {
   return new Date(year, monthOneBased, 0).getDate();
 }
 
-function buildDate(year, monthOneBased, day){
+function buildDate(year, monthOneBased, day) {
   const safeDay = Math.min(day, daysInMonth(year, monthOneBased));
   return `${year}-${String(monthOneBased).padStart(2,"0")}-${String(safeDay).padStart(2,"0")}`;
 }
 
-function todayMidnight(){
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+function todayMidnight() {
+  const n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
 }
 
-function getBillStatus(b){
-  if (b.paid) return { text:"Paid", color:"green" };
+function isCurrentMonth() {
+  const now = new Date();
+  return current.getFullYear() === now.getFullYear() && current.getMonth() === now.getMonth();
+}
 
-  const due = new Date(b.date + "T00:00:00");
+function escapeHtml(v) {
+  return String(v??"")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+// ─── Status ────────────────────────────────────────────────────
+function getBillStatus(b) {
+  if (b.paid) return { text:"Paid", color:"green" };
+  const due = new Date(b.date+"T00:00:00");
   const today = todayMidnight();
   const diff = Math.ceil((due - today) / 86400000);
-
   if (diff < 0) return { text:`Overdue ${Math.abs(diff)}d`, color:"red" };
+  if (diff === 0) return { text:"Due today", color:"red" };
   if (diff <= 7) return { text:`Due in ${diff}d`, color:"yellow" };
   return { text:"Upcoming", color:"blue" };
 }
 
-function genMonth(){
+// ─── Data generation ───────────────────────────────────────────
+function genMonth() {
   const year = current.getFullYear();
-  const month = current.getMonth() + 1;
+  const month = current.getMonth()+1;
+  const mk = monthKey();
 
   state.templates.forEach(t => {
-    const exists = state.instances.some(i => i.templateId === t.id && i.month === monthKey());
+    const exists = state.instances.some(i => i.templateId === t.id && i.month === mk);
     if (exists) return;
-
     state.instances.push({
       id: crypto.randomUUID(),
       templateId: t.id,
-      month: monthKey(),
+      month: mk,
       name: t.name,
       amount: Number(t.amount),
       category: t.category || "Other",
       date: buildDate(year, month, Number(t.day) || 1),
-      paid: false,
-      paidDate: null,
-      recurring: true
+      paid: false, paidDate: null, recurring: true, notes: ""
     });
   });
 
-  const recurringIncomeTemplates = state.income.filter(i => i.recurring && !i.templateId);
-  recurringIncomeTemplates.forEach(i => {
-    const exists = state.income.some(x => x.templateId === i.id && x.month === monthKey());
+  // Recurring income
+  state.income.filter(i => i.recurring && !i.templateId).forEach(i => {
+    const exists = state.income.some(x => x.templateId === i.id && x.month === mk);
     if (exists) return;
-
     state.income.push({
       id: crypto.randomUUID(),
       templateId: i.id,
-      month: monthKey(),
+      month: mk,
       name: i.name,
       amount: Number(i.amount),
-      date: `${monthKey()}-01`,
+      date: `${mk}-01`,
       recurring: false
     });
   });
@@ -871,40 +597,67 @@ function genMonth(){
   save();
 }
 
-function getMonthBills(){
-  return state.instances.filter(b => b.month === monthKey());
+// ─── Selectors ─────────────────────────────────────────────────
+function getMonthBills(mk) {
+  mk = mk || monthKey();
+  return state.instances.filter(b => b.month === mk);
 }
 
-function getMonthIncome(){
-  return state.income.filter(i =>
-    i.month === monthKey() || (i.date && i.date.startsWith(monthKey()))
-  );
+function getMonthIncome(mk) {
+  mk = mk || monthKey();
+  return state.income.filter(i => i.month === mk || (i.date && i.date.startsWith(mk)));
 }
 
-function getRecurringTemplates(){
+function getRecurringTemplates() {
   return [...state.templates].sort((a,b) => a.name.localeCompare(b.name));
 }
 
-function getOverdueBills(){
+function getOverdueBills() {
   return getMonthBills()
-    .filter(b => !b.paid && new Date(b.date + "T00:00:00") < todayMidnight())
+    .filter(b => !b.paid && new Date(b.date+"T00:00:00") < todayMidnight())
     .sort((a,b) => new Date(a.date) - new Date(b.date));
 }
 
-function getPaidBills(){
+function getPaidBills() {
   return getMonthBills()
     .filter(b => b.paid)
-    .sort((a,b) => new Date(b.paidDate || b.date) - new Date(a.paidDate || a.date));
+    .sort((a,b) => new Date(b.paidDate||b.date) - new Date(a.paidDate||a.date));
 }
 
-function compute(){
+function getDueThisWeekBills() {
+  return getMonthBills().filter(b => {
+    if (b.paid) return false;
+    const diff = Math.ceil((new Date(b.date+"T00:00:00") - todayMidnight()) / 86400000);
+    return diff >= 0 && diff <= 7;
+  });
+}
+
+function getNextUnpaidBill() {
+  return getMonthBills().filter(b => !b.paid).sort((a,b) => new Date(a.date) - new Date(b.date))[0] || null;
+}
+
+function filteredBills() {
+  let bills = getMonthBills();
+  const q = ($("search")?.value || "").toLowerCase().trim();
+  const s = $("fStatus")?.value || "all";
+  const c = $("fCat")?.value || "all";
+  return bills.filter(b => {
+    const text = `${b.name} ${b.category}`.toLowerCase();
+    const st = getBillStatus(b);
+    return text.includes(q) &&
+      (s === "all" || (s === "paid" && b.paid) || (s === "unpaid" && !b.paid) || (s === "overdue" && st.color === "red")) &&
+      (c === "all" || b.category === c);
+  }).sort((a,b) => new Date(a.date) - new Date(b.date));
+}
+
+// ─── Compute KPIs ──────────────────────────────────────────────
+function compute() {
   const bills = getMonthBills();
   const income = getMonthIncome();
-
-  const totalBills = bills.reduce((s,b) => s + Number(b.amount), 0);
-  const paid = bills.filter(b => b.paid).reduce((s,b) => s + Number(b.amount), 0);
+  const totalBills = bills.reduce((s,b) => s+Number(b.amount), 0);
+  const paid = bills.filter(b => b.paid).reduce((s,b) => s+Number(b.amount), 0);
   const remain = totalBills - paid;
-  const totalIncome = income.reduce((s,i) => s + Number(i.amount), 0);
+  const totalIncome = income.reduce((s,i) => s+Number(i.amount), 0);
   const net = totalIncome - totalBills;
 
   $("kIncome").textContent = money(totalIncome);
@@ -913,84 +666,143 @@ function compute(){
   $("kRemain").textContent = money(remain);
   $("kNet").textContent = money(net);
 
-  const overdue = bills.filter(b => !b.paid && new Date(b.date + "T00:00:00") < todayMidnight());
-
+  const overdue = bills.filter(b => !b.paid && new Date(b.date+"T00:00:00") < todayMidnight());
   let alerts = "";
-  if (overdue.length){
-    alerts += `<div class="alert">⚠ ${overdue.length} overdue bill(s)</div>`;
-  }
-  if (net < 0){
-    alerts += `<div class="alert">⚠ Net negative this month</div>`;
-  }
+  if (overdue.length) alerts += `<div class="alert">⚠ ${overdue.length} overdue bill${overdue.length > 1 ? "s" : ""} this month</div>`;
+  if (net < 0) alerts += `<div class="alert">⚠ Net negative this month — expenses exceed income</div>`;
   $("alerts").innerHTML = alerts;
 
   $("dashboardSummary").textContent =
-    `For ${fmtMonth()}, income is ${money(totalIncome)}, total bills are ${money(totalBills)}, paid is ${money(paid)}, remaining is ${money(remain)}, and net balance is ${money(net)}.`;
-
-  return { bills, income };
+    `${fmtMonth()}: income ${money(totalIncome)}, total bills ${money(totalBills)}, paid ${money(paid)}, remaining ${money(remain)}, net ${money(net)}.`;
 }
 
-function renderBillsSummary(){
-  const bills = getMonthBills();
-  const overdue = bills.filter(b => !b.paid && new Date(b.date + "T00:00:00") < todayMidnight());
-  const paid = bills.filter(b => b.paid);
-  const unpaid = bills.filter(b => !b.paid);
-  const total = bills.length;
+// ─── Category breakdown chart ──────────────────────────────────
+const CAT_COLORS = {
+  Housing:"#58a6ff", Utilities:"#f2cc60", Transportation:"#8b5cf6",
+  Insurance:"#2ea043", Subscriptions:"#3fb9c5", Debt:"#ff6b6b", Other:"#9da7b3"
+};
 
-  $("billsSummary").innerHTML = `
-    <div class="bills-mini">
-      <div class="label">Total</div>
-      <div class="value">${total}</div>
-    </div>
-    <div class="bills-mini">
-      <div class="label">Overdue</div>
-      <div class="value">${overdue.length}</div>
-    </div>
-    <div class="bills-mini">
-      <div class="label">Paid</div>
-      <div class="value">${paid.length}</div>
-    </div>
-    <div class="bills-mini">
-      <div class="label">Unpaid</div>
-      <div class="value">${unpaid.length}</div>
+function renderCategoryBreakdown() {
+  const bills = getMonthBills();
+  const map = {};
+  bills.forEach(b => {
+    const cat = b.category || "Other";
+    if (!map[cat]) map[cat] = { total:0, paid:0, count:0 };
+    map[cat].total += Number(b.amount);
+    if (b.paid) map[cat].paid += Number(b.amount);
+    map[cat].count++;
+  });
+  const entries = Object.entries(map).sort((a,b) => b[1].total - a[1].total);
+  const el = $("categoryBreakdown");
+  if (!entries.length) { el.innerHTML = `<div class="empty">No bills this month.</div>`; return; }
+  const maxVal = entries[0][1].total || 1;
+  el.innerHTML = entries.map(([cat, data]) => {
+    const pct = Math.round((data.total / maxVal) * 100);
+    const paidPct = data.total ? Math.round((data.paid / data.total) * 100) : 0;
+    const color = CAT_COLORS[cat] || CAT_COLORS.Other;
+    return `
+      <div class="cat-row">
+        <div class="cat-label" title="${escapeHtml(cat)}">${escapeHtml(cat)}</div>
+        <div>
+          <div class="cat-bar-shell">
+            <div class="cat-bar-fill" style="width:${pct}%;background:${color}"></div>
+          </div>
+          <div class="cat-sub">${paidPct}% paid · ${data.count} bill${data.count !== 1 ? "s" : ""}</div>
+        </div>
+        <div class="cat-amount">${money(data.total)}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+// ─── 6-month trend chart ───────────────────────────────────────
+function renderTrendChart() {
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(current.getFullYear(), current.getMonth() - i, 1);
+    const mk = monthKeyFor(d);
+    const bills = state.instances.filter(b => b.month === mk);
+    const income = state.income.filter(x => x.month === mk || (x.date && x.date.startsWith(mk)));
+    const totalBills = bills.reduce((s,b) => s+Number(b.amount), 0);
+    const totalIncome = income.reduce((s,x) => s+Number(x.amount), 0);
+    const net = totalIncome - totalBills;
+    const label = d.toLocaleDateString("en-US", { month:"short", year:"2-digit" });
+    months.push({ label, net, totalIncome, totalBills });
+  }
+
+  const W = 400, H = 130;
+  const barW = 38, pad = 12;
+  const usableW = W - pad * 2;
+  const gap = (usableW - 6 * barW) / 5;
+  const absVals = months.map(m => Math.abs(m.net)).filter(v => v > 0);
+  const maxVal = absVals.length ? Math.max(...absVals) : 1;
+  const midY = 68;
+  const maxBarH = 50;
+
+  let svg = "";
+  // zero line
+  svg += `<line x1="${pad}" y1="${midY}" x2="${W-pad}" y2="${midY}" stroke="#27313d" stroke-width="1"/>`;
+
+  months.forEach((m, i) => {
+    const x = pad + i * (barW + gap);
+    const barH = Math.max(3, Math.abs(m.net) / maxVal * maxBarH);
+    const isPos = m.net >= 0;
+    const color = isPos ? "#2ea043" : "#ff6b6b";
+    const y = isPos ? midY - barH : midY;
+    svg += `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" rx="4" fill="${color}" opacity="0.9"/>`;
+    // label
+    svg += `<text x="${x + barW/2}" y="${H - 4}" text-anchor="middle" fill="#9da7b3" font-size="9" font-weight="bold" font-family="system-ui">${escapeHtml(m.label)}</text>`;
+    // value above/below bar
+    if (m.net !== 0) {
+      const valY = isPos ? y - 5 : y + barH + 11;
+      const absStr = money(Math.abs(m.net)).replace("$","");
+      const sign = isPos ? "+" : "-";
+      svg += `<text x="${x + barW/2}" y="${valY}" text-anchor="middle" fill="${color}" font-size="8" font-weight="900" font-family="system-ui">${sign}$${absStr}</text>`;
+    }
+  });
+
+  $("trendChart").innerHTML = `
+    <div class="trend-wrap">
+      <svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;max-width:${W}px">
+        ${svg}
+      </svg>
     </div>
   `;
 }
 
-function filteredBills(){
-  let bills = getMonthBills();
+// ─── Bills summary bar ─────────────────────────────────────────
+function renderBillsSummary() {
+  const bills = getMonthBills();
+  const overdue = bills.filter(b => !b.paid && new Date(b.date+"T00:00:00") < todayMidnight());
+  const overdueAmt = overdue.reduce((s,b) => s+Number(b.amount), 0);
+  const paid = bills.filter(b => b.paid);
+  const unpaid = bills.filter(b => !b.paid);
+  const paidPct = bills.length ? Math.round((paid.length / bills.length) * 100) : 0;
 
-  const q = $("search") ? $("search").value.toLowerCase().trim() : "";
-  const s = $("fStatus") ? $("fStatus").value : "all";
-  const c = $("fCat") ? $("fCat").value : "all";
+  $("billsSummary").innerHTML = `
+    <div class="bills-mini"><div class="label">Total Bills</div><div class="value">${bills.length}</div></div>
+    <div class="bills-mini"><div class="label">Overdue</div><div class="value" style="color:${overdue.length ? "var(--red)" : "inherit"}">${overdue.length}</div></div>
+    <div class="bills-mini"><div class="label">Overdue $</div><div class="value" style="color:${overdue.length ? "var(--red)" : "inherit"}">${money(overdueAmt)}</div></div>
+    <div class="bills-mini"><div class="label">Due 7 Days</div><div class="value">${getDueThisWeekBills().length}</div></div>
+  `;
 
-  bills = bills.filter(b => {
-    const text = `${b.name} ${b.category}`.toLowerCase();
-    const matchQ = text.includes(q);
-    const st = getBillStatus(b);
-    const matchS =
-      s === "all" ||
-      (s === "paid" && b.paid) ||
-      (s === "unpaid" && !b.paid) ||
-      (s === "overdue" && st.color === "red");
-    const matchC = c === "all" || b.category === c;
-    return matchQ && matchS && matchC;
-  });
+  $("paidProgressText").textContent = `${paidPct}% paid (${paid.length} of ${bills.length})`;
+  $("paidProgressBar").style.width = `${paidPct}%`;
 
-  bills.sort((a,b) => new Date(a.date) - new Date(b.date));
-  return bills;
+  const next = getNextUnpaidBill();
+  $("billsInsight").textContent = next
+    ? `Next unpaid: ${next.name} on ${fmtDate(next.date)} for ${money(next.amount)}. ${unpaid.length} unpaid remaining.`
+    : `Everything for this month is paid! 🎉`;
 }
 
-function renderDashboardBills(){
+// ─── Dashboard bills ───────────────────────────────────────────
+function renderDashboardBills() {
   const items = getMonthBills()
-    .filter(b => {
-      const st = getBillStatus(b);
-      return st.color === "red" || st.color === "yellow";
-    })
+    .filter(b => { const st = getBillStatus(b); return st.color === "red" || st.color === "yellow"; })
     .sort((a,b) => new Date(a.date) - new Date(b.date))
     .slice(0, 8);
 
-  if (!items.length){
+  if (!items.length) {
     $("dashboardBills").innerHTML = `<div class="empty">No overdue or near-due bills right now.</div>`;
     return;
   }
@@ -1002,26 +814,19 @@ function renderDashboardBills(){
         <div class="item-top">
           <div>
             <div class="name">${escapeHtml(b.name)}</div>
-            <div class="meta">Due: ${fmtDate(b.date)} • ${escapeHtml(b.category)}</div>
+            <div class="meta">Due: ${fmtDate(b.date)} · ${escapeHtml(b.category)}</div>
           </div>
           <div class="amount">${money(b.amount)}</div>
         </div>
-        <div class="pills">
-          <span class="pill ${st.color}">${st.text}</span>
-        </div>
-      </div>
-    `;
+        <div class="pills"><span class="pill ${st.color}">${st.text}</span></div>
+      </div>`;
   }).join("");
 }
 
-function renderIncomeList(){
+// ─── Income list ───────────────────────────────────────────────
+function renderIncomeList() {
   const items = getMonthIncome().sort((a,b) => new Date(a.date) - new Date(b.date));
-
-  if (!items.length){
-    $("incomeList").innerHTML = `<div class="empty">No income for this month yet.</div>`;
-    return;
-  }
-
+  if (!items.length) { $("incomeList").innerHTML = `<div class="empty">No income for this month yet.</div>`; return; }
   $("incomeList").innerHTML = items.map(i => `
     <div class="item">
       <div class="item-top">
@@ -1032,39 +837,32 @@ function renderIncomeList(){
         <div class="amount">${money(i.amount)}</div>
       </div>
       <div class="pills">
-        ${i.templateId ? `<span class="pill purple">Recurring Instance</span>` : (i.recurring ? `<span class="pill purple">Recurring Template</span>` : `<span class="pill blue">One-Time</span>`)}
+        ${i.templateId ? `<span class="pill purple">Recurring Instance</span>` : i.recurring ? `<span class="pill purple">Recurring Template</span>` : `<span class="pill blue">One-Time</span>`}
       </div>
-      <div class="actions">
-        <button class="btn red" onclick="delIncome('${i.id}')">Delete</button>
-      </div>
+      <div class="actions"><button class="btn red" onclick="delIncome('${i.id}')">Delete</button></div>
     </div>
   `).join("");
 }
 
-function renderBillWorkspace(){
+// ─── Bill workspace ────────────────────────────────────────────
+function renderBillWorkspace() {
   const workspace = $("billWorkspace");
 
-  if (currentBillView === "templates"){
+  if (currentBillView === "templates") {
     const templates = getRecurringTemplates();
-
-    if (!templates.length){
-      workspace.innerHTML = `<div class="empty">No recurring templates yet.</div>`;
-      return;
-    }
-
+    if (!templates.length) { workspace.innerHTML = `<div class="empty">No recurring templates yet. Add one above.</div>`; return; }
     workspace.innerHTML = templates.map(t => `
       <div class="item">
         <div class="item-top">
           <div>
             <div class="name">${escapeHtml(t.name)}</div>
-            <div class="meta">Due day: ${t.day} • ${escapeHtml(t.category)}</div>
+            <div class="meta">Due day: ${t.day} · ${escapeHtml(t.category)}</div>
           </div>
           <div class="amount">${money(t.amount)}</div>
         </div>
-        <div class="pills">
-          <span class="pill purple">Template</span>
-        </div>
+        <div class="pills"><span class="pill purple">Template</span></div>
         <div class="actions">
+          <button class="btn blue" onclick="openEditTemplate('${t.id}')">Edit</button>
           <button class="btn red" onclick="delTemplate('${t.id}')">Delete</button>
         </div>
       </div>
@@ -1072,213 +870,208 @@ function renderBillWorkspace(){
     return;
   }
 
-  if (currentBillView === "overdue"){
+  if (currentBillView === "overdue") {
     const items = getOverdueBills();
-
-    if (!items.length){
-      workspace.innerHTML = `<div class="empty">No overdue bills this month.</div>`;
-      return;
-    }
-
-    workspace.innerHTML = items.map(b => `
-      <div class="item">
-        <div class="item-top">
-          <div>
-            <div class="name">${escapeHtml(b.name)}</div>
-            <div class="meta">Due: ${fmtDate(b.date)} • ${escapeHtml(b.category)}</div>
-          </div>
-          <div class="amount">${money(b.amount)}</div>
-        </div>
-        <div class="pills">
-          <span class="pill red">${getBillStatus(b).text}</span>
-          ${b.recurring ? `<span class="pill purple">Recurring</span>` : ``}
-        </div>
-        <div class="actions">
-          <button class="btn green" onclick="togglePaid('${b.id}')">Pay</button>
-          <button class="btn blue" onclick="openEdit('${b.id}')">Edit</button>
-          <button class="btn red" onclick="delInst('${b.id}')">Delete</button>
-        </div>
-      </div>
-    `).join("");
+    if (!items.length) { workspace.innerHTML = `<div class="empty">No overdue bills this month. 🎉</div>`; return; }
+    workspace.innerHTML = items.map(b => billCard(b)).join("");
     return;
   }
 
-  if (currentBillView === "paid"){
+  if (currentBillView === "paid") {
     const items = getPaidBills();
-
-    if (!items.length){
-      workspace.innerHTML = `<div class="empty">No paid bills this month yet.</div>`;
-      return;
-    }
-
-    workspace.innerHTML = items.map(b => `
-      <div class="item">
-        <div class="item-top">
-          <div>
-            <div class="name">${escapeHtml(b.name)}</div>
-            <div class="meta">Due: ${fmtDate(b.date)} • ${escapeHtml(b.category)}</div>
-            ${b.paidDate ? `<div class="small">Paid on: ${fmtDate(b.paidDate)}</div>` : ``}
-          </div>
-          <div class="amount">${money(b.amount)}</div>
-        </div>
-        <div class="pills">
-          <span class="pill green">Paid</span>
-          ${b.recurring ? `<span class="pill purple">Recurring</span>` : ``}
-        </div>
-        <div class="actions">
-          <button class="btn yellow" onclick="togglePaid('${b.id}')">Unpay</button>
-          <button class="btn blue" onclick="openEdit('${b.id}')">Edit</button>
-          <button class="btn red" onclick="delInst('${b.id}')">Delete</button>
-        </div>
-      </div>
-    `).join("");
+    if (!items.length) { workspace.innerHTML = `<div class="empty">No paid bills this month yet.</div>`; return; }
+    workspace.innerHTML = items.map(b => billCard(b)).join("");
     return;
   }
 
   const items = filteredBills();
-
-  if (!items.length){
-    workspace.innerHTML = `<div class="empty">No bills match your filters.</div>`;
-    return;
-  }
-
-  workspace.innerHTML = items.map(b => {
-    const st = getBillStatus(b);
-    return `
-      <div class="item">
-        <div class="item-top">
-          <div>
-            <div class="name">${escapeHtml(b.name)}</div>
-            <div class="meta">Due: ${fmtDate(b.date)} • ${escapeHtml(b.category)}</div>
-            ${b.paidDate ? `<div class="small">Paid on: ${fmtDate(b.paidDate)}</div>` : ``}
-          </div>
-          <div class="amount">${money(b.amount)}</div>
-        </div>
-        <div class="pills">
-          <span class="pill ${st.color}">${st.text}</span>
-          ${b.recurring ? `<span class="pill purple">Recurring</span>` : ``}
-        </div>
-        <div class="actions">
-          <button class="btn ${b.paid ? "yellow" : "green"}" onclick="togglePaid('${b.id}')">${b.paid ? "Unpay" : "Pay"}</button>
-          <button class="btn blue" onclick="openEdit('${b.id}')">Edit</button>
-          <button class="btn red" onclick="delInst('${b.id}')">Delete</button>
-        </div>
-      </div>
-    `;
-  }).join("");
+  if (!items.length) { workspace.innerHTML = `<div class="empty">No bills match your filters.</div>`; return; }
+  workspace.innerHTML = items.map(b => billCard(b)).join("");
 }
 
-function renderCalendar(){
+function billCard(b) {
+  const st = getBillStatus(b);
+  return `
+    <div class="item">
+      <div class="item-top">
+        <div>
+          <div class="name">${escapeHtml(b.name)}</div>
+          <div class="meta">Due: ${fmtDate(b.date)} · ${escapeHtml(b.category)}</div>
+          ${b.paidDate ? `<div class="small">Paid on: ${fmtDate(b.paidDate)}</div>` : ""}
+        </div>
+        <div class="amount">${money(b.amount)}</div>
+      </div>
+      <div class="pills">
+        <span class="pill ${st.color}">${st.text}</span>
+        ${b.recurring ? `<span class="pill purple">Recurring</span>` : ""}
+      </div>
+      ${b.notes ? `<div class="bill-notes">${escapeHtml(b.notes)}</div>` : ""}
+      <div class="actions">
+        <button class="btn ${b.paid ? "yellow" : "green"}" onclick="togglePaid('${b.id}')">${b.paid ? "Unpay" : "Pay"}</button>
+        <button class="btn blue" onclick="openEdit('${b.id}')">Edit</button>
+        <button class="btn red" onclick="delInst('${b.id}')">Delete</button>
+      </div>
+    </div>`;
+}
+
+// ─── Calendar ──────────────────────────────────────────────────
+function renderCalendar() {
   const el = $("calendarGrid");
   el.innerHTML = "";
-
   const bills = getMonthBills();
   const year = current.getFullYear();
   const monthIndex = current.getMonth();
   const firstDay = new Date(year, monthIndex, 1).getDay();
-  const totalDays = new Date(year, monthIndex + 1, 0).getDate();
+  const totalDays = new Date(year, monthIndex+1, 0).getDate();
 
-  for (let i = 0; i < firstDay; i++){
-    el.innerHTML += `<div class="day"></div>`;
-  }
+  for (let i = 0; i < firstDay; i++) el.innerHTML += `<div class="day"></div>`;
 
-  for (let d = 1; d <= totalDays; d++){
-    const date = `${monthKey()}-${String(d).padStart(2, "0")}`;
+  for (let d = 1; d <= totalDays; d++) {
+    const date = `${monthKey()}-${String(d).padStart(2,"0")}`;
     const dayBills = bills.filter(b => b.date === date);
-
     let cls = "day";
-    if (dayBills.some(b => !b.paid && new Date(b.date + "T00:00:00") < todayMidnight())) cls += " overdue";
+    if (dayBills.some(b => !b.paid && new Date(b.date+"T00:00:00") < todayMidnight())) cls += " overdue";
     else if (dayBills.some(b => b.paid)) cls += " paid";
     else if (dayBills.length) cls += " upcoming";
-
     el.innerHTML += `
       <div class="${cls}">
         <div class="d">${d}</div>
-        ${dayBills.map(b => `<div>${escapeHtml(b.name)} • ${money(b.amount)}</div>`).join("")}
-      </div>
-    `;
+        ${dayBills.map(b => `<div>${escapeHtml(b.name)} · ${money(b.amount)}</div>`).join("")}
+      </div>`;
   }
 }
 
-function escapeHtml(value){
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function render(){
+// ─── Main render ───────────────────────────────────────────────
+function render() {
   $("monthLabel").textContent = fmtMonth();
+  // Only call genMonth for current month to avoid side effects on history
   genMonth();
   compute();
   renderBillsSummary();
+  renderCategoryBreakdown();
+  renderTrendChart();
   renderDashboardBills();
   renderBillWorkspace();
   renderIncomeList();
   renderCalendar();
 }
 
-document.querySelectorAll(".collapse-toggle").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const card = btn.closest(".collapse-card");
-    if (!card) return;
-    card.classList.toggle("open");
-    const icon = card.querySelector(".collapse-icon");
-    if (icon) icon.textContent = card.classList.contains("open") ? "−" : "+";
+// ─── Panel helpers ─────────────────────────────────────────────
+function openPanel() {
+  $("panel").classList.add("open");
+  $("backdrop").classList.add("open");
+}
+
+function closePanel() {
+  $("panel").classList.remove("open");
+  $("backdrop").classList.remove("open");
+  editId = null;
+  editMode = "bill";
+}
+
+window.openEdit = (id) => {
+  const b = state.instances.find(x => x.id === id);
+  if (!b) return;
+  editId = id; editMode = "bill";
+  $("panelTitle").textContent = "Edit Bill";
+  $("eName").value = b.name;
+  $("eAmount").value = b.amount;
+  $("eCat").value = b.category || "Other";
+  $("eDate").value = b.date;
+  $("eNotes").value = b.notes || "";
+  $("eDateWrap").style.display = "";
+  $("eDayWrap").style.display = "none";
+  $("eNotesWrap").style.display = "";
+  openPanel();
+};
+
+window.openEditTemplate = (id) => {
+  const t = state.templates.find(x => x.id === id);
+  if (!t) return;
+  editId = id; editMode = "template";
+  $("panelTitle").textContent = "Edit Template";
+  $("eName").value = t.name;
+  $("eAmount").value = t.amount;
+  $("eCat").value = t.category || "Other";
+  $("eDay").value = t.day;
+  $("eDateWrap").style.display = "none";
+  $("eDayWrap").style.display = "";
+  $("eNotesWrap").style.display = "none";
+  openPanel();
+};
+
+$("saveEdit").onclick = () => {
+  if (!editId) return;
+  if (editMode === "template") {
+    const newName = $("eName").value.trim();
+    const newAmt = Number($("eAmount").value);
+    const newCat = $("eCat").value;
+    const newDay = Number($("eDay").value);
+    if (!newName || !newAmt || !newDay) { showToast("Please fill all fields."); return; }
+    state.templates = state.templates.map(t =>
+      t.id !== editId ? t : { ...t, name:newName, amount:newAmt, category:newCat, day:newDay }
+    );
+    // Propagate name/amount/category to current month's instances from this template
+    state.instances = state.instances.map(b =>
+      (b.templateId !== editId || b.month !== monthKey()) ? b :
+      { ...b, name:newName, amount:newAmt, category:newCat }
+    );
+  } else {
+    const newDate = $("eDate").value;
+    state.instances = state.instances.map(b =>
+      b.id !== editId ? b :
+      { ...b, name:$("eName").value.trim(), amount:Number($("eAmount").value), category:$("eCat").value, date:newDate, month:newDate.slice(0,7), notes:$("eNotes").value.trim() }
+    );
+  }
+  save();
+  closePanel();
+  render();
+};
+
+$("closePanel").onclick = closePanel;
+$("backdrop").onclick = closePanel;
+
+// ─── Bill actions ──────────────────────────────────────────────
+window.togglePaid = (id) => {
+  state.instances = state.instances.map(b => {
+    if (b.id !== id) return b;
+    const next = !b.paid;
+    return { ...b, paid:next, paidDate: next ? new Date().toISOString().slice(0,10) : null };
   });
-});
+  save(); render();
+};
 
-function clearBillForm(){
-  $("rbName").value = "";
-  $("rbAmount").value = "";
-  $("rbDay").value = "";
-  $("rbCat").value = "Housing";
-}
+window.delInst = (id) => {
+  if (!confirm("Delete this bill?")) return;
+  state.instances = state.instances.filter(b => b.id !== id);
+  save(); render();
+};
 
-function clearOneTimeForm(){
-  $("otName").value = "";
-  $("otAmount").value = "";
-  $("otDate").value = "";
-  $("otCat").value = "Housing";
-}
+window.delIncome = (id) => {
+  if (!confirm("Delete this income entry?")) return;
+  state.income = state.income.filter(i => i.id !== id);
+  save(); render();
+};
 
-function clearIncomeForm(){
-  $("incName").value = "";
-  $("incAmount").value = "";
-  $("incDate").value = "";
-  $("incRecurring").checked = false;
-}
+window.delTemplate = (id) => {
+  if (!confirm("Delete this template? Future months will stop generating it.")) return;
+  state.templates = state.templates.filter(t => t.id !== id);
+  save(); render();
+};
 
+// ─── Add forms ─────────────────────────────────────────────────
 $("addRB").onclick = () => {
   const name = $("rbName").value.trim();
   const amount = Number($("rbAmount").value);
   const day = Number($("rbDay").value);
   const category = $("rbCat").value;
-
-  if (!name || !amount || !day){
-    alert("Fill name, amount, and due day.");
-    return;
-  }
-  if (day < 1 || day > 31){
-    alert("Due day must be between 1 and 31.");
-    return;
-  }
-
-  state.templates.push({
-    id: crypto.randomUUID(),
-    name,
-    amount,
-    day,
-    category
-  });
-
+  if (!name || !amount || !day) { showToast("Fill name, amount, and due day."); return; }
+  if (day < 1 || day > 31) { showToast("Due day must be 1–31."); return; }
+  state.templates.push({ id:crypto.randomUUID(), name, amount, day, category });
   save();
-  clearBillForm();
+  $("rbName").value = ""; $("rbAmount").value = ""; $("rbDay").value = ""; $("rbCat").value = "Housing";
   const card = $("recurringCard");
-  card.classList.remove("open");
-  card.querySelector(".collapse-icon").textContent = "+";
+  card.classList.remove("open"); card.querySelector(".collapse-icon").textContent = "+";
   render();
 };
 
@@ -1287,30 +1080,13 @@ $("addOT").onclick = () => {
   const amount = Number($("otAmount").value);
   const date = $("otDate").value;
   const category = $("otCat").value;
-
-  if (!name || !amount || !date){
-    alert("Fill name, amount, and date.");
-    return;
-  }
-
-  state.instances.push({
-    id: crypto.randomUUID(),
-    templateId: null,
-    month: date.slice(0,7),
-    name,
-    amount,
-    category,
-    date,
-    paid: false,
-    paidDate: null,
-    recurring: false
-  });
-
+  const notes = $("otNotes").value.trim();
+  if (!name || !amount || !date) { showToast("Fill name, amount, and date."); return; }
+  state.instances.push({ id:crypto.randomUUID(), templateId:null, month:date.slice(0,7), name, amount, category, date, paid:false, paidDate:null, recurring:false, notes });
   save();
-  clearOneTimeForm();
+  $("otName").value = ""; $("otAmount").value = ""; $("otDate").value = ""; $("otNotes").value = ""; $("otCat").value = "Housing";
   const card = $("oneTimeCard");
-  card.classList.remove("open");
-  card.querySelector(".collapse-icon").textContent = "+";
+  card.classList.remove("open"); card.querySelector(".collapse-icon").textContent = "+";
   render();
 };
 
@@ -1319,124 +1095,38 @@ $("addInc").onclick = () => {
   const amount = Number($("incAmount").value);
   const date = $("incDate").value;
   const recurring = $("incRecurring").checked;
-
-  if (!name || !amount || !date){
-    alert("Fill source, amount, and date.");
-    return;
-  }
-
-  state.income.push({
-    id: crypto.randomUUID(),
-    name,
-    amount,
-    date,
-    recurring
-  });
-
+  if (!name || !amount || !date) { showToast("Fill source, amount, and date."); return; }
+  state.income.push({ id:crypto.randomUUID(), name, amount, date, recurring });
   save();
-  clearIncomeForm();
+  $("incName").value = ""; $("incAmount").value = ""; $("incDate").value = ""; $("incRecurring").checked = false;
   render();
 };
 
-window.togglePaid = (id) => {
-  state.instances = state.instances.map(b => {
-    if (b.id !== id) return b;
-    const next = !b.paid;
-    return {
-      ...b,
-      paid: next,
-      paidDate: next ? new Date().toISOString().slice(0,10) : null
-    };
-  });
-  save();
-  render();
-};
-
-window.delInst = (id) => {
-  if (!confirm("Delete this bill?")) return;
-  state.instances = state.instances.filter(b => b.id !== id);
-  save();
-  render();
-};
-
-window.delIncome = (id) => {
-  if (!confirm("Delete this income entry?")) return;
-  state.income = state.income.filter(i => i.id !== id);
-  save();
-  render();
-};
-
-window.delTemplate = (id) => {
-  if (!confirm("Delete this recurring template? Future months will stop generating it.")) return;
-  state.templates = state.templates.filter(t => t.id !== id);
-  save();
-  render();
-};
-
-window.openEdit = (id) => {
-  const b = state.instances.find(x => x.id === id);
-  if (!b) return;
-
-  editId = id;
-  $("eName").value = b.name;
-  $("eAmount").value = b.amount;
-  $("eCat").value = b.category;
-  $("eDate").value = b.date;
-  $("panel").classList.add("open");
-};
-
-$("saveEdit").onclick = () => {
-  if (!editId) return;
-
-  state.instances = state.instances.map(b => {
-    if (b.id !== editId) return b;
-    return {
-      ...b,
-      name: $("eName").value.trim(),
-      amount: Number($("eAmount").value),
-      category: $("eCat").value,
-      date: $("eDate").value,
-      month: $("eDate").value.slice(0,7)
-    };
-  });
-
-  save();
-  $("panel").classList.remove("open");
-  editId = null;
-  render();
-};
-
-$("closePanel").onclick = () => {
-  $("panel").classList.remove("open");
-  editId = null;
-};
-
+// ─── Filters ───────────────────────────────────────────────────
 $("search").oninput = render;
 $("fStatus").onchange = render;
 $("fCat").onchange = render;
 
-$("prev").onclick = () => {
-  current.setMonth(current.getMonth() - 1);
-  render();
-};
+// ─── Month nav ─────────────────────────────────────────────────
+$("prev").onclick = () => { current.setMonth(current.getMonth()-1); render(); };
+$("next").onclick = () => { current.setMonth(current.getMonth()+1); render(); };
+$("today").onclick = () => { current = new Date(); render(); };
 
-$("next").onclick = () => {
-  current.setMonth(current.getMonth() + 1);
-  render();
-};
+// Keyboard month nav
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,select,textarea")) return;
+  if (e.key === "ArrowLeft") { current.setMonth(current.getMonth()-1); render(); }
+  if (e.key === "ArrowRight") { current.setMonth(current.getMonth()+1); render(); }
+});
 
-$("today").onclick = () => {
-  current = new Date();
-  render();
-};
-
+// ─── Tabs ──────────────────────────────────────────────────────
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn").forEach(x => x.classList.remove("active"));
     document.querySelectorAll(".tab-panel").forEach(x => x.classList.remove("active"));
     btn.classList.add("active");
     $(btn.dataset.tab).classList.add("active");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top:0, behavior:"smooth" });
   });
 });
 
@@ -1449,35 +1139,71 @@ document.querySelectorAll(".subtab-btn").forEach(btn => {
   });
 });
 
+// ─── Collapse toggles ──────────────────────────────────────────
+document.querySelectorAll(".collapse-toggle").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".collapse-card");
+    card.classList.toggle("open");
+    const icon = card.querySelector(".collapse-icon");
+    icon.textContent = card.classList.contains("open") ? "−" : "+";
+  });
+});
+
+function openCollapse(cardId) {
+  const card = $(cardId);
+  if (!card) return;
+  card.classList.add("open");
+  const icon = card.querySelector(".collapse-icon");
+  if (icon) icon.textContent = "−";
+  // Switch to bills tab first if needed
+  const billsTab = document.querySelector('[data-tab="bills"]');
+  if (!$("bills").classList.contains("active")) billsTab.click();
+  setTimeout(() => card.scrollIntoView({ behavior:"smooth", block:"center" }), 50);
+}
+
+$("qaFilters").onclick = () => openCollapse("filtersCard");
+$("qaRecurring").onclick = () => openCollapse("recurringCard");
+$("qaOneTime").onclick = () => openCollapse("oneTimeCard");
+$("qaOverdue").onclick = () => {
+  currentBillView = "overdue";
+  document.querySelectorAll(".subtab-btn").forEach(x => x.classList.remove("active"));
+  document.querySelector('.subtab-btn[data-bill-view="overdue"]').classList.add("active");
+  renderBillWorkspace();
+};
+$("qaNextUnpaid").onclick = () => {
+  const next = getNextUnpaidBill();
+  if (!next) { showToast("Everything is paid for this month! 🎉"); return; }
+  // Switch to bills tab
+  if (!$("bills").classList.contains("active")) document.querySelector('[data-tab="bills"]').click();
+  setTimeout(() => openEdit(next.id), 50);
+};
+
+// ─── Import / Export ───────────────────────────────────────────
 $("exportBtn").onclick = () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = "finance-command-center-v4.1.json";
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = `finance-command-center-${monthKey()}.json`;
+  a.click(); URL.revokeObjectURL(url);
 };
 
-$("importFile").addEventListener("change", (e) => {
+$("importFile").addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
-  reader.onload = (event) => {
-    try{
-      const parsed = JSON.parse(event.target.result);
+  reader.onload = ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
       state = {
         templates: Array.isArray(parsed.templates) ? parsed.templates : [],
         instances: Array.isArray(parsed.instances) ? parsed.instances : [],
         income: Array.isArray(parsed.income) ? parsed.income : []
       };
-      save();
-      render();
-      alert("Data imported successfully.");
-    }catch(error){
-      alert("Import failed. Please use a valid export file.");
-    }finally{
+      save(); render();
+      showToast("✓ Data imported successfully");
+    } catch {
+      showToast("Import failed — please use a valid export file");
+    } finally {
       $("importFile").value = "";
     }
   };
@@ -1485,13 +1211,14 @@ $("importFile").addEventListener("change", (e) => {
 });
 
 $("clearBtn").onclick = () => {
-  if (!confirm("Clear all saved app data? This cannot be undone.")) return;
-  state = { templates: [], instances: [], income: [] };
-  save();
-  render();
+  if (!confirm("Clear all saved data? This cannot be undone.")) return;
+  state = { templates:[], instances:[], income:[] };
+  save(); render();
 };
 
+// ─── Boot ──────────────────────────────────────────────────────
 render();
 </script>
+
 </body>
 </html>
