@@ -46,9 +46,9 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:12px;
+  gap:10px;
   flex-wrap:wrap;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 .hero h1{
@@ -62,7 +62,7 @@ body{
 .sub{
   color:var(--muted);
   font-size:13px;
-  margin-top:6px;
+  margin-top:5px;
   font-weight:700;
 }
 
@@ -79,7 +79,7 @@ body{
   min-width:0;
   border:1px solid var(--line);
   border-radius:14px;
-  padding:12px 12px;
+  padding:11px 12px;
   background:rgba(15,20,27,.9);
   font-weight:900;
   font-size:clamp(18px, 4.8vw, 24px);
@@ -91,7 +91,7 @@ body{
   position:sticky;
   top:0;
   z-index:15;
-  margin:8px 0 12px 0;
+  margin:8px 0 10px 0;
   padding:8px 0 4px 0;
   background:linear-gradient(180deg, rgba(11,15,20,.97), rgba(11,15,20,.88));
   backdrop-filter:blur(8px);
@@ -125,9 +125,9 @@ body{
   background:#0f141b;
   color:var(--text);
   border-radius:14px;
-  padding:12px 18px;
+  padding:10px 16px;
   font-weight:900;
-  font-size:16px;
+  font-size:15px;
   cursor:pointer;
   white-space:nowrap;
   box-shadow:var(--shadow);
@@ -147,7 +147,7 @@ body{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:10px;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
 .kpi{
@@ -185,17 +185,17 @@ body{
   border:1px solid var(--line);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  margin-bottom:12px;
+  margin-bottom:10px;
   overflow:hidden;
 }
 
 .card .head{
-  padding:14px 14px 0 14px;
+  padding:12px 12px 0 12px;
   font-weight:950;
   font-size:17px;
 }
 
-.card .body{padding:14px}
+.card .body{padding:12px}
 
 .row{display:grid;gap:10px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -207,10 +207,10 @@ input,select,textarea{
   color:var(--text);
   border:1px solid var(--line);
   border-radius:14px;
-  padding:14px 14px;
+  padding:12px 13px;
   outline:none;
   font:inherit;
-  min-height:52px;
+  min-height:48px;
 }
 
 input:focus,select:focus,textarea:focus{
@@ -221,11 +221,11 @@ input:focus,select:focus,textarea:focus{
 .btn{
   border:none;
   border-radius:14px;
-  padding:13px 14px;
+  padding:12px 14px;
   font-weight:950;
-  font-size:16px;
+  font-size:15px;
   cursor:pointer;
-  min-height:52px;
+  min-height:48px;
 }
 
 .btn.blue{background:var(--blue);color:#08111b}
@@ -253,7 +253,7 @@ input:focus,select:focus,textarea:focus{
 .item{
   border:1px solid var(--line);
   border-radius:16px;
-  padding:13px;
+  padding:12px;
   background:rgba(255,255,255,.02);
 }
 
@@ -309,8 +309,8 @@ input:focus,select:focus,textarea:focus{
 }
 
 .actions .btn{
-  min-height:42px;
-  padding:10px 12px;
+  min-height:40px;
+  padding:9px 12px;
   font-size:14px;
 }
 
@@ -382,8 +382,51 @@ input:focus,select:focus,textarea:focus{
 }
 .edit-panel.open{transform:translateX(0)}
 
+.collapse-card .collapse-toggle{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  background:none;
+  border:none;
+  color:var(--text);
+  padding:12px 12px 0 12px;
+  font:inherit;
+  cursor:pointer;
+  text-align:left;
+}
+
+.collapse-title{
+  font-weight:950;
+  font-size:17px;
+}
+
+.collapse-icon{
+  font-weight:950;
+  color:var(--muted);
+  font-size:20px;
+  line-height:1;
+}
+
+.collapse-content{
+  display:none;
+  padding:12px;
+}
+
+.collapse-card.open .collapse-content{
+  display:block;
+}
+
+.bills-workspace-sticky{
+  position:sticky;
+  top:66px;
+  z-index:10;
+}
+
 @media (max-width: 980px){
   .two-col{grid-template-columns:1fr}
+  .bills-workspace-sticky{top:62px}
 }
 
 @media (max-width: 780px){
@@ -397,29 +440,28 @@ input:focus,select:focus,textarea:focus{
     padding-top:max(12px, env(safe-area-inset-top));
   }
 
-  .hero{margin-bottom:8px}
-  .sub{font-size:12px;margin-top:5px}
+  .sub{font-size:12px}
   .month{gap:6px}
 
   .badge{
-    padding:11px 10px;
+    padding:10px 10px;
     border-radius:12px;
     font-size:18px;
   }
 
   .tab-btn,
   .subtab-btn{
-    padding:11px 15px;
+    padding:10px 14px;
     border-radius:12px;
     font-size:15px;
   }
 
   .card .head{
-    padding:12px 12px 0 12px;
+    padding:11px 11px 0 11px;
     font-size:16px;
   }
 
-  .card .body{padding:12px}
+  .card .body{padding:11px}
   .row2{grid-template-columns:1fr}
 
   .calendar{
@@ -435,6 +477,10 @@ input:focus,select:focus,textarea:focus{
 
   .day .d{font-size:11px}
   .amount{font-size:20px}
+
+  .bills-workspace-sticky{
+    top:58px;
+  }
 }
 </style>
 </head>
@@ -443,7 +489,7 @@ input:focus,select:focus,textarea:focus{
   <div class="hero">
     <div>
       <h1>Finance Command Center</h1>
-      <div class="sub">Tabbed V3.2 • Bills workspace • Mobile polished</div>
+      <div class="sub">Tabbed V4 • Cleaner Bills workspace • Mobile polished</div>
     </div>
 
     <div class="month">
@@ -493,88 +539,97 @@ input:focus,select:focus,textarea:focus{
   </div>
 
   <div id="bills" class="tab-panel">
-    <div class="two-col">
-      <div>
-        <div class="card">
-          <div class="head">Add Recurring Bill</div>
-          <div class="body row">
-            <input id="rbName" placeholder="Name" />
-            <div class="row2">
-              <input id="rbAmount" type="number" placeholder="Amount" />
-              <input id="rbDay" type="number" min="1" max="31" placeholder="Due day" />
-            </div>
-            <select id="rbCat">
-              <option>Housing</option>
-              <option>Utilities</option>
-              <option>Transportation</option>
-              <option>Insurance</option>
-              <option>Subscriptions</option>
-              <option>Debt</option>
-              <option>Other</option>
-            </select>
-            <button class="btn blue" id="addRB">Add Recurring</button>
+    <div class="card bills-workspace-sticky">
+      <div class="head">Bills Workspace</div>
+      <div class="body">
+        <div class="subtabs-scroll">
+          <div class="subtabs">
+            <button class="subtab-btn active" data-bill-view="all">All Bills</button>
+            <button class="subtab-btn" data-bill-view="templates">Recurring Templates</button>
+            <button class="subtab-btn" data-bill-view="overdue">Overdue</button>
+            <button class="subtab-btn" data-bill-view="paid">Paid History</button>
           </div>
         </div>
+        <div id="billWorkspace" class="list"></div>
+      </div>
+    </div>
 
-        <div class="card">
-          <div class="head">Add One-Time Bill</div>
-          <div class="body row">
-            <input id="otName" placeholder="Name" />
-            <div class="row2">
-              <input id="otAmount" type="number" placeholder="Amount" />
-              <input id="otDate" type="date" />
-            </div>
-            <select id="otCat">
-              <option>Housing</option>
-              <option>Utilities</option>
-              <option>Transportation</option>
-              <option>Insurance</option>
-              <option>Subscriptions</option>
-              <option>Debt</option>
-              <option>Other</option>
-            </select>
-            <button class="btn blue" id="addOT">Add One-Time</button>
-          </div>
+    <div class="card collapse-card" id="filtersCard">
+      <button class="collapse-toggle" type="button" data-target="filtersContent">
+        <span class="collapse-title">Filters</span>
+        <span class="collapse-icon">+</span>
+      </button>
+      <div class="collapse-content" id="filtersContent">
+        <div class="row2">
+          <input id="search" placeholder="Search..." />
+          <select id="fStatus">
+            <option value="all">All</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+            <option value="overdue">Overdue</option>
+          </select>
+          <select id="fCat">
+            <option value="all">All Categories</option>
+            <option>Housing</option>
+            <option>Utilities</option>
+            <option>Transportation</option>
+            <option>Insurance</option>
+            <option>Subscriptions</option>
+            <option>Debt</option>
+            <option>Other</option>
+          </select>
         </div>
       </div>
+    </div>
 
-      <div>
-        <div class="card">
-          <div class="head">Bill Filters</div>
-          <div class="body row2">
-            <input id="search" placeholder="Search..." />
-            <select id="fStatus">
-              <option value="all">All</option>
-              <option value="paid">Paid</option>
-              <option value="unpaid">Unpaid</option>
-              <option value="overdue">Overdue</option>
-            </select>
-            <select id="fCat">
-              <option value="all">All Categories</option>
-              <option>Housing</option>
-              <option>Utilities</option>
-              <option>Transportation</option>
-              <option>Insurance</option>
-              <option>Subscriptions</option>
-              <option>Debt</option>
-              <option>Other</option>
-            </select>
+    <div class="card collapse-card" id="recurringCard">
+      <button class="collapse-toggle" type="button" data-target="recurringContent">
+        <span class="collapse-title">Add Recurring Bill</span>
+        <span class="collapse-icon">+</span>
+      </button>
+      <div class="collapse-content" id="recurringContent">
+        <div class="row">
+          <input id="rbName" placeholder="Name" />
+          <div class="row2">
+            <input id="rbAmount" type="number" placeholder="Amount" />
+            <input id="rbDay" type="number" min="1" max="31" placeholder="Due day" />
           </div>
+          <select id="rbCat">
+            <option>Housing</option>
+            <option>Utilities</option>
+            <option>Transportation</option>
+            <option>Insurance</option>
+            <option>Subscriptions</option>
+            <option>Debt</option>
+            <option>Other</option>
+          </select>
+          <button class="btn blue" id="addRB">Add Recurring</button>
         </div>
+      </div>
+    </div>
 
-        <div class="card">
-          <div class="head">Bills Workspace</div>
-          <div class="body">
-            <div class="subtabs-scroll">
-              <div class="subtabs">
-                <button class="subtab-btn active" data-bill-view="all">All Bills</button>
-                <button class="subtab-btn" data-bill-view="templates">Recurring Templates</button>
-                <button class="subtab-btn" data-bill-view="overdue">Overdue</button>
-                <button class="subtab-btn" data-bill-view="paid">Paid History</button>
-              </div>
-            </div>
-            <div id="billWorkspace" class="list"></div>
+    <div class="card collapse-card" id="oneTimeCard">
+      <button class="collapse-toggle" type="button" data-target="oneTimeContent">
+        <span class="collapse-title">Add One-Time Bill</span>
+        <span class="collapse-icon">+</span>
+      </button>
+      <div class="collapse-content" id="oneTimeContent">
+        <div class="row">
+          <input id="otName" placeholder="Name" />
+          <div class="row2">
+            <input id="otAmount" type="number" placeholder="Amount" />
+            <input id="otDate" type="date" />
           </div>
+          <select id="otCat">
+            <option>Housing</option>
+            <option>Utilities</option>
+            <option>Transportation</option>
+            <option>Insurance</option>
+            <option>Subscriptions</option>
+            <option>Debt</option>
+            <option>Other</option>
+          </select>
+          <button class="btn blue" id="addOT">Add One-Time</button>
         </div>
       </div>
     </div>
@@ -839,9 +894,9 @@ function compute(){
 function filteredBills(){
   let bills = getMonthBills();
 
-  const q = $("search").value.toLowerCase().trim();
-  const s = $("fStatus").value;
-  const c = $("fCat").value;
+  const q = $("search") ? $("search").value.toLowerCase().trim() : "";
+  const s = $("fStatus") ? $("fStatus").value : "all";
+  const c = $("fCat") ? $("fCat").value : "all";
 
   bills = bills.filter(b => {
     const text = `${b.name} ${b.category}`.toLowerCase();
@@ -1119,6 +1174,24 @@ function clearIncomeForm(){
   $("incRecurring").checked = false;
 }
 
+function toggleCollapse(cardId){
+  const card = $(cardId);
+  if (!card) return;
+  card.classList.toggle("open");
+  const icon = card.querySelector(".collapse-icon");
+  if (icon) icon.textContent = card.classList.contains("open") ? "−" : "+";
+}
+
+document.querySelectorAll(".collapse-toggle").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".collapse-card");
+    if (!card) return;
+    card.classList.toggle("open");
+    const icon = card.querySelector(".collapse-icon");
+    if (icon) icon.textContent = card.classList.contains("open") ? "−" : "+";
+  });
+});
+
 $("addRB").onclick = () => {
   const name = $("rbName").value.trim();
   const amount = Number($("rbAmount").value);
@@ -1144,6 +1217,9 @@ $("addRB").onclick = () => {
 
   save();
   clearBillForm();
+  const card = $("recurringCard");
+  card.classList.remove("open");
+  card.querySelector(".collapse-icon").textContent = "+";
   render();
 };
 
@@ -1173,6 +1249,9 @@ $("addOT").onclick = () => {
 
   save();
   clearOneTimeForm();
+  const card = $("oneTimeCard");
+  card.classList.remove("open");
+  card.querySelector(".collapse-icon").textContent = "+";
   render();
 };
 
@@ -1316,7 +1395,7 @@ $("exportBtn").onclick = () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "finance-command-center-v3-tabbed.json";
+  a.download = "finance-command-center-v4.json";
   a.click();
   URL.revokeObjectURL(url);
 };
@@ -1332,13 +1411,8 @@ $("importFile").addEventListener("change", (e) => {
       state = {
         templates: Array.isArray(parsed.templates) ? parsed.templates : [],
         instances: Array.isArray(parsed.instances) ? parsed.instances : [],
-        income: Array.isArray(parsed.income) ? parsed.instances : Array.isArray(parsed.income) ? parsed.income : []
+        income: Array.isArray(parsed.income) ? parsed.income : []
       };
-
-      if (!Array.isArray(state.income)) {
-        state.income = [];
-      }
-
       save();
       render();
       alert("Data imported successfully.");
